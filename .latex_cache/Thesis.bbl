@@ -1,0 +1,210 @@
+\begin{thebibliography}{36}
+\providecommand{\biband}{和}
+\providecommand{\bibetal}{等}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{#1}
+\expandafter\ifx\csname urlstyle\endcsname\relax\else
+  \urlstyle{same}\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \DeclareUrlCommand\doi{\urlstyle{rm}}
+  \def\eprint#1#2{#2}
+\else
+  \def\doi#1{\href{https://doi.org/#1}{\nolinkurl{#1}}}
+  \let\eprint\href
+\fi
+
+\bibitem[Grubbs(1969)]{grubbs1969}
+Grubbs~F~E.
+\newblock Procedures for detecting outlying observations in samples [J].
+\newblock Technometrics, 1969, 11\penalty0 (1): 1-21.
+
+\bibitem[Dixon(1950)]{dixon1950}
+Dixon~W~J.
+\newblock Analysis of extreme values [J].
+\newblock The Annals of Mathematical Statistics, 1950, 21\penalty0 (4): 488-506.
+
+\bibitem[Mahalanobis(1936)]{mahalanobis1936}
+Mahalanobis~P~C.
+\newblock On the generalised distance in statistics [J].
+\newblock Proceedings of the National Institute of Science of India, 1936, 2: 49-55.
+
+\bibitem[Box {\bibetal}(1970)Box and Jenkins]{box1970arima}
+Box~G~E, Jenkins~G~M.
+\newblock Time series analysis: Forecasting and control [M].
+\newblock Holden-Day, 1970.
+
+\bibitem[Cleveland {\bibetal}(1990)Cleveland, Cleveland, McRae, and Terpenning]{cleveland1990stl}
+Cleveland~R~B, Cleveland~W~S, McRae~J~E, et~al.
+\newblock Stl: A seasonal-trend decomposition procedure based on loess [J].
+\newblock Journal of Official Statistics, 1990, 6\penalty0 (1): 3-73.
+
+\bibitem[Ramaswamy {\bibetal}(2000)Ramaswamy, Rastogi, and Shim]{ramaswamy2000}
+Ramaswamy~S, Rastogi~R, Shim~K.
+\newblock Efficient algorithms for mining outliers from large data sets [C]//\allowbreak
+Proceedings of the 2000 ACM SIGMOD International Conference on Management of Data.
+\newblock 2000: 427-438.
+
+\bibitem[Breunig {\bibetal}(2000)Breunig, Kriegel, Ng, and Sander]{breunig2000lof}
+Breunig~M~M, Kriegel~H~P, Ng~R~T, et~al.
+\newblock Lof: identifying density-based local outliers [J].
+\newblock ACM SIGMOD Record, 2000, 29\penalty0 (2): 93-104.
+
+\bibitem[Liu {\bibetal}(2008)Liu, Ting, and Zhou]{liu2008isolation}
+Liu~F~T, Ting~K~M, Zhou~Z~H.
+\newblock Isolation forest [C]//\allowbreak
+Proceedings of the 8th IEEE International Conference on Data Mining.
+\newblock 2008: 413-422.
+
+\bibitem[Choi {\bibetal}(2021)Choi, Yi, Park, and Yoon]{choi2021deepreview}
+Choi~K, Yi~J, Park~C, et~al.
+\newblock Deep learning for anomaly detection in time-series data: Review, analysis, and guidelines [J].
+\newblock IEEE Access, 2021, 9: 120043-120065.
+
+\bibitem[Pang {\bibetal}(2021)Pang, Shen, Cao, and Hengel]{pang2021deepsurvey}
+Pang~G, Shen~C, Cao~L, et~al.
+\newblock Deep learning for anomaly detection: A review [J].
+\newblock ACM Computing Surveys, 2021, 54\penalty0 (2): 1-38.
+
+\bibitem[Su {\bibetal}(2019)Su, Zhao, Niu, Liu, Sun, and Pei]{su2019omni}
+Su~Y, Zhao~Y, Niu~C, et~al.
+\newblock Robust anomaly detection for multivariate time series through stochastic recurrent neural network [C]//\allowbreak
+Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery \& Data Mining.
+\newblock 2019: 2828-2837.
+
+\bibitem[Audibert {\bibetal}(2020)Audibert, Michiardi, Guyard, Marti, and Zuluaga]{audibert2020usad}
+Audibert~J, Michiardi~P, Guyard~F, et~al.
+\newblock Usad: Unsupervised anomaly detection on multivariate time series [C]//\allowbreak
+Proceedings of the 26th ACM SIGKDD International Conference on Knowledge Discovery \& Data Mining.
+\newblock 2020: 3395-3404.
+
+\bibitem[Hochreiter {\bibetal}(1997)Hochreiter and Schmidhuber]{hochreiter1997lstm}
+Hochreiter~S, Schmidhuber~J.
+\newblock Long short-term memory [J].
+\newblock Neural computation, 1997, 9\penalty0 (8): 1735-1780.
+
+\bibitem[Tuli {\bibetal}(2022)Tuli, Casale, and Jennings]{tuli2022tranad}
+Tuli~S, Casale~G, Jennings~N~R.
+\newblock Tranad: Deep transformer networks for anomaly detection in multivariate time series data [C]//\allowbreak
+Proceedings of the VLDB Endowment: volume~15.
+\newblock 2022: 1201-1214.
+
+\bibitem[Xu {\bibetal}(2022)Xu, Wu, Wang, and Long]{xu2022anomaly}
+Xu~J, Wu~H, Wang~J, et~al.
+\newblock Anomaly transformer: Time series anomaly detection with association discrepancy [J].
+\newblock arXiv preprint arXiv:2110.02642, 2022.
+
+\bibitem[Deng {\bibetal}(2021)Deng and Hooi]{deng2021graph}
+Deng~A, Hooi~B.
+\newblock Graph neural network-based anomaly detection in multivariate time series [C]//\allowbreak
+Proceedings of the AAAI Conference on Artificial Intelligence: volume~35.
+\newblock 2021: 4027-4035.
+
+\bibitem[Chen {\bibetal}(2025{\natexlab{a}})Chen, Liu, and Zhang]{chen2025carots}
+Chen~W, Liu~Y, Zhang~M.
+\newblock Carots: Causal-aware contrastive learning for robust multivariate time series anomaly detection [C]//\allowbreak
+Proceedings of the 42nd International Conference on Machine Learning.
+\newblock 2025{\natexlab{a}}.
+
+\bibitem[Ren {\bibetal}(2019)Ren, Xu, Wang, Yi, Huang, Kou, Xing, Yang, Tong, and Zhang]{ren2019sranomaly}
+Ren~H, Xu~B, Wang~Y, et~al.
+\newblock Time-series anomaly detection service at {Microsoft} [C]//\allowbreak
+Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery \& Data Mining.
+\newblock 2019: 3009-3017.
+
+\bibitem[Darban {\bibetal}(2025)Darban, Webb, Pan, Aggarwal, and Salehi]{darban2025carla}
+Darban~Z~Z, Webb~G~I, Pan~S, et~al.
+\newblock Carla: Self-supervised contrastive representation learning for time series anomaly detection [J].
+\newblock Pattern Recognition, 2025, 157: 110874.
+
+\bibitem[Paparrizos {\bibetal}(2022)Paparrizos, Kang, Boniol, Tsay, Palpanas, and Franklin]{paparrizos2022tsbuad}
+Paparrizos~J, Kang~Y, Boniol~P, et~al.
+\newblock Tsb-uad: An end-to-end benchmark suite for univariate time-series anomaly detection [J].
+\newblock Proceedings of the VLDB Endowment, 2022, 15\penalty0 (8): 1697-1711.
+
+\bibitem[Wu {\bibetal}(2024)Wu, Jiang, and Zhang]{wu2024tab}
+Wu~Q, Jiang~T, Zhang~Y.
+\newblock Tab: Unified benchmarking of time series anomaly detection methods [J].
+\newblock arXiv preprint arXiv:2506.18046, 2024.
+
+\bibitem[Fan {\bibetal}(2015)Fan, Li, and Qi]{fan2015spark}
+Fan~X, Li~F, Qi~L.
+\newblock Distributed discord discovery: Spark based anomaly detection in time series [C]//\allowbreak
+Proceedings of the IEEE International Conference on High Performance Computing and Communications.
+\newblock 2015: 154-159.
+
+\bibitem[Carbone {\bibetal}(2015)Carbone, Katsifodimos, Ewen, Markl, Haridi, and Tzoumas]{carbone2015flink}
+Carbone~P, Katsifodimos~A, Ewen~S, et~al.
+\newblock Apache {Flink}: Stream and batch processing in a single engine [J].
+\newblock IEEE Data Engineering Bulletin, 2015, 36\penalty0 (4): 28-38.
+
+\bibitem[Ester {\bibetal}(1996)Ester, Kriegel, Sander, and Xu]{ester1996dbscan}
+Ester~M, Kriegel~H~P, Sander~J, et~al.
+\newblock A density-based algorithm for discovering clusters in large spatial databases with noise [J].
+\newblock KDD, 1996, 96\penalty0 (34): 226-231.
+
+\bibitem[Kingma {\bibetal}(2014)Kingma and Welling]{kingma2014vae}
+Kingma~D~P, Welling~M.
+\newblock Auto-encoding variational bayes [J].
+\newblock arXiv preprint arXiv:1312.6114, 2014.
+
+\bibitem[Zhang {\bibetal}(2024{\natexlab{a}})Zhang, Wang, and Huang]{zhang2024tfmae}
+Zhang~H, Wang~Y, Huang~T.
+\newblock Tfmae: Temporal-frequency masked autoencoder for time series anomaly detection [C]//\allowbreak
+Proceedings of the 40th IEEE International Conference on Data Engineering.
+\newblock 2024{\natexlab{a}}: 1-12.
+
+\bibitem[Zhao {\bibetal}(2020)Zhao, Wang, Duan, Huang, Cao, Tong, Xu, Bai, Tong, and Zhang]{zhao2020mtadgat}
+Zhao~H, Wang~Y, Duan~J, et~al.
+\newblock Multivariate time-series anomaly detection via graph attention network [C]//\allowbreak
+Proceedings of the 2020 IEEE International Conference on Data Mining.
+\newblock 2020: 841-850.
+
+\bibitem[Veli{\v{c}}kovi{\'c} {\bibetal}(2018)Veli{\v{c}}kovi{\'c}, Cucurull, Casanova, Romero, Li{\`o}, and Bengio]{velickovic2018gat}
+Veli{\v{c}}kovi{\'c}~P, Cucurull~G, Casanova~A, et~al.
+\newblock Graph attention networks [C]//\allowbreak
+International Conference on Learning Representations.
+\newblock 2018.
+
+\bibitem[Kipf {\bibetal}(2017)Kipf and Welling]{kipf2017gcn}
+Kipf~T~N, Welling~M.
+\newblock Semi-supervised classification with graph convolutional networks [J].
+\newblock arXiv preprint arXiv:1609.02907, 2017.
+
+\bibitem[Wu {\bibetal}(2021)Wu, Pan, Chen, Long, Zhang, and Philip]{wu2021gnnsurvey}
+Wu~Z, Pan~S, Chen~F, et~al.
+\newblock A comprehensive survey on graph neural networks [J].
+\newblock IEEE Transactions on Neural Networks and Learning Systems, 2021, 32\penalty0 (1): 4-24.
+
+\bibitem[Zhang {\bibetal}(2024{\natexlab{b}})Zhang, Chen, and Li]{zhang2024gstpro}
+Zhang~J, Chen~H, Li~Y.
+\newblock Graph spatiotemporal process for multivariate time series anomaly detection with missing values [J].
+\newblock arXiv preprint arXiv:2401.05800, 2024.
+
+\bibitem[Liu {\bibetal}(2025)Liu, Wang, and Zhang]{liu2025mgcl}
+Liu~Y, Wang~H, Zhang~Q.
+\newblock Mgcl: Multiorder graph neural network with cross-learning for multivariate time-series anomaly detection [J].
+\newblock IEEE Transactions on Instrumentation and Measurement, 2025.
+
+\bibitem[Chen {\bibetal}(2025{\natexlab{b}})Chen, Huang, and Wang]{chen2025cgad}
+Chen~X, Huang~W, Wang~Z.
+\newblock Entropy causal graphs for multivariate time series anomaly detection [J].
+\newblock ACM Transactions on Knowledge Discovery from Data, 2025.
+
+\bibitem[Li {\bibetal}(2019)Li, Chen, Shi, Jin, Goh, and Ng]{li2019madgan}
+Li~D, Chen~D, Shi~L, et~al.
+\newblock Mad-gan: Multivariate anomaly detection for time series data with generative adversarial networks [C]//\allowbreak
+International Conference on Artificial Neural Networks.
+\newblock 2019: 703-716.
+
+\bibitem[Goodfellow {\bibetal}(2014)Goodfellow, Pouget-Abadie, Mirza, Xu, Warde-Farley, Ozair, Courville, and Bengio]{goodfellow2014gan}
+Goodfellow~I, Pouget-Abadie~J, Mirza~M, et~al.
+\newblock Generative adversarial nets [C]//\allowbreak
+Advances in Neural Information Processing Systems: volume~27.
+\newblock 2014.
+
+\bibitem[Boniol {\bibetal}(2022)Boniol and Palpanas]{boniol2022dads}
+Boniol~P, Palpanas~T.
+\newblock Distributed detection of sequential anomalies in univariate time series [J].
+\newblock The VLDB Journal, 2022, 31: 233-256.
+
+\end{thebibliography}

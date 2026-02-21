@@ -1,0 +1,21 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3-1}{\ignorespaces 数据集统计数据}}{17}{table.caption.17}%
+\contentsline {table}{\numberline {3-2}{\ignorespaces 基线算法与本文方法在RPC Router连接数数据集上的异常检测效果对比}}{20}{table.caption.19}%
+\contentsline {table}{\numberline {3-3}{\ignorespaces 欧氏距离方法在不同阈值和时间窗口下的异常检测分数}}{21}{table.caption.20}%
+\contentsline {table}{\numberline {3-4}{\ignorespaces AE嵌入后异常检测分数}}{21}{table.caption.21}%
+\contentsline {table}{\numberline {3-5}{\ignorespaces DBSCAN异常检测分数}}{22}{table.caption.22}%
+\contentsline {table}{\numberline {3-6}{\ignorespaces CSAD-AT框架保守集成策略的检测效果}}{26}{table.caption.24}%
+\contentsline {table}{\numberline {3-7}{\ignorespaces I-SPOT自适应阈值与固定阈值方法的性能对比}}{27}{table.caption.25}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4-1}{\ignorespaces 故障类别及数量分布}}{30}{table.caption.26}%
+\contentsline {table}{\numberline {4-2}{\ignorespaces 监控指标列表及说明}}{30}{table.caption.27}%
+\contentsline {table}{\numberline {4-3}{\ignorespaces 多指标多节点异常检测方法对比}}{38}{table.caption.28}%
+\contentsline {table}{\numberline {4-4}{\ignorespaces 算法效率对比}}{38}{table.caption.29}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }

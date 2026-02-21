@@ -1,0 +1,89 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds, calc}
+\usepackage{xeCJK}
+\setCJKmainfont{SimSun}
+
+\begin{document}
+\begin{tikzpicture}[
+    node distance=1.2cm and 1.5cm,
+    >={Stealth[length=3mm]},
+    box/.style={rectangle, draw, rounded corners, minimum height=1cm, minimum width=2.8cm, align=center, font=\small},
+    inputbox/.style={box, fill=blue!15, draw=blue!60},
+    methodbox/.style={box, fill=green!15, draw=green!60},
+    spotbox/.style={box, fill=orange!15, draw=orange!60},
+    ensemblebox/.style={box, fill=purple!15, draw=purple!60},
+    outputbox/.style={box, fill=red!15, draw=red!60},
+    modulelabel/.style={font=\small\bfseries, align=center},
+    arrow/.style={->, thick, draw=gray!70}
+]
+
+% 输入层
+\node[inputbox, minimum width=4cm] (input) {多节点监控时序数据\\$\{x_1^t, x_2^t, \ldots, x_N^t\}$};
+
+% 多视角相似性度量模块
+\node[methodbox, below left=1.5cm and 0.5cm of input] (euclidean) {欧氏距离\\数值相似性};
+\node[methodbox, below=1.5cm of input] (autoencoder) {自编码器嵌入\\形态相似性};
+\node[methodbox, below right=1.5cm and 0.5cm of input] (dbscan) {DBSCAN聚类\\密度相似性};
+
+% 异常分数
+\node[box, fill=gray!10, below=0.8cm of euclidean, minimum width=2cm] (score1) {异常分数 $s_1^t$};
+\node[box, fill=gray!10, below=0.8cm of autoencoder, minimum width=2cm] (score2) {异常分数 $s_2^t$};
+\node[box, fill=gray!10, below=0.8cm of dbscan, minimum width=2cm] (score3) {异常分数 $s_3^t$};
+
+% I-SPOT自适应阈值模块
+\node[spotbox, below=0.8cm of score1, minimum width=2cm] (spot1) {I-SPOT\\自适应阈值};
+\node[spotbox, below=0.8cm of score2, minimum width=2cm] (spot2) {I-SPOT\\自适应阈值};
+\node[spotbox, below=0.8cm of score3, minimum width=2cm] (spot3) {I-SPOT\\自适应阈值};
+
+% 判定结果
+\node[box, fill=gray!10, below=0.8cm of spot1, minimum width=1.8cm] (decision1) {$s_1^t > z_1^t$};
+\node[box, fill=gray!10, below=0.8cm of spot2, minimum width=1.8cm] (decision2) {$s_2^t > z_2^t$};
+\node[box, fill=gray!10, below=0.8cm of spot3, minimum width=1.8cm] (decision3) {$s_3^t > z_3^t$};
+
+% 集成决策模块
+\node[ensemblebox, below=1.2cm of decision2, minimum width=5cm] (ensemble) {保守集成决策（逻辑与）\\$\hat{y}_t = \mathbb{I}[\bigwedge_{m=1}^{M}(s_t^{(m)} > z_t^{(m)})]$};
+
+% 输出
+\node[outputbox, below=1cm of ensemble, minimum width=3.5cm] (output) {异常检测结果\\节点$i$时刻$t$异常判定};
+
+% 连接箭头
+\draw[arrow] (input) -- (euclidean);
+\draw[arrow] (input) -- (autoencoder);
+\draw[arrow] (input) -- (dbscan);
+
+\draw[arrow] (euclidean) -- (score1);
+\draw[arrow] (autoencoder) -- (score2);
+\draw[arrow] (dbscan) -- (score3);
+
+\draw[arrow] (score1) -- (spot1);
+\draw[arrow] (score2) -- (spot2);
+\draw[arrow] (score3) -- (spot3);
+
+\draw[arrow] (spot1) -- (decision1);
+\draw[arrow] (spot2) -- (decision2);
+\draw[arrow] (spot3) -- (decision3);
+
+\draw[arrow] (decision1) -- (ensemble);
+\draw[arrow] (decision2) -- (ensemble);
+\draw[arrow] (decision3) -- (ensemble);
+
+\draw[arrow] (ensemble) -- (output);
+
+% 模块标签背景框
+\begin{scope}[on background layer]
+    % 多视角相似性度量模块
+    \node[draw=green!60, dashed, rounded corners, fit=(euclidean)(autoencoder)(dbscan), inner sep=8pt, fill=green!5] (module1) {};
+    \node[modulelabel, above=0.1cm of module1.north, text=green!70!black] {多视角相似性度量模块};
+
+    % 自适应阈值调整模块
+    \node[draw=orange!60, dashed, rounded corners, fit=(spot1)(spot2)(spot3), inner sep=8pt, fill=orange!5] (module2) {};
+    \node[modulelabel, right=0.3cm of module2.east, text=orange!70!black, rotate=0] {自适应阈值\\调整模块};
+
+    % 集成决策模块
+    \node[draw=purple!60, dashed, rounded corners, fit=(ensemble), inner sep=8pt, fill=purple!5] (module3) {};
+    \node[modulelabel, right=0.3cm of module3.east, text=purple!70!black] {集成决策模块};
+\end{scope}
+
+\end{tikzpicture}
+\end{document}
