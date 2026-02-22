@@ -28,6 +28,15 @@
 
 在分布式集群场景中，本文重点关注的是\textbf{节点级异常}，即在多节点环境下，个别节点的监控曲线偏离集群整体行为模式的情形。这类异常的识别需要同时考虑时间维度的变化规律和节点维度的群体一致性。
 
+上述四种异常类型的示意图如图\ref{fig:anomaly_types}所示。
+
+\begin{figure}[htbp]
+    \centering
+    \input{Img/anomaly_types_inline}
+    \caption{时间序列异常类型分类示意图}
+    \label{fig:anomaly_types}
+\end{figure}
+
 \subsection{时间序列异常检测面临的挑战}
 
 时间序列异常检测因数据特性、算法需求和应用场景的复杂性而面临诸多挑战。

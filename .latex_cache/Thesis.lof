@@ -1,8 +1,10 @@
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {1-1}{\ignorespaces 论文研究内容框架图}}{5}{figure.caption.17}%
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {2-1}{\ignorespaces 时间序列异常类型分类示意图}}{9}{figure.caption.18}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3-1}{\ignorespaces 测试数据集异常标注曲线（红色阴影部分为异常标注）}}{17}{figure.caption.18}%
-\contentsline {figure}{\numberline {3-2}{\ignorespaces CSAD-AT框架整体架构}}{23}{figure.caption.23}%
+\contentsline {figure}{\numberline {3-1}{\ignorespaces 测试数据集异常标注曲线（红色阴影部分为异常标注）}}{17}{figure.caption.20}%
+\contentsline {figure}{\numberline {3-2}{\ignorespaces CSAD-AT框架整体架构}}{23}{figure.caption.25}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

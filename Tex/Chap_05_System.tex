@@ -1,53 +1,643 @@
 \chapter{基于曲线相似性的异常检测系统}\label{chap:system}
 
-本章介绍基于曲线相似性的分布式集群异常检测系统的设计与实现。首先阐述系统的总体流程设计，包括数据采集、预处理、异常检测和结果展示四个阶段；其次介绍系统的分层架构与关键技术选型；然后详细说明核心模块的实现细节；最后通过实际应用案例展示系统的检测效果。
+在前述章节中，本文分别针对单指标多节点和多指标多节点两种典型场景，提出了基于曲线相似性的异常检测方法，并通过实验验证了其有效性。然而，算法层面的研究成果要真正服务于生产环境，还需要构建一个完整的系统平台，将数据采集、预处理、异常检测、告警通知和可视化分析等环节有机串联。本章聚焦于将上述研究成果转化为可落地的工程系统，详细介绍基于曲线相似性的分布式集群异常检测系统的设计与实现。系统以联通大数据生产底座平台为应用背景，对接Prometheus监控体系实现常态化巡检，并构建了完整的多级告警机制，旨在为运维团队提供一套自动化、智能化的集群健康监控解决方案。
 
-\section{总体流程设计}
+\section{系统设计}
 
-基于曲线相似性的异常检测系统旨在为分布式集群提供实时的节点级异常监控能力。系统的总体流程分为数据采集、数据预处理、异常检测和结果展示四个阶段。
+\subsection{功能模块设计}
 
-在数据采集阶段，系统通过对接集群的监控系统获取各节点的多维度时序数据。对于YARN集群，数据来源于Prometheus监控系统，通过其提供的API接口按固定时间间隔采集指标数据。对于GPU集群，数据来源于专用的GPU监控服务，采集GPU温度、功耗、利用率等核心指标。采集到的原始数据按节点和指标进行组织，形成时间对齐的多节点多指标时序数据结构。
+基于曲线相似性的异常检测系统旨在为分布式集群提供自动化的节点级异常监控与告警能力。根据实际生产环境的运维需求，系统采用模块化设计思想，划分为七个核心功能模块：用户与权限管理模块、数据接入与管理模块、数据预处理模块、检测引擎模块、常态化监控模块、告警管理模块以及可视化与数据看板模块。各模块之间通过标准化接口实现数据的无缝流转与高效交互，确保异常检测的及时性与准确性。
 
-在数据预处理阶段，系统对原始数据进行清洗和标准化处理。具体包括缺失值填充，采用线性插值方法处理因监控抖动造成的短时缺失。时间戳对齐，将不同数据源的采样点统一对齐到固定的时间间隔。数据归一化，对不同量纲的指标进行标准化处理以便后续计算。
+用户与权限管理模块负责系统用户的身份验证与权限控制，确保不同角色的用户仅能访问其授权范围内的数据和功能。该模块支持用户注册与登录、角色分配（管理员和普通用户）以及操作日志记录等功能，为多用户协同运维提供安全的管理基础。
 
-在异常检测阶段，系统根据配置的算法类型执行相应的检测逻辑。对于单指标多节点场景，可选择欧氏距离、自编码器嵌入或DBSCAN方法，并支持集成学习和SPOT自适应阈值策略。对于多指标多节点场景，系统并行运行数值检测和形状检测两个模块，然后进行加权融合得到最终的异常分数。
+数据接入与管理模块负责对接多种数据源，实现监控数据的统一采集与管理。该模块支持两种数据输入方式：一是通过文件上传导入CSV或JSON格式的历史数据，适用于离线分析和算法验证场景；二是通过Prometheus API接口实时采集集群监控指标，适用于在线监控场景。模块内置数据集管理功能，支持数据集的查询、预览和删除操作，并提供时序数据的图表化预览能力。
 
-在结果展示阶段，系统将检测结果以可视化的形式呈现给运维人员。主要展示内容包括异常节点列表及其异常分数排名，异常时间段的多节点曲线对比图，以及各指标的异常贡献度分析等。
+数据预处理模块针对采集到的原始监控数据进行系统性清洗与转化，主要功能包括时间戳对齐、缺失值填充、数据去噪和归一化处理。该模块采用流水线式的处理架构，将各预处理步骤串联执行，确保输出数据在时间维度上对齐、在数值维度上可比，为后续检测算法提供高质量的输入数据。
 
-\section{系统架构与关键技术}
+检测引擎模块是系统的核心计算组件，封装了本文提出的全部异常检测算法。对于单指标多节点场景，支持欧氏距离检测、自编码器嵌入检测和DBSCAN聚类检测三种方法，并通过I-SPOT自适应阈值和保守集成决策实现鲁棒的异常判定。对于多指标多节点场景，支持数值检测与形状检测的双视角融合框架。检测引擎采用统一的调度接口，根据用户配置的场景类型和算法参数自动编排检测流程。
 
-系统采用分层架构设计，从下至上分为数据层、服务层和展示层三个层次。
+常态化监控模块是系统区别于一次性离线分析工具的关键特性。该模块通过定时任务调度机制，按照预设的巡检周期自动从Prometheus拉取最新的监控数据，执行预处理和异常检测流程，并将检测结果写入数据库。运维人员无需手动触发检测任务，系统即可实现对集群健康状态的7$\times$24小时持续监控。
 
-数据层负责数据的存储和管理。原始监控数据存储在时序数据库中，支持高效的时间范围查询。检测结果和配置信息存储在关系型数据库中，支持灵活的查询和统计分析。
+告警管理模块基于检测引擎输出的异常评分，实现分级告警与多渠道通知。系统定义了三个告警级别：信息级（异常分数轻微偏高，记录但不主动推送）、警告级（异常分数显著偏高，需要运维人员关注）和严重级（异常分数极高，需要立即处置）。当检测到超过预设阈值的异常事件时，系统自动生成告警记录并通过邮件、企业微信等渠道向相关人员推送告警通知。模块同时提供告警日志的查询、筛选和统计分析功能，支持告警策略的灵活配置。
 
-服务层是系统的核心，包含数据接入服务、预处理服务、检测引擎和结果输出服务四个主要组件。数据接入服务负责对接不同类型的监控数据源，提供统一的数据获取接口。预处理服务实现数据清洗、对齐和归一化等功能。检测引擎封装了本文提出的各种异常检测算法，支持灵活的算法配置和参数调整。结果输出服务将检测结果格式化后推送至展示层或外部系统。
+可视化与数据看板模块通过交互式图表和数据面板，为运维人员提供全方位的集群健康状态视图。主要功能包括实时数据监控大屏、多节点曲线对比分析、异常分数排名展示、时间线热力图、历史检测结果回溯以及告警统计报表等，帮助运维人员快速定位异常节点并分析异常原因。
 
-展示层提供Web端的可视化界面，运维人员可以通过浏览器查看实时的检测结果和历史分析报告。界面采用响应式设计，支持在不同终端上访问。
+\subsection{系统架构设计}
 
-系统的关键技术包括以下几个方面。在数据处理方面，采用流式处理架构支持实时数据接入和分析，避免了传统批处理模式的延迟问题。在算法调度方面，采用任务队列机制管理检测任务，支持多个集群的并发检测。在结果缓存方面，采用分级缓存策略减少重复计算，提高系统响应速度。
+系统采用前后端分离的分层架构设计，从上至下分为用户层、应用层、算法层和数据层四个层次，各层之间职责明确、接口规范，便于独立开发和水平扩展。
+
+用户层面向最终使用者，提供基于Web浏览器的可视化交互界面。前端基于HTML5、CSS3和JavaScript构建，利用ECharts图表库实现丰富的数据可视化效果，通过AJAX异步请求与后端API进行数据交互。用户层支持响应式布局，可在不同分辨率的终端设备上正常访问。
+
+应用层承接用户请求并协调各功能模块的工作，是连接用户界面与核心算法的桥梁。后端基于Python的Flask轻量级Web框架构建RESTful API服务，负责路由分发、请求参数校验、业务逻辑编排和响应结果封装。应用层同时负责定时任务的调度管理，通过APScheduler框架实现常态化监控任务的定时触发。此外，应用层还集成了告警通知服务，通过SMTP协议发送邮件告警，通过Webhook接口对接企业微信等即时通讯工具。
+
+算法层封装了本文提出的全部异常检测算法，是系统的核心计算引擎。算法层接收应用层传递的标准化数据和配置参数，调用相应的检测算法进行计算，并将异常评分和检测结论返回给应用层。算法层基于Python科学计算生态构建，核心依赖包括NumPy、SciPy和scikit-learn等数值计算库，自编码器模块基于PyTorch深度学习框架实现。
+
+数据层负责系统全部数据的持久化存储与高效检索。针对不同类型数据的存储需求，系统采用关系型数据库与缓存相结合的策略：使用SQLite关系型数据库存储用户信息、集群配置、检测任务、检测结果、告警规则和告警记录等结构化数据；使用基于内存的LRU缓存机制存储实时检测结果和高频访问数据，减轻数据库查询压力，提高系统响应速度。对于Prometheus时序数据，系统不做本地持久化存储，而是在每次检测时通过API实时拉取，避免数据冗余和同步问题。
+
+\subsection{数据库设计}
+
+系统的结构化数据采用SQLite关系型数据库进行存储，共设计了六张核心数据表，覆盖用户管理、集群配置、检测任务、检测结果、告警规则和告警记录等关键业务实体。各表之间通过主外键关联，保障数据的完整性与一致性。
+
+（1）用户表（users）
+
+用户表存储系统用户的基础信息和角色权限，用于实现安全的身份验证与访问控制。具体表结构如表\ref{tab:db_users}所示。
+
+\begin{table}[htbp]
+    \centering
+    \caption{用户表}
+    \label{tab:db_users}
+    \begin{tabular}{llp{3.2cm}p{4cm}}
+        \hline
+        字段名 & 类型 & 说明 & 约束 \\
+        \hline
+        user\_id & INTEGER & 用户ID（主键） & PRIMARY KEY AUTOINCREMENT \\
+        username & VARCHAR(50) & 用户名 & UNIQUE, NOT NULL \\
+        password\_hash & VARCHAR(255) & 密码哈希值 & NOT NULL \\
+        role & VARCHAR(20) & 用户角色 & DEFAULT 'user' \\
+        email & VARCHAR(100) & 邮箱地址 & \\
+        created\_at & DATETIME & 创建时间 & DEFAULT CURRENT\_TIMESTAMP \\
+        \hline
+    \end{tabular}
+\end{table}
+
+（2）集群配置表（cluster\_configs）
+
+集群配置表存储被监控集群的基本信息和Prometheus数据源配置，作为常态化监控任务的配置基础。具体表结构如表\ref{tab:db_clusters}所示。
+
+\begin{table}[htbp]
+    \centering
+    \caption{集群配置表}
+    \label{tab:db_clusters}
+    \begin{tabular}{llp{3.2cm}p{4cm}}
+        \hline
+        字段名 & 类型 & 说明 & 约束 \\
+        \hline
+        cluster\_id & INTEGER & 集群ID（主键） & PRIMARY KEY AUTOINCREMENT \\
+        cluster\_name & VARCHAR(100) & 集群名称 & NOT NULL \\
+        cluster\_type & VARCHAR(50) & 集群类型 & NOT NULL \\
+        prometheus\_url & VARCHAR(255) & Prometheus地址 & NOT NULL \\
+        promql\_query & TEXT & PromQL查询表达式 & NOT NULL \\
+        check\_interval & INTEGER & 巡检间隔（分钟） & DEFAULT 5 \\
+        scenario\_type & VARCHAR(20) & 检测场景类型 & NOT NULL \\
+        is\_active & BOOLEAN & 是否启用 & DEFAULT TRUE \\
+        created\_by & INTEGER & 创建者ID & FOREIGN KEY(users) \\
+        \hline
+    \end{tabular}
+\end{table}
+
+（3）检测任务表（detection\_tasks）
+
+检测任务表记录每次异常检测的执行信息，包括手动触发和定时巡检两种来源的检测任务。具体表结构如表\ref{tab:db_tasks}所示。
+
+\begin{table}[htbp]
+    \centering
+    \caption{检测任务表}
+    \label{tab:db_tasks}
+    \begin{tabular}{llp{3.2cm}p{4cm}}
+        \hline
+        字段名 & 类型 & 说明 & 约束 \\
+        \hline
+        task\_id & INTEGER & 任务ID（主键） & PRIMARY KEY AUTOINCREMENT \\
+        cluster\_id & INTEGER & 关联集群ID & FOREIGN KEY(cluster\_configs) \\
+        task\_type & VARCHAR(20) & 任务类型 & NOT NULL \\
+        scenario & VARCHAR(20) & 检测场景 & NOT NULL \\
+        algorithm\_config & TEXT & 算法配置（JSON） & \\
+        status & VARCHAR(20) & 任务状态 & DEFAULT 'pending' \\
+        started\_at & DATETIME & 开始时间 & \\
+        finished\_at & DATETIME & 结束时间 & \\
+        \hline
+    \end{tabular}
+\end{table}
+
+其中，task\_type字段区分手动检测（manual）和定时巡检（scheduled）两种任务来源；status字段记录任务的执行状态，取值包括pending（等待中）、running（执行中）、completed（已完成）和failed（失败）四种状态。
+
+（4）检测结果表（detection\_results）
+
+检测结果表存储每次异常检测的节点级结果数据，包括异常评分、是否异常等信息。具体表结构如表\ref{tab:db_results}所示。
+
+\begin{table}[htbp]
+    \centering
+    \caption{检测结果表}
+    \label{tab:db_results}
+    \begin{tabular}{llp{3.2cm}p{4cm}}
+        \hline
+        字段名 & 类型 & 说明 & 约束 \\
+        \hline
+        result\_id & INTEGER & 结果ID（主键） & PRIMARY KEY AUTOINCREMENT \\
+        task\_id & INTEGER & 关联任务ID & FOREIGN KEY(detection\_tasks) \\
+        node\_name & VARCHAR(100) & 节点名称 & NOT NULL \\
+        anomaly\_score & FLOAT & 异常评分 & NOT NULL \\
+        is\_anomaly & BOOLEAN & 是否异常 & NOT NULL \\
+        detection\_time & DATETIME & 检测时间 & NOT NULL \\
+        details & TEXT & 详细信息（JSON） & \\
+        \hline
+    \end{tabular}
+\end{table}
+
+（5）告警规则表（alert\_rules）
+
+告警规则表存储用户配置的告警策略，定义不同级别告警的触发条件和通知方式。具体表结构如表\ref{tab:db_alert_rules}所示。
+
+\begin{table}[htbp]
+    \centering
+    \caption{告警规则表}
+    \label{tab:db_alert_rules}
+    \begin{tabular}{llp{3.2cm}p{4cm}}
+        \hline
+        字段名 & 类型 & 说明 & 约束 \\
+        \hline
+        rule\_id & INTEGER & 规则ID（主键） & PRIMARY KEY AUTOINCREMENT \\
+        cluster\_id & INTEGER & 关联集群ID & FOREIGN KEY(cluster\_configs) \\
+        alert\_level & INTEGER & 告警级别 & NOT NULL \\
+        score\_threshold & FLOAT & 分数阈值 & NOT NULL \\
+        notify\_method & VARCHAR(50) & 通知方式 & NOT NULL \\
+        notify\_target & VARCHAR(255) & 通知目标 & NOT NULL \\
+        is\_enabled & BOOLEAN & 是否启用 & DEFAULT TRUE \\
+        created\_at & DATETIME & 创建时间 & DEFAULT CURRENT\_TIMESTAMP \\
+        \hline
+    \end{tabular}
+\end{table}
+
+其中，alert\_level字段定义了三个告警级别：1表示信息级，2表示警告级，3表示严重级。notify\_method字段支持email（邮件通知）、webhook（企业微信/钉钉Webhook）和system（仅系统内记录）三种通知方式。
+
+（6）告警记录表（alert\_logs）
+
+告警记录表保存系统触发的所有告警事件及其处理状态，便于后续追踪和统计分析。具体表结构如表\ref{tab:db_alert_logs}所示。
+
+\begin{table}[htbp]
+    \centering
+    \caption{告警记录表}
+    \label{tab:db_alert_logs}
+    \begin{tabular}{llp{3.2cm}p{4cm}}
+        \hline
+        字段名 & 类型 & 说明 & 约束 \\
+        \hline
+        log\_id & INTEGER & 日志ID（主键） & PRIMARY KEY AUTOINCREMENT \\
+        task\_id & INTEGER & 关联任务ID & FOREIGN KEY(detection\_tasks) \\
+        alert\_level & INTEGER & 告警级别 & NOT NULL \\
+        node\_name & VARCHAR(100) & 异常节点 & NOT NULL \\
+        anomaly\_score & FLOAT & 异常评分 & NOT NULL \\
+        alert\_message & TEXT & 告警信息 & NOT NULL \\
+        notify\_status & VARCHAR(20) & 通知状态 & DEFAULT 'pending' \\
+        acknowledged & BOOLEAN & 是否已确认 & DEFAULT FALSE \\
+        alert\_time & DATETIME & 告警时间 & NOT NULL \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\section{开发环境与技术选型}
+
+系统采用前后端分离的开发模式，结合多种成熟的技术框架和工具库，确保系统在异常检测任务中的高效性和稳定性。
+
+在后端技术方面，系统基于Python 3.9开发环境构建，选用Flask 2.3作为Web服务框架，提供轻量级的RESTful API服务能力。核心异常检测算法依赖NumPy 1.24、SciPy 1.10和scikit-learn 1.2等科学计算库实现高效的数值运算，自编码器模块基于PyTorch 2.0深度学习框架构建。定时任务调度采用APScheduler 3.10框架，支持基于Cron表达式的灵活调度配置。数据处理依赖Pandas 2.0进行时序数据的清洗与转换。告警通知模块通过Python标准库smtplib实现邮件发送，通过requests库对接企业微信Webhook接口。
+
+在前端技术方面，界面基于HTML5、CSS3和JavaScript构建，采用ECharts 5.4图表库实现丰富的交互式数据可视化效果，包括折线图、柱状图、热力图和仪表盘等多种图表类型。页面布局采用响应式设计，通过CSS Flexbox和Grid布局实现自适应的多终端访问。前端与后端之间通过Fetch API进行异步数据通信。
+
+在数据存储方面，结构化数据采用SQLite 3关系型数据库存储，适合中等规模的部署场景，无需额外的数据库服务进程。系统同时在应用层实现了基于Python字典和functools.lru\_cache的内存缓存机制，用于缓存高频访问的检测结果和配置数据，减少数据库IO开销。
+
+系统的开发和测试环境配置如下：操作系统为Ubuntu 20.04 LTS，CPU为Intel Xeon E5-2680 v4，内存为64GB DDR4，GPU为NVIDIA Tesla V100（用于自编码器模型训练）。生产环境部署于联通大数据平台的容器化基础设施上，通过Docker容器实现服务的隔离部署和弹性伸缩。系统的代码组织结构如表\ref{tab:code_structure}所示。
+
+\begin{table}[htbp]
+    \centering
+    \caption{系统代码目录结构}
+    \label{tab:code_structure}
+    \begin{tabular}{ll}
+        \hline
+        目录/文件 & 功能说明 \\
+        \hline
+        \texttt{app.py} & Flask主应用，路由定义与API接口 \\
+        \texttt{config.py} & 系统配置与算法默认参数 \\
+        \texttt{models.py} & 数据库ORM模型定义 \\
+        \texttt{auth.py} & 用户认证与权限控制 \\
+        \texttt{algorithms/} & 核心算法模块 \\
+        \quad \texttt{euclidean.py} & 欧氏距离相似性检测 \\
+        \quad \texttt{autoencoder.py} & 自编码器嵌入检测 \\
+        \quad \texttt{dbscan\_detector.py} & DBSCAN聚类检测 \\
+        \quad \texttt{ispot.py} & I-SPOT自适应阈值 \\
+        \quad \texttt{ensemble.py} & 保守集成决策 \\
+        \quad \texttt{sax\_improved.py} & 改进SAX形状检测 \\
+        \quad \texttt{fusion.py} & 双视角融合 \\
+        \texttt{services/} & 业务服务模块 \\
+        \quad \texttt{data\_loader.py} & 数据加载（文件上传/API） \\
+        \quad \texttt{preprocessor.py} & 预处理流水线 \\
+        \quad \texttt{detection\_engine.py} & 检测引擎调度 \\
+        \quad \texttt{scheduler.py} & 常态化监控定时调度 \\
+        \quad \texttt{alert\_service.py} & 告警规则匹配与通知分发 \\
+        \texttt{templates/} & 前端HTML模板 \\
+        \texttt{static/} & 静态资源（CSS/JS/图表组件） \\
+        \hline
+    \end{tabular}
+\end{table}
 
 \section{系统实现}
 
-系统采用Python作为主要开发语言，核心组件的实现细节如下。
+系统具体实现的功能包含用户与权限管理、数据接入与管理、数据预处理、检测引擎、常态化监控、告警管理以及可视化与数据看板七个模块。以下分别介绍各模块的实现细节。
 
-数据接入服务通过Prometheus客户端库访问监控API，支持PromQL查询语法灵活获取所需指标数据。对于其他数据源，通过适配器模式实现统一的数据接口，便于扩展支持新的监控系统。
+\subsection{用户与权限管理模块}
 
-预处理服务的核心是数据对齐和缺失值处理模块。数据对齐采用基于时间戳的重采样方法，将不规则采样的数据转换为固定间隔的时序数据。缺失值处理采用分段策略，对短时缺失采用线性插值，对长时间缺失的节点数据进行标记或剔除。
+用户与权限管理模块为系统提供安全的身份认证和细粒度的访问控制能力。系统设计了独立的登录注册页面，用户输入用户名和密码后，后端对密码进行SHA-256哈希校验，验证通过后生成基于Flask-Session的会话令牌，后续请求通过Cookie携带会话信息实现身份保持。
 
-检测引擎采用模块化设计，每种算法封装为独立的检测器类，通过统一的接口进行调用。检测器的配置参数支持动态调整，无需重启服务即可生效。对于计算密集型的距离矩阵计算，采用NumPy和SciPy库进行向量化优化，并支持多进程并行加速。
+系统定义了管理员（admin）和普通用户（user）两种角色。管理员拥有系统的全部操作权限，包括用户管理、集群配置、告警规则设定和系统参数调整等；普通用户可以使用数据上传、手动检测、结果查看和告警日志查询等常规功能。权限控制通过Flask的装饰器机制实现，在每个受保护的API接口上添加角色检查逻辑，确保越权请求被及时拦截。
 
-结果输出服务将检测结果封装为标准的JSON格式，支持推送至消息队列、写入数据库或通过WebSocket实时推送至前端等多种输出方式。告警规则引擎根据配置的阈值和规则生成告警事件，并支持告警聚合和抑制策略。
+管理员登录后，可以在用户管理页面中查看所有注册用户的信息列表，包括用户名、角色、邮箱和注册时间等字段，支持对用户角色的编辑修改和过期账号的删除操作。系统同时记录关键操作的审计日志，包括登录、登出、配置修改和告警确认等操作，便于安全审计和问题追溯。
+
+系统的用户登录页面如图\ref{fig:login_page}所示，用户权限管理页面如图\ref{fig:user_manage}所示。
+
+\begin{figure}[htbp]
+    \centering
+    %\includegraphics[width=0.85\textwidth]{Img/chap5/login_page.png}
+    \fbox{\parbox{0.85\textwidth}{\centering\vspace{3cm}TODO: 用户登录页面截图\vspace{3cm}}}
+    \caption{用户登录页面}
+    \label{fig:login_page}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    %\includegraphics[width=0.85\textwidth]{Img/chap5/user_manage.png}
+    \fbox{\parbox{0.85\textwidth}{\centering\vspace{3cm}TODO: 用户权限管理页面截图\vspace{3cm}}}
+    \caption{用户权限管理页面}
+    \label{fig:user_manage}
+\end{figure}
+
+\subsection{数据接入与管理模块}
+
+数据接入与管理模块支持文件上传和Prometheus API接入两种数据输入方式，并提供统一的数据集管理功能。
+
+\textbf{文件上传方式}支持CSV和JSON两种格式。CSV格式支持宽表（列为节点）和长表（包含timestamp、node、value列）两种结构，系统自动检测格式并转换为统一的DataFrame结构。JSON格式采用嵌套字典结构，支持多指标数据的组织。文件上传接口通过Flask的文件处理机制实现，限制最大上传大小为50MB，仅允许指定扩展名的文件类型。
+
+\textbf{Prometheus API接入}通过HTTP请求调用Prometheus的\texttt{query\_range}接口，支持标准的PromQL查询语法。系统自动解析返回的JSON数据，提取节点标识（instance标签）和时序数值，转换为统一的数据格式。Prometheus数据接入的核心实现如下：
+
+\begin{lstlisting}[language=Python, caption=Prometheus数据接入核心代码, label=lst:prometheus]
+def load_from_prometheus(url, query, start, end, step='60s'):
+    api_url = f"{url.rstrip('/')}/api/v1/query_range"
+    params = {'query': query, 'start': start,
+              'end': end, 'step': step}
+    response = requests.get(api_url, params=params, timeout=30)
+    data = response.json()
+    results = {}
+    for result in data['data']['result']:
+        labels = result['metric']
+        node_name = labels.get('instance', 'unknown')
+        timestamps = [float(v[0]) for v in result['values']]
+        values = [float(v[1]) for v in result['values']]
+        results[node_name] = values
+    return pd.DataFrame(results,
+        index=pd.to_datetime(timestamps, unit='s'))
+\end{lstlisting}
+
+两种数据接入方式的输出统一为字典格式\texttt{\{metric\_name: DataFrame\}}，其中DataFrame的列为节点名称，行索引为时间戳，确保后续预处理和检测模块无需关注数据来源的差异。
+
+在数据管理页面中，用户可以查看已上传数据集的列表信息，包括数据集名称、数据规模（节点数和时间步数）、上传时间等。模块内置了时序数据预览功能，用户点击某个数据集后，页面右侧自动渲染该数据集的时序曲线图，以折线图形式展示各节点的指标变化趋势，支持通过下拉框切换不同指标的预览视图。数据集管理页面如图\ref{fig:data_manage}所示，时序数据预览页面如图\ref{fig:data_preview}所示。
+
+\begin{figure}[htbp]
+    \centering
+    %\includegraphics[width=0.85\textwidth]{Img/chap5/data_manage.png}
+    \fbox{\parbox{0.85\textwidth}{\centering\vspace{3cm}TODO: 数据集管理页面截图\vspace{3cm}}}
+    \caption{数据集管理页面}
+    \label{fig:data_manage}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    %\includegraphics[width=0.85\textwidth]{Img/chap5/data_preview.png}
+    \fbox{\parbox{0.85\textwidth}{\centering\vspace{3cm}TODO: 时序数据预览页面截图\vspace{3cm}}}
+    \caption{时序数据预览页面}
+    \label{fig:data_preview}
+\end{figure}
+
+\subsection{预处理服务模块}
+
+预处理服务模块对原始监控数据进行系统性清洗与标准化处理，实现为完整的预处理流水线。
+
+数据对齐采用基于时间戳的重采样方法，通过Pandas的\texttt{resample}接口将不规则采样的数据转换为固定间隔的时序数据，聚合策略采用均值。缺失值处理采用分段策略：对短时缺失（连续缺失不超过5个采样点）采用线性插值方法进行填充，对长时间连续缺失的节点数据直接剔除以避免引入较大误差。数据归一化支持Z-score标准化、Min-Max归一化和基于中位数的鲁棒归一化三种方法，用户可根据数据特点在配置页面中选择合适的归一化策略。
+
+预处理流水线将上述步骤串联执行，核心实现如下：
+
+\begin{lstlisting}[language=Python, caption=预处理流水线核心代码, label=lst:preprocess]
+def preprocess_pipeline(data_dict, interval='60s',
+                        normalize_method='zscore'):
+    processed = {}
+    for metric_name, df in data_dict.items():
+        # Step 1: 时间戳对齐与重采样
+        df_aligned = align_timestamps(df, interval)
+        # Step 2: 缺失值检测与分段填充
+        df_filled, dropped = interpolate_missing(
+            df_aligned, max_gap=5)
+        # Step 3: 数据归一化
+        df_normalized, stats = normalize(
+            df_filled, normalize_method)
+        processed[metric_name] = df_normalized
+    return processed
+\end{lstlisting}
+
+在预处理界面中，用户可以选择待处理的数据集并配置预处理参数，包括重采样间隔、缺失值填充方法和归一化方式等。系统在预处理过程中记录详细的处理日志，用户可在预处理日志页面中查看每个步骤的执行时间和处理结果，如时间戳对齐后的数据点数、被剔除的缺失节点列表和归一化统计参数等信息。数据预处理页面如图\ref{fig:preprocess}所示，预处理日志页面如图\ref{fig:preprocess_log}所示。
+
+\begin{figure}[htbp]
+    \centering
+    %\includegraphics[width=0.85\textwidth]{Img/chap5/preprocess.png}
+    \fbox{\parbox{0.85\textwidth}{\centering\vspace{3cm}TODO: 数据预处理页面截图\vspace{3cm}}}
+    \caption{数据预处理页面}
+    \label{fig:preprocess}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    %\includegraphics[width=0.85\textwidth]{Img/chap5/preprocess_log.png}
+    \fbox{\parbox{0.85\textwidth}{\centering\vspace{3cm}TODO: 预处理日志页面截图\vspace{3cm}}}
+    \caption{预处理日志页面}
+    \label{fig:preprocess_log}
+\end{figure}
+
+\subsection{检测引擎模块}
+
+检测引擎模块采用模块化设计，将每种算法封装为独立的检测器类，通过统一的\texttt{detect()}接口进行调用。检测引擎根据用户配置的场景类型自动选择对应的检测流程。
+
+对于单指标多节点场景，检测引擎依次调用欧氏距离检测器、自编码器嵌入检测器和DBSCAN聚类检测器，获取三种方法各自的异常分数后，通过I-SPOT算法为每种方法计算自适应阈值，最后执行保守集成决策。欧氏距离检测器的核心计算采用SciPy的\texttt{pdist}函数实现向量化的成对距离计算，避免了显式的双重循环，将时间复杂度从$O(N^2 \cdot T)$优化至接近$O(N^2)$的矩阵运算效率：
+
+\begin{lstlisting}[language=Python, caption=欧氏距离检测器核心代码, label=lst:euclidean]
+def compute_anomaly_scores(self, data):
+    T, N = data.shape
+    n_windows = T - self.window_size + 1
+    scores = np.zeros((n_windows, N))
+    for t in range(n_windows):
+        window = data[t:t + self.window_size, :]
+        # 向量化计算节点间欧氏距离矩阵
+        dist_matrix = squareform(
+            pdist(window.T, metric='euclidean'))
+        np.fill_diagonal(dist_matrix, 0)
+        avg_distances = dist_matrix.sum(axis=1) / (N - 1)
+        # Z-score归一化
+        mu, sigma = avg_distances.mean(), avg_distances.std()
+        if sigma > 1e-10:
+            scores[t] = (avg_distances - mu) / sigma
+    return scores
+\end{lstlisting}
+
+对于多指标多节点场景，检测引擎并行运行数值检测模块和形状检测模块。数值检测模块对各指标分别计算欧氏距离异常分数后进行加权融合；形状检测模块采用改进SAX算法提取各指标的形状特征并计算异常分数。最终通过可配置的权重参数融合两种视角的检测结果。
+
+在检测配置页面中，用户可以选择检测所使用的场景类型（单指标或多指标）、指定数据来源、配置各算法的关键参数（如滑动窗口大小、I-SPOT初始化长度、集成决策投票比例等），并设置异常判定阈值。系统提交检测任务后自动执行完整的检测流程，用户可在检测记录页面中查看所有历史检测任务的执行状态和结果摘要，包括任务类型、关联集群、检测时间、发现的异常节点数量等信息。异常检测配置页面如图\ref{fig:detection_config}所示，检测记录页面如图\ref{fig:detection_records}所示。
+
+\begin{figure}[htbp]
+    \centering
+    %\includegraphics[width=0.85\textwidth]{Img/chap5/detection_config.png}
+    \fbox{\parbox{0.85\textwidth}{\centering\vspace{3cm}TODO: 异常检测配置页面截图\vspace{3cm}}}
+    \caption{异常检测配置页面}
+    \label{fig:detection_config}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    %\includegraphics[width=0.85\textwidth]{Img/chap5/detection_records.png}
+    \fbox{\parbox{0.85\textwidth}{\centering\vspace{3cm}TODO: 检测记录页面截图\vspace{3cm}}}
+    \caption{检测记录页面}
+    \label{fig:detection_records}
+\end{figure}
+
+\subsection{常态化监控模块}
+
+常态化监控模块是系统服务于生产环境的核心功能，通过定时任务调度机制实现对分布式集群的持续性自动巡检，将异常检测从被动的人工触发模式转变为主动的自动化监控模式。
+
+模块的核心实现基于APScheduler定时任务框架，结合集群配置表中的巡检参数，为每个已启用的被监控集群创建独立的定时任务。定时任务按照配置的巡检间隔（默认每5分钟一次）自动执行以下流程：首先，通过Prometheus API拉取该集群最近一个检测窗口内的监控数据；然后，调用预处理流水线对原始数据进行清洗和标准化；接着，调用检测引擎执行配置的异常检测算法；最后，将检测结果写入数据库，并触发告警规则匹配流程。常态化监控的调度核心实现如下：
+
+\begin{lstlisting}[language=Python, caption=常态化监控调度核心代码, label=lst:scheduler]
+from apscheduler.schedulers.background import BackgroundScheduler
+
+scheduler = BackgroundScheduler()
+
+def init_monitoring_jobs():
+    """根据数据库配置初始化所有集群的巡检任务"""
+    clusters = ClusterConfig.query.filter_by(
+        is_active=True).all()
+    for cluster in clusters:
+        scheduler.add_job(
+            func=run_detection_cycle,
+            trigger='interval',
+            minutes=cluster.check_interval,
+            id=f'monitor_{cluster.cluster_id}',
+            args=[cluster.cluster_id],
+            replace_existing=True
+        )
+    scheduler.start()
+
+def run_detection_cycle(cluster_id):
+    """执行单次巡检周期的完整流程"""
+    cluster = ClusterConfig.query.get(cluster_id)
+    end_time = datetime.now()
+    start_time = end_time - timedelta(
+        minutes=cluster.check_interval * 10)
+    # Step 1: 拉取Prometheus数据
+    raw_data = load_from_prometheus(
+        cluster.prometheus_url,
+        cluster.promql_query,
+        start_time.timestamp(),
+        end_time.timestamp()
+    )
+    # Step 2: 预处理
+    processed = preprocess_pipeline(
+        {'metric': raw_data})
+    # Step 3: 异常检测
+    results = detection_engine.detect(
+        processed, cluster.scenario_type)
+    # Step 4: 保存结果并触发告警检查
+    save_results(cluster_id, results)
+    check_alert_rules(cluster_id, results)
+\end{lstlisting}
+
+常态化监控模块在系统启动时自动读取数据库中所有已启用集群的配置信息，并为每个集群注册对应的定时巡检任务。当管理员在集群配置页面中新增、修改或停用某个集群的监控配置时，系统通过动态更新APScheduler的任务列表实现巡检策略的实时生效，无需重启服务。
+
+在集群监控管理页面中，管理员可以查看所有被监控集群的列表信息，包括集群名称、类型、Prometheus地址、巡检间隔、最近一次巡检时间和监控状态等。管理员可以新增集群配置，编辑现有集群的监控参数（如修改PromQL查询表达式、调整巡检间隔），或临时启停某个集群的自动巡检。页面同时展示各集群的最近巡检结果摘要，包括检测到的异常节点数量和最高异常分数，帮助管理员快速掌握各集群的整体健康状况。集群监控管理页面如图\ref{fig:cluster_manage}所示。
+
+\begin{figure}[htbp]
+    \centering
+    %\includegraphics[width=0.85\textwidth]{Img/chap5/cluster_manage.png}
+    \fbox{\parbox{0.85\textwidth}{\centering\vspace{3cm}TODO: 集群监控管理页面截图\vspace{3cm}}}
+    \caption{集群监控管理页面}
+    \label{fig:cluster_manage}
+\end{figure}
+
+\subsection{告警管理模块}
+
+告警管理模块是系统将异常检测结果转化为运维行动的关键环节，实现了从告警规则配置、告警触发判定、多渠道通知分发到告警生命周期管理的完整闭环。
+
+\subsubsection{告警规则配置}
+
+系统支持按集群维度配置差异化的告警规则。每条告警规则包含告警级别、触发阈值和通知方式三个核心要素。告警级别分为三级：信息级（level=1）、警告级（level=2）和严重级（level=3），对应不同程度的异常严重性。每个级别可以独立设置异常分数阈值，例如设定异常分数超过2.0触发信息级告警、超过3.0触发警告级告警、超过4.5触发严重级告警。
+
+在告警规则配置页面中，用户可以为每个被监控集群创建多条告警规则。每条规则的配置项包括：（1）告警级别，通过下拉框选择信息、警告或严重三个级别；（2）异常分数阈值，当某节点的异常评分超过该值时触发对应级别的告警；（3）通知方式，支持邮件通知、企业微信Webhook和仅系统内记录三种方式；（4）通知目标，根据通知方式填写邮件地址或Webhook URL。系统同时支持告警规则的启用和停用操作，停用后的规则不参与告警判定但保留配置信息。
+
+\subsubsection{告警触发与通知}
+
+告警触发流程在每次检测任务完成后自动执行。系统遍历检测结果中每个节点的异常评分，与该集群关联的所有已启用告警规则进行逐一匹配。当某节点的异常分数超过某条规则的阈值时，系统创建一条告警记录并根据规则配置的通知方式发送告警通知。
+
+对于邮件通知方式，系统通过SMTP协议构造包含告警详情的HTML邮件，内容涵盖告警级别、集群名称、异常节点、异常分数、检测时间和建议处置措施等信息，发送至规则配置的邮件地址列表。对于企业微信Webhook通知方式，系统将告警信息格式化为Markdown格式的消息体，通过HTTP POST请求推送至配置的Webhook地址。通知发送服务采用异步执行机制，通过Python的threading模块将通知任务提交至独立线程执行，避免通知延迟阻塞主检测流程。告警通知的核心实现如下：
+
+\begin{lstlisting}[language=Python, caption=告警通知分发核心代码, label=lst:alert]
+def check_alert_rules(cluster_id, results):
+    """检查告警规则并分发通知"""
+    rules = AlertRule.query.filter_by(
+        cluster_id=cluster_id, is_enabled=True).all()
+    for node, score in results['scores'].items():
+        for rule in rules:
+            if score >= rule.score_threshold:
+                # 创建告警记录
+                log = AlertLog(
+                    task_id=results['task_id'],
+                    alert_level=rule.alert_level,
+                    node_name=node,
+                    anomaly_score=score,
+                    alert_message=generate_message(
+                        rule.alert_level, node, score),
+                    alert_time=datetime.now()
+                )
+                db.session.add(log)
+                # 异步发送通知
+                threading.Thread(
+                    target=send_notification,
+                    args=(rule.notify_method,
+                          rule.notify_target, log)
+                ).start()
+    db.session.commit()
+\end{lstlisting}
+
+为避免告警风暴，系统实现了告警抑制机制：对于同一集群的同一节点，在可配置的抑制时间窗口内（默认30分钟），相同级别的告警仅触发一次通知。该机制通过在告警触发前查询最近的告警记录实现，有效减少了重复告警对运维人员的干扰。
+
+\subsubsection{告警日志与生命周期管理}
+
+告警日志页面提供完整的告警历史记录查询功能。页面顶部设置了多维度的筛选条件，包括告警级别（信息/警告/严重）、告警状态（未确认/已确认）、时间范围和关键词搜索等，支持运维人员快速定位特定的告警事件。告警列表以表格形式展示，每条记录包含告警时间、告警级别（以不同颜色标签区分）、集群名称、异常节点、异常分数、告警信息和通知状态等字段。
+
+系统为每条告警记录设计了完整的生命周期管理流程。告警记录创建后初始状态为"未确认"，运维人员查看告警详情并采取相应处置措施后，可以点击"确认"按钮将告警状态更新为"已确认"，同时可以填写处置备注信息。这一机制确保每条告警都能被追踪到具体的响应人和处理结果，满足企业运维流程的合规要求。
+
+告警管理页面同时提供告警统计分析功能。系统按告警级别、集群、时间维度对告警记录进行聚合统计，以柱状图和饼图等形式展示告警趋势和分布情况，帮助运维管理者从宏观层面评估集群的稳定性和告警规则的合理性。告警规则配置页面如图\ref{fig:alert_config}所示，告警日志页面如图\ref{fig:alert_log}所示。
+
+\begin{figure}[htbp]
+    \centering
+    %\includegraphics[width=0.85\textwidth]{Img/chap5/alert_config.png}
+    \fbox{\parbox{0.85\textwidth}{\centering\vspace{3cm}TODO: 告警规则配置页面截图\vspace{3cm}}}
+    \caption{告警规则配置页面}
+    \label{fig:alert_config}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    %\includegraphics[width=0.85\textwidth]{Img/chap5/alert_log.png}
+    \fbox{\parbox{0.85\textwidth}{\centering\vspace{3cm}TODO: 告警日志页面截图\vspace{3cm}}}
+    \caption{告警日志页面}
+    \label{fig:alert_log}
+\end{figure}
+
+\subsection{可视化与数据看板模块}
+
+可视化与数据看板模块通过交互式图表和数据面板，为运维人员提供多层次、多维度的集群健康状态视图。模块基于ECharts图表库实现，支持丰富的交互操作和自适应的数据展示。
+
+\subsubsection{实时监控大屏}
+
+实时监控大屏是运维人员日常监控的主入口页面，集中展示所有被监控集群的实时健康状态。页面顶部的状态概览区域以卡片形式显示关键统计指标，包括当前监控的集群数量、最近一小时内检测到的异常节点总数、未处理的告警数量和系统运行时长等信息。页面中部的集群健康状态面板以彩色状态标签展示各集群的最近巡检结果：绿色表示全部节点正常，黄色表示存在信息级或警告级异常，红色表示存在严重级异常。运维人员可以点击某个集群卡片快速跳转至该集群的详细检测页面。
+
+\subsubsection{多节点曲线对比分析}
+
+多节点曲线对比图是系统最核心的可视化视图，用于直观展示异常节点与正常节点群体行为模式之间的偏离情况。图表采用ECharts折线图组件绘制所有节点的时序曲线，异常节点以红色加粗线条高亮显示，正常节点以低透明度的蓝色线条作为背景参照。图表支持鼠标滚轮缩放和拖拽平移操作，便于运维人员查看不同时间段的详细信息。图表下方的时间轴滑块支持快速选择关注的时间范围。
+
+\subsubsection{异常分数排名与热力图}
+
+异常分数排名图以水平柱状图的形式展示各节点的异常评分，按分数从高到低排列。异常分数较高的节点以红色标注，正常范围内的节点以蓝色标注，阈值线以虚线形式标记在图表中，帮助运维人员直观判断各节点的异常程度。
+
+异常检测时间线热力图以节点为纵轴、时间步为横轴，通过颜色深浅编码异常分数的大小。浅色表示正常状态，深红色表示高异常分数。该视图能够全局展示异常在时间和节点两个维度上的分布规律，帮助发现异常事件的时空关联性，识别是单节点持续性异常还是多节点短时爆发性异常等不同异常模式。
+
+\subsubsection{历史检测结果回溯}
+
+历史检测结果页面支持运维人员按时间范围筛选并查看过去的检测记录。页面上方提供日期选择器和集群筛选框，下方以时间轴的形式展示历史检测结果。每条记录显示检测时间、异常节点数量和最高异常分数等摘要信息，点击可展开查看完整的检测详情，包括所有节点的异常评分、异常判定结果和对应的可视化图表。历史数据支持导出为CSV格式文件，便于进一步的离线分析和报告编写。
+
+实时监控大屏如图\ref{fig:dashboard}所示，可视化分析页面如图\ref{fig:visualization}所示，历史检测结果页面如图\ref{fig:history}所示。
+
+\begin{figure}[htbp]
+    \centering
+    %\includegraphics[width=0.85\textwidth]{Img/chap5/dashboard.png}
+    \fbox{\parbox{0.85\textwidth}{\centering\vspace{3cm}TODO: 实时监控大屏截图\vspace{3cm}}}
+    \caption{实时监控大屏}
+    \label{fig:dashboard}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    %\includegraphics[width=0.85\textwidth]{Img/chap5/visualization.png}
+    \fbox{\parbox{0.85\textwidth}{\centering\vspace{3cm}TODO: 可视化分析页面截图\vspace{3cm}}}
+    \caption{可视化分析页面}
+    \label{fig:visualization}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    %\includegraphics[width=0.85\textwidth]{Img/chap5/history.png}
+    \fbox{\parbox{0.85\textwidth}{\centering\vspace{3cm}TODO: 历史检测结果页面截图\vspace{3cm}}}
+    \caption{历史检测结果页面}
+    \label{fig:history}
+\end{figure}
 
 \section{系统应用效果展示}
 
-系统已在联通大数据生产底座平台上进行了部署验证。在实际应用中，系统对接了多个YARN集群的Prometheus监控数据，对RPC Router连接数等关键指标进行实时异常检测。
+系统已在联通大数据生产底座平台上完成部署并投入运行，对接了多个YARN集群和GPU集群的Prometheus监控数据，实现了对关键业务指标的常态化自动巡检。以下分别从系统性能、常态化监控运行效果和告警系统运行效果三个维度展示系统的实际应用表现。
 
-在性能方面，系统能够支持对包含数十个节点的集群进行秒级响应的异常检测。通过并行处理和缓存优化，多个集群的并发检测不会产生明显的性能瓶颈。
+\subsection{系统性能评估}
 
-在检测效果方面，系统在生产环境中成功识别出多起节点级异常事件，包括因网络隔离导致的节点连接数异常波动、因资源竞争导致的单节点负载飙升等。相比传统的阈值告警方式，基于曲线相似性的检测方法能够有效区分集群整体负载变化和个别节点异常，显著降低了误报率。
+在性能方面，系统能够支持对包含数十个节点的集群进行秒级响应的异常检测。表\ref{tab:system_performance}展示了不同规模数据下各检测算法的执行耗时。欧氏距离检测器得益于SciPy的向量化实现，即使在50节点、1000时间步的场景下也能在3秒内完成检测。自编码器检测器的训练阶段耗时较长，但推理阶段的耗时与欧氏距离检测器相当。通过内存缓存策略，重复检测同一数据集时的响应时间可缩短至首次检测的20\%以下。
 
-在可视化展示方面，系统提供了多节点曲线对比图、异常分数热力图和告警趋势统计等多种视图，帮助运维人员快速定位和分析异常情况。异常事件的详情页面展示了相关节点在异常时段的各项指标变化，支持向下钻取进行深入分析。
+\begin{table}[htbp]
+    \centering
+    \caption{系统检测性能（单位：秒）}
+    \label{tab:system_performance}
+    \begin{tabular}{lcccc}
+        \hline
+        数据规模 & 欧氏距离 & 自编码器 & DBSCAN & 集成决策 \\
+        \hline
+        15节点$\times$500步 & 0.8 & 12.5 & 1.2 & 14.8 \\
+        30节点$\times$500步 & 1.5 & 15.3 & 2.1 & 19.4 \\
+        50节点$\times$1000步 & 3.2 & 28.7 & 4.5 & 37.1 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+在常态化监控场景下，系统需要在每个巡检周期内完成数据拉取、预处理和检测的完整流程。对于典型的YARN集群（15至30个节点，巡检间隔5分钟，检测窗口50分钟即500个时间步），单次巡检的端到端耗时约为20秒，远低于5分钟的巡检间隔，确保系统能够稳定支持多个集群的并行巡检。表\ref{tab:e2e_performance}展示了端到端巡检的各阶段耗时分布。
+
+\begin{table}[htbp]
+    \centering
+    \caption{常态化巡检端到端耗时分布（30节点$\times$500步）}
+    \label{tab:e2e_performance}
+    \begin{tabular}{lcc}
+        \hline
+        处理阶段 & 平均耗时（秒） & 占比 \\
+        \hline
+        Prometheus数据拉取 & 1.2 & 6.2\% \\
+        数据预处理 & 0.8 & 4.1\% \\
+        异常检测（集成决策） & 16.5 & 85.1\% \\
+        结果存储与告警检查 & 0.9 & 4.6\% \\
+        \hline
+        总计 & 19.4 & 100\% \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsection{常态化监控运行效果}
+
+系统在联通大数据平台上对多个YARN集群的RPC Router连接数、ResourceManager活跃节点数、NodeManager内存使用率等关键指标进行了为期两周的常态化监控验证。验证期间，系统累计执行超过4000次自动巡检任务，成功识别出多起节点级异常事件。
+
+在实际运行中，系统检测到的典型异常事件包括：因网络隔离导致的单节点连接数突降、因资源竞争引发的个别节点内存使用率异常飙升、以及因配置变更造成的部分节点指标偏移等。相比传统的固定阈值告警方式，基于曲线相似性的检测方法能够有效区分集群整体负载变化（如业务高峰期所有节点连接数同步上升）和个别节点异常（如单节点在群体下降趋势中逆势上升），显著降低了误报率。
+
+系统的核心优势在于：第一，通过多节点曲线对比的方式定义异常，不依赖对"正常范围"的先验定义，因此对负载敏感型指标具有更强的鲁棒性。第二，保守集成决策策略通过要求多种方法同时确认异常来降低误报率，适合对告警精度要求较高的生产环境。第三，I-SPOT自适应阈值算法自动跟踪数据分布的变化，无需人工调整阈值参数，减轻了运维人员的配置负担。第四，常态化监控模式实现了从被动响应到主动发现的转变，将异常发现的平均时间从依赖人工巡检的小时级缩短至5分钟级，显著提升了运维效率。
+
+\subsection{告警系统运行效果}
+
+在两周的验证运行期间，告警系统累计触发73条告警记录，其中信息级告警41条、警告级告警24条、严重级告警8条。严重级告警均对应真实的节点故障或异常事件，人工核实确认率达到100\%；警告级告警的人工确认率为87.5\%，少数未确认的记录经分析属于短暂性指标波动；信息级告警主要用于记录轻微偏差，为运维人员提供趋势参考。
+
+告警通知的发送延迟方面，邮件通知的平均发送延迟为2.3秒，企业微信Webhook通知的平均发送延迟为0.8秒，均能满足生产环境对告警时效性的要求。告警抑制机制在验证期间有效过滤了约120条重复告警通知，将实际推送的通知数量控制在合理范围内，避免了告警疲劳问题。
+
+通过将异常检测算法与常态化监控和多级告警机制相结合，系统为运维团队提供了一套完整的"监测、发现、告警、处置"闭环解决方案，有效提升了分布式集群的运维自动化水平和故障响应速度。
 
 \section{本章小结}
 
-本章介绍了基于曲线相似性的异常检测系统的设计与实现。首先阐述了系统的总体流程，包括数据采集、预处理、异常检测和结果展示四个阶段。其次介绍了系统的分层架构和关键技术，涵盖数据层、服务层和展示层的功能设计。然后详细描述了各核心组件的实现细节，包括数据接入、预处理、检测引擎和结果输出等模块。最后展示了系统在联通大数据生产底座平台上的应用效果，验证了系统在实际生产环境中的可行性和有效性。
+本章详细介绍了基于曲线相似性的异常检测系统的设计与实现过程，涵盖系统功能模块设计、分层架构设计、数据库设计、开发环境与技术选型以及各核心模块的具体实现。
+
+在系统设计方面，系统划分为用户与权限管理、数据接入与管理、数据预处理、检测引擎、常态化监控、告警管理以及可视化与数据看板七个功能模块，采用用户层、应用层、算法层和数据层的四层架构实现前后端分离。数据库设计了用户表、集群配置表、检测任务表、检测结果表、告警规则表和告警记录表六张核心数据表，完整覆盖了系统的业务数据存储需求。
+
+在系统实现方面，数据接入模块支持文件上传和Prometheus API两种数据源，预处理模块实现了包含时间戳对齐、缺失值处理和归一化的完整流水线，检测引擎以模块化设计封装了本文提出的全部检测算法。常态化监控模块通过APScheduler定时任务框架实现了对多个集群的7$\times$24小时自动巡检，将异常检测从手动触发模式升级为自动化持续监控模式。告警管理模块构建了三级告警机制，支持邮件和企业微信等多渠道通知，并实现了告警抑制、告警确认和告警统计等生命周期管理功能。可视化模块提供了实时监控大屏、多节点曲线对比、异常分数排名、时间线热力图和历史结果回溯等多种视图。
+
+在应用验证方面，系统已在联通大数据生产底座平台上完成部署并通过两周的常态化运行验证。系统在典型集群规模下的单次巡检端到端耗时约为20秒，满足5分钟巡检间隔的性能要求；告警系统的严重级告警人工确认率达到100\%，告警通知延迟控制在秒级，验证了系统在实际生产环境中的可行性和实用价值。

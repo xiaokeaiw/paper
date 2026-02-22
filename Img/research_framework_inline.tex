@@ -1,0 +1,84 @@
+\usetikzlibrary{shapes.geometric, arrows.meta, fit, backgrounds}
+\begin{tikzpicture}[
+    node distance=0.8cm and 1.5cm,
+    box/.style={rectangle, rounded corners, draw=black, thick, minimum width=3.5cm, minimum height=0.8cm, align=center, font=\small},
+    mainbox/.style={box, fill=blue!30, minimum width=5cm, minimum height=1cm},
+    ch1box/.style={box, fill=gray!20, minimum width=2.8cm},
+    ch2box/.style={box, fill=gray!20, minimum width=2.8cm},
+    ch3box/.style={box, fill=green!30},
+    ch4box/.style={box, fill=orange!30},
+    ch5box/.style={box, fill=purple!30, minimum width=5cm},
+    ch6box/.style={box, fill=gray!40, minimum width=5cm},
+    methodbox/.style={box, fill=white, minimum width=2.5cm, minimum height=0.7cm},
+    titlebox/.style={box, font=\small\bfseries, minimum height=0.7cm},
+    dashedgroup/.style={draw=black, dashed, rounded corners, thick, inner sep=8pt},
+    arrow/.style={-Stealth, thick}
+]
+
+% Chapter 1 and 2 (context)
+\node[ch1box] (ch1) at (-4, 2) {第一章：绪论};
+\node[ch2box] (ch2) [below=0.5cm of ch1] {第二章：相关背景知识};
+
+% Main problem
+\node[mainbox] (problem) at (0, 0) {分布式集群多节点\\时序异常检测};
+
+% Chapter 3 branch (left)
+\node[titlebox, ch3box] (ch3title) at (-3, -2.5) {第三章：单指标多节点异常检测};
+
+\node[methodbox] (method1) at (-4.5, -4) {欧氏距离};
+\node[methodbox] (method2) at (-3, -4) {自编码器嵌入};
+\node[methodbox] (method3) at (-1.5, -4) {DBSCAN聚类};
+
+\node[methodbox] (ispot) at (-3, -5.2) {I-SPOT自适应阈值};
+\node[methodbox] (ensemble) at (-3, -6.4) {保守集成决策};
+
+% Chapter 4 branch (right)
+\node[titlebox, ch4box] (ch4title) at (3, -2.5) {第四章：多指标多节点异常检测};
+
+\node[methodbox] (numeric) at (2.2, -4) {数值视角\\（欧氏距离）};
+\node[methodbox] (shape) at (3.8, -4) {形状视角\\（改进SAX）};
+
+\node[methodbox] (weighted) at (3, -5.5) {加权融合决策};
+
+% Chapter 5
+\node[ch5box] (ch5) at (0, -8.5) {第五章：异常检测系统\\设计与实现};
+
+% Chapter 6
+\node[ch6box] (ch6) [below=0.8cm of ch5] {第六章：总结与展望};
+
+% Dashed grouping for Chapter 3
+\begin{scope}[on background layer]
+\node[dashedgroup, fit=(method1)(method2)(method3)(ispot)(ensemble), fill=green!5] (ch3group) {};
+\end{scope}
+
+% Dashed grouping for Chapter 4
+\begin{scope}[on background layer]
+\node[dashedgroup, fit=(numeric)(shape)(weighted), fill=orange!5] (ch4group) {};
+\end{scope}
+
+% Arrows from Ch1 and Ch2 to problem
+\draw[arrow] (ch1.east) -| ($(problem.north west)+(0.5,0)$);
+\draw[arrow] (ch2.east) -| ($(problem.north west)+(0.5,0)$);
+
+% Arrow from problem to Ch3 and Ch4 titles
+\draw[arrow] (problem.south) -- ++(0, -0.5) -| (ch3title.north);
+\draw[arrow] (problem.south) -- ++(0, -0.5) -| (ch4title.north);
+
+% Arrows within Ch3
+\draw[arrow] (method1.south) |- (ispot.west);
+\draw[arrow] (method2.south) -- (ispot.north);
+\draw[arrow] (method3.south) |- (ispot.east);
+\draw[arrow] (ispot.south) -- (ensemble.north);
+
+% Arrows within Ch4
+\draw[arrow] (numeric.south) |- (weighted.west);
+\draw[arrow] (shape.south) |- (weighted.east);
+
+% Arrows from Ch3 and Ch4 to Ch5
+\draw[arrow] (ensemble.south) |- ($(ch5.north)+(-1,0.5)$) -- ($(ch5.north)+(-1,0)$);
+\draw[arrow] (weighted.south) |- ($(ch5.north)+(1,0.5)$) -- ($(ch5.north)+(1,0)$);
+
+% Arrow from Ch5 to Ch6
+\draw[arrow] (ch5.south) -- (ch6.north);
+
+\end{tikzpicture}
