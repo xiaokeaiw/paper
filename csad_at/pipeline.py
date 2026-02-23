@@ -142,6 +142,10 @@ def global_ispot_detect(scores_dict, n_nodes, n_windows, curve_names,
     for i in anomaly_node_idxs:
         node_anomaly_counts[curve_names[i]] = int(anomaly_matrix[:, i].sum())
 
+    # 计算初始化阶段覆盖的窗口数（这些窗口无法检测异常）
+    init_seq_len = ispot_res['initial_seq_len']
+    init_windows = init_seq_len // n_nodes  # 前 init_windows 个完整窗口属于初始化
+
     return {
         'timeline': timeline,
         'index_map': index_map,
@@ -150,6 +154,7 @@ def global_ispot_detect(scores_dict, n_nodes, n_windows, curve_names,
         'anomaly_nodes': anomaly_nodes,
         'node_anomaly_counts': node_anomaly_counts,
         'anomaly_details': anomaly_details,
+        'init_windows': init_windows,
     }
 
 
@@ -181,7 +186,7 @@ def weighted_fusion(score_dicts, weights, n_nodes, n_windows):
     return fused
 
 
-def run_pipeline(csv_file, window_size=60, step=30,
+def run_pipeline(csv_file, window_size=20, step=10,
                  weights=None,
                  k_neighbors=5,
                  ae_latent_dim=5, ae_epochs=50, ae_lr=1e-3,

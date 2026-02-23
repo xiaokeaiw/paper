@@ -214,4 +214,5 @@ class ISPOT:
             'thresholds': thresholds,
             't0_values': t0_values,
             'anomaly_indices': anomaly_indices,
+            'initial_seq_len': initial_seq_len,
         }

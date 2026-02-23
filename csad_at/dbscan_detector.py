@@ -59,7 +59,7 @@ def compute_dbscan_deviation_scores(window_curves, k_neighbors=5):
     return deviation_scores
 
 
-def run_dbscan_detector(curves, timestamps, window_size=60, step=30,
+def run_dbscan_detector(curves, timestamps, window_size=20, step=10,
                         k_neighbors=5):
     """
     对完整时间序列运行 DBSCAN 密度偏离度检测

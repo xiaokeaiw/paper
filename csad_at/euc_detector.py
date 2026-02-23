@@ -55,7 +55,7 @@ def compute_euc_deviation_scores(window_curves):
     return deviation_scores
 
 
-def run_euc_detector(curves, timestamps, window_size=60, step=30):
+def run_euc_detector(curves, timestamps, window_size=20, step=10):
     """
     对完整时间序列运行欧氏距离偏离度检测
 

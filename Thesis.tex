@@ -22,6 +22,7 @@
 %->> Document settings
 %---------------------------------------------------------------------------%
 \usepackage{caption}
+\usepackage{float}
 \usepackage[super,numbers,list,tikz,table,math]{Style/artratex}
 %- usage: \usepackage[option1,option2,...,optionN]{artratex}
 %- Multiple optional arguments:
@@ -75,7 +76,7 @@
 
 }
 \thispagestyle{figureheader}
-\input{Tex/Prematter}% symbol list, preface content
+%\input{Tex/Prematter}% symbol list, preface content
 %-
 %-> Mainmatter
 %-
@@ -97,10 +98,10 @@
     \printbibliography% bibliography
 }
 \cleardoublepage%
-\appendix% initialize the environment
-\input{Tex/Appendix}% appendix content
+%\appendix% initialize the environment
+%\input{Tex/Appendix}% appendix content
 
-\thispagestyle{appendixheader}
+%\thispagestyle{appendixheader}
 \backmatter% initialize the environment
 \input{Tex/Backmatter}% other information
 \end{document}

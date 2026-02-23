@@ -1,14 +1,29 @@
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {1-1}{\ignorespaces 论文研究内容框架图}}{5}{figure.caption.17}%
+\contentsline {figure}{\numberline {1-1}{\ignorespaces 论文研究内容框架图}}{5}{figure.caption.12}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2-1}{\ignorespaces 时间序列异常类型分类示意图}}{9}{figure.caption.18}%
+\contentsline {figure}{\numberline {2-1}{\ignorespaces 点异常示意图}}{8}{figure.caption.13}%
+\contentsline {figure}{\numberline {2-2}{\ignorespaces 片段异常示意图（从上到下依次为波形异常、季节性异常与趋势异常）}}{9}{figure.caption.14}%
+\contentsline {figure}{\numberline {2-3}{\ignorespaces 变量间关联异常示意图}}{9}{figure.caption.15}%
+\contentsline {figure}{\numberline {2-4}{\ignorespaces 节点级异常示意图}}{10}{figure.caption.16}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3-1}{\ignorespaces 测试数据集异常标注曲线（红色阴影部分为异常标注）}}{17}{figure.caption.20}%
-\contentsline {figure}{\numberline {3-2}{\ignorespaces CSAD-AT框架整体架构}}{23}{figure.caption.25}%
+\contentsline {figure}{\numberline {3-1}{\ignorespaces 测试数据集异常标注曲线（红色阴影部分为异常标注）}}{19}{figure.caption.18}%
+\contentsline {figure}{\numberline {3-2}{\ignorespaces CSAD-AT框架整体架构}}{25}{figure.caption.23}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\addvspace {10\p@ }
-\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5-1}{\ignorespaces 用户登录页面}}{50}{figure.caption.37}%
+\contentsline {figure}{\numberline {5-2}{\ignorespaces 用户权限管理页面}}{51}{figure.caption.38}%
+\contentsline {figure}{\numberline {5-3}{\ignorespaces 数据集管理页面}}{52}{figure.caption.39}%
+\contentsline {figure}{\numberline {5-4}{\ignorespaces 时序数据预览页面}}{52}{figure.caption.40}%
+\contentsline {figure}{\numberline {5-5}{\ignorespaces 数据预处理页面}}{53}{figure.caption.41}%
+\contentsline {figure}{\numberline {5-6}{\ignorespaces 预处理日志页面}}{54}{figure.caption.42}%
+\contentsline {figure}{\numberline {5-7}{\ignorespaces 异常检测配置页面}}{55}{figure.caption.43}%
+\contentsline {figure}{\numberline {5-8}{\ignorespaces 检测记录页面}}{55}{figure.caption.44}%
+\contentsline {figure}{\numberline {5-9}{\ignorespaces 集群监控管理页面}}{57}{figure.caption.45}%
+\contentsline {figure}{\numberline {5-10}{\ignorespaces 告警规则配置页面}}{59}{figure.caption.46}%
+\contentsline {figure}{\numberline {5-11}{\ignorespaces 告警日志页面}}{60}{figure.caption.47}%
+\contentsline {figure}{\numberline {5-12}{\ignorespaces 实时监控大屏}}{61}{figure.caption.48}%
+\contentsline {figure}{\numberline {5-13}{\ignorespaces 可视化分析页面}}{61}{figure.caption.49}%
+\contentsline {figure}{\numberline {5-14}{\ignorespaces 历史检测结果页面}}{62}{figure.caption.50}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

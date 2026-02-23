@@ -127,7 +127,7 @@ def compute_ae_deviation_scores(window_curves, ae_model, device='cpu'):
     return deviation_scores
 
 
-def run_ae_detector(curves, timestamps, window_size=60, step=30,
+def run_ae_detector(curves, timestamps, window_size=20, step=10,
                     latent_dim=5, hidden_dim=128, epochs=50, lr=1e-3,
                     batch_size=32):
     """

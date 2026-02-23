@@ -2,9 +2,16 @@
 CSAD-AT 命令行入口
 
 用法:
+    # 仅检测
     python -m csad_at.run data.csv --output results/
-    python -m csad_at.run data.csv --window 60 --step 30 --weights 0.4 0.3 0.3
-    python -m csad_at.run data.csv --no-plot  # 不生成可视化
+
+    # 检测 + 评估
+    python -m csad_at.run data.csv --output results/ \
+        --ground-truth anomaly_data_YARN6_new.csv
+
+    # 自定义参数
+    python -m csad_at.run data.csv --window 60 --step 30 --weights 0.4 0.3 0.3 \
+        --ground-truth anomaly_data_YARN6_new.csv --overlap-threshold 0.3
 """
 
 import argparse
@@ -14,6 +21,7 @@ import time
 
 from .pipeline import run_pipeline, save_results
 from .visualize import generate_all_plots
+from .evaluate import evaluate_all_stages, save_evaluation
 
 
 def parse_args():
@@ -25,25 +33,26 @@ def parse_args():
   # 使用默认参数运行（含可视化）
   python -m csad_at.run input.csv --output results/
 
-  # 自定义窗口和权重
-  python -m csad_at.run input.csv --window 120 --step 60 --weights 0.5 0.3 0.2
+  # 检测 + 评估（需要真实标注文件）
+  python -m csad_at.run input.csv --output results/ \\
+      --ground-truth anomaly_data_YARN6_new.csv
 
-  # 只使用欧氏距离和自编码器
-  python -m csad_at.run input.csv --methods euclidean autoencoder --output results/
-
-  # 不生成可视化图表
-  python -m csad_at.run input.csv --no-plot
+  # 自定义窗口、权重和评估参数
+  python -m csad_at.run input.csv --window 120 --step 60 \\
+      --weights 0.5 0.3 0.2 --ground-truth labels.csv \\
+      --overlap-threshold 0.3
         """)
 
     # 数据输入
-    parser.add_argument('csv_file', help='输入 CSV 文件路径（首列时间戳，其余列为节点时序）')
+    parser.add_argument('csv_file',
+                        help='输入 CSV 文件路径（首列时间戳，其余列为节点时序）')
     parser.add_argument('--output', '-o', default='csad_at_results',
                         help='输出目录（默认: csad_at_results）')
 
     # 滑动窗口参数
-    parser.add_argument('--window', type=int, default=60,
+    parser.add_argument('--window', type=int, default=20,
                         help='滑动窗口大小（默认: 60）')
-    parser.add_argument('--step', type=int, default=30,
+    parser.add_argument('--step', type=int, default=10,
                         help='窗口滑动步长（默认: 30）')
 
     # 方法选择与权重
@@ -81,6 +90,13 @@ def parse_args():
     parser.add_argument('--no-plot', action='store_true',
                         help='不生成可视化图表')
 
+    # 评估参数
+    parser.add_argument('--ground-truth', default=None,
+                        help='异常标注文件路径（CSV: node, start, end, label）'
+                             '提供此参数时自动运行评估')
+    parser.add_argument('--overlap-threshold', type=float, default=0.5,
+                        help='评估时的时间重叠比例阈值（默认: 0.5）')
+
     return parser.parse_args()
 
 
@@ -101,7 +117,7 @@ def main():
         print(f"错误: 权重数量({len(weights)})与方法数量({len(args.methods)})不匹配")
         sys.exit(1)
 
-    # 补全权重到三维（pipeline 需要三个权重对应三种方法）
+    # 补全权重到三维
     full_weights = [0.0, 0.0, 0.0]
     method_indices = {'euclidean': 0, 'autoencoder': 1, 'dbscan': 2}
     for i, method in enumerate(args.methods):
@@ -109,7 +125,7 @@ def main():
 
     start_time = time.time()
 
-    # ========== 运行检测流水线 ==========
+    # ========== 1. 运行检测流水线 ==========
     results = run_pipeline(
         csv_file=args.csv_file,
         window_size=args.window,
@@ -129,16 +145,37 @@ def main():
     elapsed = time.time() - start_time
     print(f"\n检测耗时: {elapsed:.2f} 秒")
 
-    # ========== 保存结果 ==========
+    # ========== 2. 保存结果 ==========
     save_results(results, args.output)
 
-    # ========== 生成可视化 ==========
+    # ========== 3. 生成可视化 ==========
     if not args.no_plot:
         try:
             generate_all_plots(results, args.output)
         except Exception as e:
             print(f"\n[警告] 可视化生成失败: {e}")
-            print("检测结果已正常保存，可手动检查 CSV 文件。")
+            import traceback
+            traceback.print_exc()
+
+    # ========== 4. 评估（如果提供了标注文件）==========
+    if args.ground_truth:
+        if not os.path.exists(args.ground_truth):
+            print(f"\n[警告] 异常标注文件不存在: {args.ground_truth}")
+        else:
+            try:
+                all_eval = evaluate_all_stages(
+                    results=results,
+                    ground_truth_file=args.ground_truth,
+                    data_file=args.csv_file,
+                    window_size=args.window,
+                    step=args.step,
+                    overlap_threshold=args.overlap_threshold,
+                )
+                save_evaluation(all_eval, args.output)
+            except Exception as e:
+                print(f"\n[警告] 评估失败: {e}")
+                import traceback
+                traceback.print_exc()
 
     print(f"\n总耗时: {time.time() - start_time:.2f} 秒")
     print(f"所有结果已保存到: {args.output}/")
