@@ -318,12 +318,12 @@ def preprocess_pipeline(data_dict, interval='60s',
                         normalize_method='zscore'):
     processed = {}
     for metric_name, df in data_dict.items():
-        # Step 1: 时间戳对齐与重采样
+        # Step 1: Timestamp alignment & resampling
         df_aligned = align_timestamps(df, interval)
-        # Step 2: 缺失值检测与分段填充
+        # Step 2: Missing value detection & interpolation
         df_filled, dropped = interpolate_missing(
             df_aligned, max_gap=5)
-        # Step 3: 数据归一化
+        # Step 3: Data normalization
         df_normalized, stats = normalize(
             df_filled, normalize_method)
         processed[metric_name] = df_normalized

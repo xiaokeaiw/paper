@@ -102,199 +102,231 @@
 \citation{ren2019srnn}
 \@writefile{toc}{\contentsline {section}{\numberline {2.3}分布式集群监控数据与异常检测}{13}{section.2.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3.1}分布式集群概述}{13}{subsection.2.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.2}集群监控数据特点}{13}{subsection.2.3.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2-5}{\ignorespaces Hadoop分布式集群架构示意图}}{14}{figure.caption.17}\protected@file@percent }
+\newlabel{fig:hadoop_cluster}{{2-5}{14}{Hadoop分布式集群架构示意图}{figure.caption.17}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.2}集群监控数据特点}{14}{subsection.2.3.2}\protected@file@percent }
 \citation{fan2015spark}
 \citation{boniol2022dads}
 \citation{chen2025tsadsurvey}
 \citation{chen2025tsadsurvey}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.3}分布式异常检测系统架构}{14}{subsection.2.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.4}异常检测方法在集群数据中的应用与挑战}{14}{subsection.2.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.3}分布式异常检测系统架构}{15}{subsection.2.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.4}异常检测方法在集群数据中的应用与挑战}{15}{subsection.2.3.4}\protected@file@percent }
 \citation{chen2025tsadsurvey}
 \citation{boniol2022dads}
-\@writefile{toc}{\contentsline {section}{\numberline {2.4}本章小结}{15}{section.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {第3章\hspace  {.3em}}面向多节点单指标的异常检测算法}{17}{chapter.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.4}本章小结}{16}{section.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {第3章\hspace  {.3em}}面向多节点单指标的异常检测算法}{19}{chapter.3}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loappfig}{\addvspace {10\p@ }}
 \@writefile{loapptab}{\addvspace {10\p@ }}
-\newlabel{chap:single_metric}{{3}{17}{面向多节点单指标的异常检测算法}{chapter.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.1}多节点单指标数据集构建}{17}{section.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}数据来源与采集}{17}{subsection.3.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.2}数据集预处理与标注}{18}{subsection.3.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.3}数据集统计与可视化}{18}{subsection.3.1.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {3-1}{\ignorespaces 数据集统计数据}}{19}{table.caption.17}\protected@file@percent }
-\newlabel{tab:dataset_stats}{{3-1}{19}{数据集统计数据}{table.caption.17}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3-1}{\ignorespaces 测试数据集异常标注曲线（红色阴影部分为异常标注）}}{19}{figure.caption.18}\protected@file@percent }
-\newlabel{fig:anomaly_curve}{{3-1}{19}{测试数据集异常标注曲线（红色阴影部分为异常标注）}{figure.caption.18}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.2}现有异常检测方法评估}{19}{section.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}异常检测基线算法}{19}{subsection.3.2.1}\protected@file@percent }
-\newlabel{subsec:baseline}{{3.2.1}{19}{异常检测基线算法}{subsection.3.2.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}基于曲线相似性的异常检测方法}{20}{subsection.3.2.2}\protected@file@percent }
-\newlabel{subsec:similarity}{{3.2.2}{20}{基于曲线相似性的异常检测方法}{subsection.3.2.2}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2.1}基于欧氏距离的数值相似性度量}{20}{subsubsection.3.2.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2.2}基于自编码器嵌入的形态相似性度量}{21}{subsubsection.3.2.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2.3}基于DBSCAN聚类的密度相似性度量}{21}{subsubsection.3.2.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.3}实验结果对比分析}{22}{subsection.3.2.3}\protected@file@percent }
-\newlabel{subsec:exp_results}{{3.2.3}{22}{实验结果对比分析}{subsection.3.2.3}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {3-2}{\ignorespaces 基线算法与本文方法在RPC Router连接数数据集上的异常检测效果对比}}{22}{table.caption.19}\protected@file@percent }
-\newlabel{tab:baseline_results}{{3-2}{22}{基线算法与本文方法在RPC Router连接数数据集上的异常检测效果对比}{table.caption.19}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.3}参数敏感性分析与优化策略}{23}{section.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}阈值敏感性实验与分析}{23}{subsection.3.3.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {3-3}{\ignorespaces 欧氏距离方法在不同阈值和时间窗口下的异常检测分数}}{23}{table.caption.20}\protected@file@percent }
-\newlabel{tab:euclidean_sensitivity}{{3-3}{23}{欧氏距离方法在不同阈值和时间窗口下的异常检测分数}{table.caption.20}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {3-4}{\ignorespaces AE嵌入后异常检测分数}}{23}{table.caption.21}\protected@file@percent }
-\newlabel{tab:ae_sensitivity}{{3-4}{23}{AE嵌入后异常检测分数}{table.caption.21}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {3-5}{\ignorespaces DBSCAN异常检测分数}}{24}{table.caption.22}\protected@file@percent }
-\newlabel{tab:dbscan_sensitivity}{{3-5}{24}{DBSCAN异常检测分数}{table.caption.22}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}参数依赖性与泛化挑战}{24}{subsection.3.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.4}CSAD-AT：基于曲线相似性的自适应阈值异常检测框架}{25}{section.3.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3-2}{\ignorespaces CSAD-AT框架整体架构}}{25}{figure.caption.23}\protected@file@percent }
-\newlabel{fig:csad_framework}{{3-2}{25}{CSAD-AT框架整体架构}{figure.caption.23}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.1}经典SPOT算法原理与局限性分析}{25}{subsection.3.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.2}I-SPOT：基于包容性极值建模的自适应阈值算法}{26}{subsection.3.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.3}多视角保守集成决策机制}{27}{subsection.3.4.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {3-6}{\ignorespaces CSAD-AT框架保守集成策略的检测效果}}{28}{table.caption.24}\protected@file@percent }
-\newlabel{tab:ensemble_results}{{3-6}{28}{CSAD-AT框架保守集成策略的检测效果}{table.caption.24}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.5}实验验证与对比分析}{28}{section.3.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.1}实验设置}{28}{subsection.3.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.2}与基线算法实验结果对比}{28}{subsection.3.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.3}I-SPOT算法的自适应阈值效果验证}{29}{subsection.3.5.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {3-7}{\ignorespaces I-SPOT自适应阈值与固定阈值方法的性能对比}}{29}{table.caption.25}\protected@file@percent }
-\newlabel{tab:spot_results}{{3-7}{29}{I-SPOT自适应阈值与固定阈值方法的性能对比}{table.caption.25}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.4}CSAD-AT框架的综合性能评估}{29}{subsection.3.5.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.6}本章小结}{30}{section.3.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {第4章\hspace  {.3em}}数值-形状双视角融合的多指标多节点异常检测}{31}{chapter.4}\protected@file@percent }
+\newlabel{chap:single_metric}{{3}{19}{面向多节点单指标的异常检测算法}{chapter.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}多节点单指标数据集构建}{19}{section.3.1}\protected@file@percent }
+\newlabel{sec:dataset}{{3.1}{19}{多节点单指标数据集构建}{section.3.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}数据来源与采集}{19}{subsection.3.1.1}\protected@file@percent }
+\newlabel{subsec:data_source}{{3.1.1}{19}{数据来源与采集}{subsection.3.1.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3-1}{\ignorespaces YARN分布式集群架构与RPC Router连接数指标示意}}{20}{figure.caption.18}\protected@file@percent }
+\newlabel{fig:yarn_arch}{{3-1}{20}{YARN分布式集群架构与RPC Router连接数指标示意}{figure.caption.18}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.2}数据集预处理与标注}{20}{subsection.3.1.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3-2}{\ignorespaces 数据标注流程示意图}}{21}{figure.caption.19}\protected@file@percent }
+\newlabel{fig:annotation_flow}{{3-2}{21}{数据标注流程示意图}{figure.caption.19}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.3}数据集统计与可视化}{21}{subsection.3.1.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3-1}{\ignorespaces 数据集统计数据}}{21}{table.caption.20}\protected@file@percent }
+\newlabel{tab:dataset_stats}{{3-1}{21}{数据集统计数据}{table.caption.20}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3-3}{\ignorespaces 测试数据集异常标注曲线（红色阴影部分为异常标注）}}{21}{figure.caption.21}\protected@file@percent }
+\newlabel{fig:anomaly_curve}{{3-3}{21}{测试数据集异常标注曲线（红色阴影部分为异常标注）}{figure.caption.21}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}现有异常检测方法评估}{21}{section.3.2}\protected@file@percent }
+\newlabel{sec:method_eval}{{3.2}{21}{现有异常检测方法评估}{section.3.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}异常检测基线算法}{22}{subsection.3.2.1}\protected@file@percent }
+\newlabel{subsec:baseline}{{3.2.1}{22}{异常检测基线算法}{subsection.3.2.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}基于曲线相似性的异常检测方法}{22}{subsection.3.2.2}\protected@file@percent }
+\newlabel{subsec:similarity}{{3.2.2}{22}{基于曲线相似性的异常检测方法}{subsection.3.2.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2.1}基于欧氏距离的数值相似性度量}{22}{subsubsection.3.2.2.1}\protected@file@percent }
+\newlabel{eq:euc_score}{{3-3}{23}{基于欧氏距离的数值相似性度量}{equation.3.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2.2}基于自编码器嵌入的形态相似性度量}{23}{subsubsection.3.2.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2.3}基于DBSCAN聚类的密度相似性度量}{24}{subsubsection.3.2.2.3}\protected@file@percent }
+\newlabel{subsec:density_score}{{3.2.2.3}{24}{基于DBSCAN聚类的密度相似性度量}{subsubsection.3.2.2.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.3}实验结果对比分析}{24}{subsection.3.2.3}\protected@file@percent }
+\newlabel{subsec:exp_results}{{3.2.3}{24}{实验结果对比分析}{subsection.3.2.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3-2}{\ignorespaces 基线算法与曲线相似性方法在RPC Router连接数数据集上的异常检测效果对比}}{25}{table.caption.22}\protected@file@percent }
+\newlabel{tab:baseline_results}{{3-2}{25}{基线算法与曲线相似性方法在RPC Router连接数数据集上的异常检测效果对比}{table.caption.22}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.4}阈值敏感性实验与分析}{25}{subsection.3.2.4}\protected@file@percent }
+\newlabel{subsec:param_sensitivity}{{3.2.4}{25}{阈值敏感性实验与分析}{subsection.3.2.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3-3}{\ignorespaces 欧氏距离方法在不同阈值和时间窗口下的异常检测分数}}{26}{table.caption.23}\protected@file@percent }
+\newlabel{tab:euclidean_sensitivity}{{3-3}{26}{欧氏距离方法在不同阈值和时间窗口下的异常检测分数}{table.caption.23}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3-4}{\ignorespaces 自编码器嵌入方法在不同阈值和时间窗口下的异常检测分数}}{26}{table.caption.24}\protected@file@percent }
+\newlabel{tab:ae_sensitivity}{{3-4}{26}{自编码器嵌入方法在不同阈值和时间窗口下的异常检测分数}{table.caption.24}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3-5}{\ignorespaces 密度偏离方法在不同参数下的异常检测分数}}{26}{table.caption.25}\protected@file@percent }
+\newlabel{tab:density_sensitivity}{{3-5}{26}{密度偏离方法在不同参数下的异常检测分数}{table.caption.25}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.5}参数依赖性与泛化挑战}{27}{subsection.3.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}I-SPOT包容性自适应阈值算法}{27}{section.3.3}\protected@file@percent }
+\newlabel{sec:threshold}{{3.3}{27}{I-SPOT包容性自适应阈值算法}{section.3.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}SPOT算法原理}{27}{subsection.3.3.1}\protected@file@percent }
+\newlabel{eq:spot_threshold}{{3-5}{28}{SPOT算法原理}{equation.3.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}I-SPOT：包容性自适应阈值算法}{28}{subsection.3.3.2}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces I-SPOT自适应阈值算法}}{29}{algorithm.1}\protected@file@percent }
+\newlabel{alg:ispot}{{1}{29}{I-SPOT自适应阈值算法}{algorithm.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.4}CSAD-AT异常检测框架}{29}{section.3.4}\protected@file@percent }
+\newlabel{sec:framework}{{3.4}{29}{CSAD-AT异常检测框架}{section.3.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.1}框架概述}{29}{subsection.3.4.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3-4}{\ignorespaces CSAD-AT框架整体架构}}{30}{figure.caption.26}\protected@file@percent }
+\newlabel{fig:csad_framework}{{3-4}{30}{CSAD-AT框架整体架构}{figure.caption.26}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.2}异常评分方法}{30}{subsection.3.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.2.1}欧氏距离评分与自编码器嵌入评分}{30}{subsubsection.3.4.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.2.2}密度偏离评分}{31}{subsubsection.3.4.2.2}\protected@file@percent }
+\newlabel{eq:density_score}{{3-8}{31}{密度偏离评分}{equation.3.8}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.2.3}多视角互补性}{31}{subsubsection.3.4.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.3}分数归一化与聚合}{31}{subsection.3.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.4}全局时间线构建与I-SPOT检测}{32}{subsection.3.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.5}实验验证与分析}{32}{section.3.5}\protected@file@percent }
+\newlabel{sec:experiments}{{3.5}{32}{实验验证与分析}{section.3.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.1}实验设置}{32}{subsection.3.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.2}整体性能分析}{33}{subsection.3.5.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3-6}{\ignorespaces CSAD-AT与基线算法及各评分方法的整体性能对比}}{33}{table.caption.27}\protected@file@percent }
+\newlabel{tab:overall_results}{{3-6}{33}{CSAD-AT与基线算法及各评分方法的整体性能对比}{table.caption.27}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.3}分数聚合策略对比实验}{34}{subsection.3.5.3}\protected@file@percent }
+\newlabel{subsec:agg_compare}{{3.5.3}{34}{分数聚合策略对比实验}{subsection.3.5.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3-7}{\ignorespaces 不同分数聚合策略的性能对比}}{34}{table.caption.28}\protected@file@percent }
+\newlabel{tab:agg_compare}{{3-7}{34}{不同分数聚合策略的性能对比}{table.caption.28}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.4}消融实验：各评分方法贡献分析}{34}{subsection.3.5.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3-8}{\ignorespaces 消融实验：各评分方法与I-SPOT结合的性能}}{34}{table.caption.29}\protected@file@percent }
+\newlabel{tab:ablation}{{3-8}{34}{消融实验：各评分方法与I-SPOT结合的性能}{table.caption.29}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.5}I-SPOT与经典SPOT对比实验}{34}{subsection.3.5.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3-9}{\ignorespaces 不同SPOT变体的性能对比}}{35}{table.caption.30}\protected@file@percent }
+\newlabel{tab:spot_compare}{{3-9}{35}{不同SPOT变体的性能对比}{table.caption.30}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.6}本章小结}{35}{section.3.6}\protected@file@percent }
+\newlabel{sec:ch3_summary}{{3.6}{35}{本章小结}{section.3.6}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {第4章\hspace  {.3em}}数值-形状双视角融合的多指标多节点异常检测}{37}{chapter.4}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loappfig}{\addvspace {10\p@ }}
 \@writefile{loapptab}{\addvspace {10\p@ }}
-\newlabel{chap:multi_metric}{{4}{31}{数值-形状双视角融合的多指标多节点异常检测}{chapter.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.1}集群多指标多节点数据集及异常检测算法框架}{31}{section.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}多指标多节点数据集概述}{31}{subsection.4.1.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4-1}{\ignorespaces 故障类别及数量分布}}{32}{table.caption.26}\protected@file@percent }
-\newlabel{tab:fault_category}{{4-1}{32}{故障类别及数量分布}{table.caption.26}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4-2}{\ignorespaces 监控指标列表及说明}}{32}{table.caption.27}\protected@file@percent }
-\newlabel{tab:monitoring_metrics}{{4-2}{32}{监控指标列表及说明}{table.caption.27}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}问题分析与算法框架}{33}{subsection.4.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.2}基于数值特征的异常检测算法}{34}{section.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}基于欧氏距离的单指标异常度量}{34}{subsection.4.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}多指标加权融合策略}{35}{subsection.4.2.2}\protected@file@percent }
-\newlabel{eq:weighted_fusion}{{4-6}{35}{多指标加权融合策略}{equation.4.6}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}算法实现与效率优化}{36}{subsection.4.2.3}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces 基于数值特征的多指标异常检测算法}}{36}{algorithm.1}\protected@file@percent }
-\newlabel{alg:numerical_detection}{{1}{36}{基于数值特征的多指标异常检测算法}{algorithm.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.3}基于形状特征的异常检测算法}{37}{section.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}经典SAX算法原理}{37}{subsection.4.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}基于SAX算法的符号化表示与模式匹配}{37}{subsection.4.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.3}算法效率优化}{38}{subsection.4.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.4}多算法融合与故障定位}{38}{section.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.1}加权融合设计}{38}{subsection.4.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.2}故障定位与根因分析建议}{39}{subsection.4.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.5}实验验证与对比分析}{39}{section.4.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.1}实验设置}{39}{subsection.4.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.2}方法结果对比分析与案例研究}{39}{subsection.4.5.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4-3}{\ignorespaces 多指标多节点异常检测方法对比}}{40}{table.caption.28}\protected@file@percent }
-\newlabel{tab:multi_metric_results}{{4-3}{40}{多指标多节点异常检测方法对比}{table.caption.28}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.3}融合方法优势分析}{40}{subsection.4.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.4}算法效率实验对比}{40}{subsection.4.5.4}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4-4}{\ignorespaces 算法效率对比}}{40}{table.caption.29}\protected@file@percent }
-\newlabel{tab:efficiency}{{4-4}{40}{算法效率对比}{table.caption.29}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.6}本章小结}{40}{section.4.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {第5章\hspace  {.3em}}基于曲线相似性的异常检测系统}{43}{chapter.5}\protected@file@percent }
+\newlabel{chap:multi_metric}{{4}{37}{数值-形状双视角融合的多指标多节点异常检测}{chapter.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}集群多指标多节点数据集及异常检测算法框架}{37}{section.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}多指标多节点数据集概述}{37}{subsection.4.1.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4-1}{\ignorespaces 故障类别及数量分布}}{38}{table.caption.31}\protected@file@percent }
+\newlabel{tab:fault_category}{{4-1}{38}{故障类别及数量分布}{table.caption.31}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4-2}{\ignorespaces 监控指标列表及说明}}{38}{table.caption.32}\protected@file@percent }
+\newlabel{tab:monitoring_metrics}{{4-2}{38}{监控指标列表及说明}{table.caption.32}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}问题分析与算法框架}{39}{subsection.4.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}基于数值特征的异常检测算法}{40}{section.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}基于欧氏距离的单指标异常度量}{40}{subsection.4.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}多指标加权融合策略}{41}{subsection.4.2.2}\protected@file@percent }
+\newlabel{eq:weighted_fusion}{{4-6}{41}{多指标加权融合策略}{equation.4.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}算法实现与效率优化}{42}{subsection.4.2.3}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces 基于数值特征的多指标异常检测算法}}{42}{algorithm.2}\protected@file@percent }
+\newlabel{alg:numerical_detection}{{2}{42}{基于数值特征的多指标异常检测算法}{algorithm.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}基于形状特征的异常检测算法}{43}{section.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}经典SAX算法原理}{43}{subsection.4.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}基于SAX算法的符号化表示与模式匹配}{43}{subsection.4.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.3}算法效率优化}{44}{subsection.4.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}多算法融合与故障定位}{44}{section.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.1}加权融合设计}{44}{subsection.4.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.2}故障定位与根因分析建议}{45}{subsection.4.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.5}实验验证与对比分析}{45}{section.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.1}实验设置}{45}{subsection.4.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.2}方法结果对比分析与案例研究}{45}{subsection.4.5.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4-3}{\ignorespaces 多指标多节点异常检测方法对比}}{46}{table.caption.33}\protected@file@percent }
+\newlabel{tab:multi_metric_results}{{4-3}{46}{多指标多节点异常检测方法对比}{table.caption.33}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.3}融合方法优势分析}{46}{subsection.4.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.4}算法效率实验对比}{46}{subsection.4.5.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4-4}{\ignorespaces 算法效率对比}}{46}{table.caption.34}\protected@file@percent }
+\newlabel{tab:efficiency}{{4-4}{46}{算法效率对比}{table.caption.34}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.6}本章小结}{46}{section.4.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {第5章\hspace  {.3em}}基于曲线相似性的异常检测系统}{49}{chapter.5}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loappfig}{\addvspace {10\p@ }}
 \@writefile{loapptab}{\addvspace {10\p@ }}
-\newlabel{chap:system}{{5}{43}{基于曲线相似性的异常检测系统}{chapter.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.1}系统设计}{43}{section.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.1}功能模块设计}{43}{subsection.5.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}系统架构设计}{44}{subsection.5.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.3}数据库设计}{45}{subsection.5.1.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5-1}{\ignorespaces 用户表}}{45}{table.caption.30}\protected@file@percent }
-\newlabel{tab:db_users}{{5-1}{45}{用户表}{table.caption.30}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5-2}{\ignorespaces 集群配置表}}{46}{table.caption.31}\protected@file@percent }
-\newlabel{tab:db_clusters}{{5-2}{46}{集群配置表}{table.caption.31}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5-3}{\ignorespaces 检测任务表}}{46}{table.caption.32}\protected@file@percent }
-\newlabel{tab:db_tasks}{{5-3}{46}{检测任务表}{table.caption.32}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5-4}{\ignorespaces 检测结果表}}{46}{table.caption.33}\protected@file@percent }
-\newlabel{tab:db_results}{{5-4}{46}{检测结果表}{table.caption.33}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5-5}{\ignorespaces 告警规则表}}{47}{table.caption.34}\protected@file@percent }
-\newlabel{tab:db_alert_rules}{{5-5}{47}{告警规则表}{table.caption.34}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5-6}{\ignorespaces 告警记录表}}{47}{table.caption.35}\protected@file@percent }
-\newlabel{tab:db_alert_logs}{{5-6}{47}{告警记录表}{table.caption.35}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.2}开发环境与技术选型}{48}{section.5.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5-7}{\ignorespaces 系统代码目录结构}}{49}{table.caption.36}\protected@file@percent }
-\newlabel{tab:code_structure}{{5-7}{49}{系统代码目录结构}{table.caption.36}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.3}系统实现}{50}{section.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.1}用户与权限管理模块}{50}{subsection.5.3.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5-1}{\ignorespaces 用户登录页面}}{50}{figure.caption.37}\protected@file@percent }
-\newlabel{fig:login_page}{{5-1}{50}{用户登录页面}{figure.caption.37}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.2}数据接入与管理模块}{50}{subsection.5.3.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5-2}{\ignorespaces 用户权限管理页面}}{51}{figure.caption.38}\protected@file@percent }
-\newlabel{fig:user_manage}{{5-2}{51}{用户权限管理页面}{figure.caption.38}{}}
-\newlabel{lst:prometheus}{{1}{51}{Prometheus数据接入核心代码}{lstlisting.1}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}{\ignorespaces Prometheus数据接入核心代码}}{51}{lstlisting.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5-3}{\ignorespaces 数据集管理页面}}{52}{figure.caption.39}\protected@file@percent }
-\newlabel{fig:data_manage}{{5-3}{52}{数据集管理页面}{figure.caption.39}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5-4}{\ignorespaces 时序数据预览页面}}{52}{figure.caption.40}\protected@file@percent }
-\newlabel{fig:data_preview}{{5-4}{52}{时序数据预览页面}{figure.caption.40}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.3}预处理服务模块}{52}{subsection.5.3.3}\protected@file@percent }
-\newlabel{lst:preprocess}{{2}{53}{预处理流水线核心代码}{lstlisting.2}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}{\ignorespaces 预处理流水线核心代码}}{53}{lstlisting.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5-5}{\ignorespaces 数据预处理页面}}{53}{figure.caption.41}\protected@file@percent }
-\newlabel{fig:preprocess}{{5-5}{53}{数据预处理页面}{figure.caption.41}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.4}检测引擎模块}{53}{subsection.5.3.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5-6}{\ignorespaces 预处理日志页面}}{54}{figure.caption.42}\protected@file@percent }
-\newlabel{fig:preprocess_log}{{5-6}{54}{预处理日志页面}{figure.caption.42}{}}
-\newlabel{lst:euclidean}{{3}{54}{欧氏距离检测器核心代码}{lstlisting.3}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}{\ignorespaces 欧氏距离检测器核心代码}}{54}{lstlisting.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5-7}{\ignorespaces 异常检测配置页面}}{55}{figure.caption.43}\protected@file@percent }
-\newlabel{fig:detection_config}{{5-7}{55}{异常检测配置页面}{figure.caption.43}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5-8}{\ignorespaces 检测记录页面}}{55}{figure.caption.44}\protected@file@percent }
-\newlabel{fig:detection_records}{{5-8}{55}{检测记录页面}{figure.caption.44}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.5}常态化监控模块}{56}{subsection.5.3.5}\protected@file@percent }
-\newlabel{lst:scheduler}{{4}{56}{常态化监控调度核心代码}{lstlisting.4}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}{\ignorespaces 常态化监控调度核心代码}}{56}{lstlisting.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5-9}{\ignorespaces 集群监控管理页面}}{57}{figure.caption.45}\protected@file@percent }
-\newlabel{fig:cluster_manage}{{5-9}{57}{集群监控管理页面}{figure.caption.45}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.6}告警管理模块}{57}{subsection.5.3.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.6.1}告警规则配置}{57}{subsubsection.5.3.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.6.2}告警触发与通知}{58}{subsubsection.5.3.6.2}\protected@file@percent }
-\newlabel{lst:alert}{{5}{58}{告警通知分发核心代码}{lstlisting.5}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {5}{\ignorespaces 告警通知分发核心代码}}{58}{lstlisting.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.6.3}告警日志与生命周期管理}{59}{subsubsection.5.3.6.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5-10}{\ignorespaces 告警规则配置页面}}{59}{figure.caption.46}\protected@file@percent }
-\newlabel{fig:alert_config}{{5-10}{59}{告警规则配置页面}{figure.caption.46}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.7}可视化与数据看板模块}{59}{subsection.5.3.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.7.1}实时监控大屏}{59}{subsubsection.5.3.7.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5-11}{\ignorespaces 告警日志页面}}{60}{figure.caption.47}\protected@file@percent }
-\newlabel{fig:alert_log}{{5-11}{60}{告警日志页面}{figure.caption.47}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.7.2}多节点曲线对比分析}{60}{subsubsection.5.3.7.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.7.3}异常分数排名与热力图}{60}{subsubsection.5.3.7.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.7.4}历史检测结果回溯}{60}{subsubsection.5.3.7.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5-12}{\ignorespaces 实时监控大屏}}{61}{figure.caption.48}\protected@file@percent }
-\newlabel{fig:dashboard}{{5-12}{61}{实时监控大屏}{figure.caption.48}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5-13}{\ignorespaces 可视化分析页面}}{61}{figure.caption.49}\protected@file@percent }
-\newlabel{fig:visualization}{{5-13}{61}{可视化分析页面}{figure.caption.49}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5-14}{\ignorespaces 历史检测结果页面}}{62}{figure.caption.50}\protected@file@percent }
-\newlabel{fig:history}{{5-14}{62}{历史检测结果页面}{figure.caption.50}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.4}系统应用效果展示}{62}{section.5.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.1}系统性能评估}{62}{subsection.5.4.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5-8}{\ignorespaces 系统检测性能（单位：秒）}}{62}{table.caption.51}\protected@file@percent }
-\newlabel{tab:system_performance}{{5-8}{62}{系统检测性能（单位：秒）}{table.caption.51}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5-9}{\ignorespaces 常态化巡检端到端耗时分布（30节点$\times $500步）}}{63}{table.caption.52}\protected@file@percent }
-\newlabel{tab:e2e_performance}{{5-9}{63}{常态化巡检端到端耗时分布（30节点$\times $500步）}{table.caption.52}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.2}常态化监控运行效果}{63}{subsection.5.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.3}告警系统运行效果}{63}{subsection.5.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5.5}本章小结}{64}{section.5.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {第6章\hspace  {.3em}}总结与展望}{65}{chapter.6}\protected@file@percent }
+\newlabel{chap:system}{{5}{49}{基于曲线相似性的异常检测系统}{chapter.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}系统设计}{49}{section.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.1}功能模块设计}{49}{subsection.5.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}系统架构设计}{50}{subsection.5.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.3}数据库设计}{51}{subsection.5.1.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5-1}{\ignorespaces 用户表}}{51}{table.caption.35}\protected@file@percent }
+\newlabel{tab:db_users}{{5-1}{51}{用户表}{table.caption.35}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5-2}{\ignorespaces 集群配置表}}{52}{table.caption.36}\protected@file@percent }
+\newlabel{tab:db_clusters}{{5-2}{52}{集群配置表}{table.caption.36}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5-3}{\ignorespaces 检测任务表}}{52}{table.caption.37}\protected@file@percent }
+\newlabel{tab:db_tasks}{{5-3}{52}{检测任务表}{table.caption.37}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5-4}{\ignorespaces 检测结果表}}{52}{table.caption.38}\protected@file@percent }
+\newlabel{tab:db_results}{{5-4}{52}{检测结果表}{table.caption.38}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5-5}{\ignorespaces 告警规则表}}{53}{table.caption.39}\protected@file@percent }
+\newlabel{tab:db_alert_rules}{{5-5}{53}{告警规则表}{table.caption.39}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5-6}{\ignorespaces 告警记录表}}{53}{table.caption.40}\protected@file@percent }
+\newlabel{tab:db_alert_logs}{{5-6}{53}{告警记录表}{table.caption.40}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}开发环境与技术选型}{54}{section.5.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5-7}{\ignorespaces 系统代码目录结构}}{55}{table.caption.41}\protected@file@percent }
+\newlabel{tab:code_structure}{{5-7}{55}{系统代码目录结构}{table.caption.41}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}系统实现}{56}{section.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.1}用户与权限管理模块}{56}{subsection.5.3.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5-1}{\ignorespaces 用户登录页面}}{56}{figure.caption.42}\protected@file@percent }
+\newlabel{fig:login_page}{{5-1}{56}{用户登录页面}{figure.caption.42}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.2}数据接入与管理模块}{56}{subsection.5.3.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5-2}{\ignorespaces 用户权限管理页面}}{57}{figure.caption.43}\protected@file@percent }
+\newlabel{fig:user_manage}{{5-2}{57}{用户权限管理页面}{figure.caption.43}{}}
+\newlabel{lst:prometheus}{{1}{57}{Prometheus数据接入核心代码}{lstlisting.1}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}{\ignorespaces Prometheus数据接入核心代码}}{57}{lstlisting.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5-3}{\ignorespaces 数据集管理页面}}{58}{figure.caption.44}\protected@file@percent }
+\newlabel{fig:data_manage}{{5-3}{58}{数据集管理页面}{figure.caption.44}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5-4}{\ignorespaces 时序数据预览页面}}{58}{figure.caption.45}\protected@file@percent }
+\newlabel{fig:data_preview}{{5-4}{58}{时序数据预览页面}{figure.caption.45}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.3}预处理服务模块}{58}{subsection.5.3.3}\protected@file@percent }
+\newlabel{lst:preprocess}{{2}{59}{预处理流水线核心代码}{lstlisting.2}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}{\ignorespaces 预处理流水线核心代码}}{59}{lstlisting.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5-5}{\ignorespaces 数据预处理页面}}{59}{figure.caption.46}\protected@file@percent }
+\newlabel{fig:preprocess}{{5-5}{59}{数据预处理页面}{figure.caption.46}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.4}检测引擎模块}{59}{subsection.5.3.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5-6}{\ignorespaces 预处理日志页面}}{60}{figure.caption.47}\protected@file@percent }
+\newlabel{fig:preprocess_log}{{5-6}{60}{预处理日志页面}{figure.caption.47}{}}
+\newlabel{lst:euclidean}{{3}{60}{欧氏距离检测器核心代码}{lstlisting.3}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}{\ignorespaces 欧氏距离检测器核心代码}}{60}{lstlisting.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5-7}{\ignorespaces 异常检测配置页面}}{61}{figure.caption.48}\protected@file@percent }
+\newlabel{fig:detection_config}{{5-7}{61}{异常检测配置页面}{figure.caption.48}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5-8}{\ignorespaces 检测记录页面}}{61}{figure.caption.49}\protected@file@percent }
+\newlabel{fig:detection_records}{{5-8}{61}{检测记录页面}{figure.caption.49}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.5}常态化监控模块}{62}{subsection.5.3.5}\protected@file@percent }
+\newlabel{lst:scheduler}{{4}{62}{常态化监控调度核心代码}{lstlisting.4}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}{\ignorespaces 常态化监控调度核心代码}}{62}{lstlisting.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5-9}{\ignorespaces 集群监控管理页面}}{63}{figure.caption.50}\protected@file@percent }
+\newlabel{fig:cluster_manage}{{5-9}{63}{集群监控管理页面}{figure.caption.50}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.6}告警管理模块}{63}{subsection.5.3.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.6.1}告警规则配置}{63}{subsubsection.5.3.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.6.2}告警触发与通知}{64}{subsubsection.5.3.6.2}\protected@file@percent }
+\newlabel{lst:alert}{{5}{64}{告警通知分发核心代码}{lstlisting.5}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5}{\ignorespaces 告警通知分发核心代码}}{64}{lstlisting.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.6.3}告警日志与生命周期管理}{65}{subsubsection.5.3.6.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5-10}{\ignorespaces 告警规则配置页面}}{65}{figure.caption.51}\protected@file@percent }
+\newlabel{fig:alert_config}{{5-10}{65}{告警规则配置页面}{figure.caption.51}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.7}可视化与数据看板模块}{65}{subsection.5.3.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.7.1}实时监控大屏}{65}{subsubsection.5.3.7.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5-11}{\ignorespaces 告警日志页面}}{66}{figure.caption.52}\protected@file@percent }
+\newlabel{fig:alert_log}{{5-11}{66}{告警日志页面}{figure.caption.52}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.7.2}多节点曲线对比分析}{66}{subsubsection.5.3.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.7.3}异常分数排名与热力图}{66}{subsubsection.5.3.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.7.4}历史检测结果回溯}{66}{subsubsection.5.3.7.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5-12}{\ignorespaces 实时监控大屏}}{67}{figure.caption.53}\protected@file@percent }
+\newlabel{fig:dashboard}{{5-12}{67}{实时监控大屏}{figure.caption.53}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5-13}{\ignorespaces 可视化分析页面}}{67}{figure.caption.54}\protected@file@percent }
+\newlabel{fig:visualization}{{5-13}{67}{可视化分析页面}{figure.caption.54}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5-14}{\ignorespaces 历史检测结果页面}}{68}{figure.caption.55}\protected@file@percent }
+\newlabel{fig:history}{{5-14}{68}{历史检测结果页面}{figure.caption.55}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.4}系统应用效果展示}{68}{section.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.1}系统性能评估}{68}{subsection.5.4.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5-8}{\ignorespaces 系统检测性能（单位：秒）}}{68}{table.caption.56}\protected@file@percent }
+\newlabel{tab:system_performance}{{5-8}{68}{系统检测性能（单位：秒）}{table.caption.56}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5-9}{\ignorespaces 常态化巡检端到端耗时分布（30节点$\times $500步）}}{69}{table.caption.57}\protected@file@percent }
+\newlabel{tab:e2e_performance}{{5-9}{69}{常态化巡检端到端耗时分布（30节点$\times $500步）}{table.caption.57}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.2}常态化监控运行效果}{69}{subsection.5.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.3}告警系统运行效果}{69}{subsection.5.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.5}本章小结}{70}{section.5.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {第6章\hspace  {.3em}}总结与展望}{71}{chapter.6}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loappfig}{\addvspace {10\p@ }}
 \@writefile{loapptab}{\addvspace {10\p@ }}
-\newlabel{chap:conclusion}{{6}{65}{总结与展望}{chapter.6}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.1}本文工作总结}{65}{section.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6.2}未来研究展望}{65}{section.6.2}\protected@file@percent }
+\newlabel{chap:conclusion}{{6}{71}{总结与展望}{chapter.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}本文工作总结}{71}{section.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}未来研究展望}{71}{section.6.2}\protected@file@percent }
 \bibdata{Biblio/ref}
 \bibcite{grubbs1969}{{1}{1969}{{Grubbs}}{{}}}
 \bibcite{dixon1950}{{2}{1950}{{Dixon}}{{}}}
@@ -314,7 +346,7 @@
 \bibcite{deng2021graph}{{16}{2021}{{Deng {等}}}{{Deng and Hooi}}}
 \bibcite{chen2025carots}{{17}{2025{}}{{Chen {等}}}{{Chen, Liu, and Zhang}}}
 \bibcite{ren2019sranomaly}{{18}{2019{}}{{Ren {等}}}{{Ren, Xu, Wang, Yi, Huang, Kou, Xing, Yang, Tong, and Zhang}}}
-\@writefile{toc}{\contentsline {chapter}{参考文献}{67}{section*.53}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{参考文献}{73}{section*.58}\protected@file@percent }
 \bibcite{darban2025carla}{{19}{2025}{{Darban {等}}}{{Darban, Webb, Pan, Aggarwal, and Salehi}}}
 \bibcite{paparrizos2022tsbuad}{{20}{2022}{{Paparrizos {等}}}{{Paparrizos, Kang, Boniol, Tsay, Palpanas, and Franklin}}}
 \bibcite{wu2024tab}{{21}{2024}{{Wu {等}}}{{Wu, Jiang, and Zhang}}}
@@ -346,14 +378,14 @@
 \bibcite{li2019madgan}{{47}{2019}{{Li {等}}}{{Li, Chen, Shi, Jin, Goh, and Ng}}}
 \bibcite{ren2019srnn}{{48}{2019{}}{{Ren {等}}}{{Ren, Xu, Wang, Yi, Huang, Kou, Xing, Yang, Tong, and Zhang}}}
 \bibcite{boniol2022dads}{{49}{2022}{{Boniol {等}}}{{Boniol and Palpanas}}}
-\@writefile{toc}{\contentsline {chapter}{致谢}{71}{chapter*.55}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{致谢}{77}{chapter*.60}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loappfig}{\addvspace {10\p@ }}
 \@writefile{loapptab}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {chapter}{作者简历及攻读学位期间发表的学术论文与其他相关学术成果}{73}{chapter*.56}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{作者简历及攻读学位期间发表的学术论文与其他相关学术成果}{79}{chapter*.61}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{loappfig}{\addvspace {10\p@ }}
 \@writefile{loapptab}{\addvspace {10\p@ }}
-\gdef \@abspage@last{90}
+\gdef \@abspage@last{96}
