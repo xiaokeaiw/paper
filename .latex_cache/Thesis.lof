@@ -9,7 +9,7 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {3-1}{\ignorespaces YARN分布式集群架构与RPC Router连接数指标示意}}{20}{figure.caption.18}%
 \contentsline {figure}{\numberline {3-2}{\ignorespaces 数据标注流程示意图}}{21}{figure.caption.19}%
-\contentsline {figure}{\numberline {3-3}{\ignorespaces 测试数据集异常标注曲线（红色阴影部分为异常标注）}}{21}{figure.caption.21}%
+\contentsline {figure}{\numberline {3-3}{\ignorespaces 测试集A典型异常片段时序可视化（红色曲线为异常节点，粉色阴影为标注的异常时段）}}{22}{figure.caption.21}%
 \contentsline {figure}{\numberline {3-4}{\ignorespaces CSAD-AT框架整体架构}}{30}{figure.caption.26}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }

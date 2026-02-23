@@ -5,10 +5,10 @@
 \contentsline {table}{\numberline {3-2}{\ignorespaces 基线算法与曲线相似性方法在RPC Router连接数数据集上的异常检测效果对比}}{25}{table.caption.22}%
 \contentsline {table}{\numberline {3-3}{\ignorespaces 欧氏距离方法在不同阈值和时间窗口下的异常检测分数}}{26}{table.caption.23}%
 \contentsline {table}{\numberline {3-4}{\ignorespaces 自编码器嵌入方法在不同阈值和时间窗口下的异常检测分数}}{26}{table.caption.24}%
-\contentsline {table}{\numberline {3-5}{\ignorespaces 密度偏离方法在不同参数下的异常检测分数}}{26}{table.caption.25}%
+\contentsline {table}{\numberline {3-5}{\ignorespaces 密度偏离方法在不同参数下的异常检测分数}}{27}{table.caption.25}%
 \contentsline {table}{\numberline {3-6}{\ignorespaces CSAD-AT与基线算法及各评分方法的整体性能对比}}{33}{table.caption.27}%
 \contentsline {table}{\numberline {3-7}{\ignorespaces 不同分数聚合策略的性能对比}}{34}{table.caption.28}%
-\contentsline {table}{\numberline {3-8}{\ignorespaces 消融实验：各评分方法与I-SPOT结合的性能}}{34}{table.caption.29}%
+\contentsline {table}{\numberline {3-8}{\ignorespaces 消融实验：各评分方法与I-SPOT结合的性能}}{35}{table.caption.29}%
 \contentsline {table}{\numberline {3-9}{\ignorespaces 不同SPOT变体的性能对比}}{35}{table.caption.30}%
 \addvspace {10\p@ }
 \contentsline {table}{\numberline {4-1}{\ignorespaces 故障类别及数量分布}}{38}{table.caption.31}%

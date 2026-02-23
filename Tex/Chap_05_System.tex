@@ -361,12 +361,12 @@ def compute_anomaly_scores(self, data):
     scores = np.zeros((n_windows, N))
     for t in range(n_windows):
         window = data[t:t + self.window_size, :]
-        # 向量化计算节点间欧氏距离矩阵
+        # Vectorized pairwise Euclidean distance
         dist_matrix = squareform(
             pdist(window.T, metric='euclidean'))
         np.fill_diagonal(dist_matrix, 0)
         avg_distances = dist_matrix.sum(axis=1) / (N - 1)
-        # Z-score归一化
+        # Z-score normalization
         mu, sigma = avg_distances.mean(), avg_distances.std()
         if sigma > 1e-10:
             scores[t] = (avg_distances - mu) / sigma
@@ -405,7 +405,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 scheduler = BackgroundScheduler()
 
 def init_monitoring_jobs():
-    """根据数据库配置初始化所有集群的巡检任务"""
+    """Initialize scheduled tasks for all clusters"""
     clusters = ClusterConfig.query.filter_by(
         is_active=True).all()
     for cluster in clusters:
@@ -420,25 +420,25 @@ def init_monitoring_jobs():
     scheduler.start()
 
 def run_detection_cycle(cluster_id):
-    """执行单次巡检周期的完整流程"""
+    """Run a single detection cycle"""
     cluster = ClusterConfig.query.get(cluster_id)
     end_time = datetime.now()
     start_time = end_time - timedelta(
         minutes=cluster.check_interval * 10)
-    # Step 1: 拉取Prometheus数据
+    # Step 1: Fetch data from Prometheus
     raw_data = load_from_prometheus(
         cluster.prometheus_url,
         cluster.promql_query,
         start_time.timestamp(),
         end_time.timestamp()
     )
-    # Step 2: 预处理
+    # Step 2: Preprocessing
     processed = preprocess_pipeline(
         {'metric': raw_data})
-    # Step 3: 异常检测
+    # Step 3: Anomaly detection
     results = detection_engine.detect(
         processed, cluster.scenario_type)
-    # Step 4: 保存结果并触发告警检查
+    # Step 4: Save results and check alerts
     save_results(cluster_id, results)
     check_alert_rules(cluster_id, results)
 \end{lstlisting}
@@ -473,13 +473,13 @@ def run_detection_cycle(cluster_id):
 
 \begin{lstlisting}[language=Python, caption=告警通知分发核心代码, label=lst:alert]
 def check_alert_rules(cluster_id, results):
-    """检查告警规则并分发通知"""
+    """Check alert rules and dispatch notifications"""
     rules = AlertRule.query.filter_by(
         cluster_id=cluster_id, is_enabled=True).all()
     for node, score in results['scores'].items():
         for rule in rules:
             if score >= rule.score_threshold:
-                # 创建告警记录
+                # Create alert log entry
                 log = AlertLog(
                     task_id=results['task_id'],
                     alert_level=rule.alert_level,
@@ -490,7 +490,7 @@ def check_alert_rules(cluster_id, results):
                     alert_time=datetime.now()
                 )
                 db.session.add(log)
-                # 异步发送通知
+                # Send notification async
                 threading.Thread(
                     target=send_notification,
                     args=(rule.notify_method,
