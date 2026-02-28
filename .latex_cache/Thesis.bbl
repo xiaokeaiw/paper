@@ -1,4 +1,4 @@
-\begin{thebibliography}{49}
+\begin{thebibliography}{57}
 \providecommand{\biband}{和}
 \providecommand{\bibetal}{等}
 \providecommand{\natexlab}[1]{#1}
@@ -90,8 +90,9 @@ Proceedings of the VLDB Endowment: volume~15.
 
 \bibitem[Xu {\bibetal}(2022)Xu, Wu, Wang, and Long]{xu2022anomaly}
 Xu~J, Wu~H, Wang~J, et~al.
-\newblock Anomaly transformer: Time series anomaly detection with association discrepancy [J].
-\newblock arXiv preprint arXiv:2110.02642, 2022.
+\newblock Anomaly transformer: Time series anomaly detection with association discrepancy [C]//\allowbreak
+International Conference on Learning Representations.
+\newblock 2022.
 
 \bibitem[Deng {\bibetal}(2021)Deng and Hooi]{deng2021graph}
 Deng~A, Hooi~B.
@@ -137,10 +138,20 @@ Carbone~P, Katsifodimos~A, Ewen~S, et~al.
 \newblock Apache {Flink}: Stream and batch processing in a single engine [J].
 \newblock IEEE Data Engineering Bulletin, 2015, 36\penalty0 (4): 28-38.
 
+\bibitem[Chandola {\bibetal}(2009)Chandola, Banerjee, and Kumar]{chandola2009anomaly}
+Chandola~V, Banerjee~A, Kumar~V.
+\newblock Anomaly detection: A survey [J].
+\newblock ACM Computing Surveys, 2009, 41\penalty0 (3): 1-58.
+
 \bibitem[Braei {\bibetal}(2020)Braei and Wagner]{braei2020anomaly}
 Braei~M, Wagner~S.
 \newblock Anomaly detection in univariate time-series: A survey on the state-of-the-art [J].
 \newblock arXiv preprint arXiv:2004.00433, 2020.
+
+\bibitem[Bl{\'a}zquez-Garc{\'i}a {\bibetal}(2021)Bl{\'a}zquez-Garc{\'i}a, Conde, Mori, and Lozano]{blazquez2021review}
+Bl{\'a}zquez-Garc{\'i}a~A, Conde~A, Mori~U, et~al.
+\newblock A review on outlier/anomaly detection in time series data [J].
+\newblock ACM Computing Surveys, 2021, 54\penalty0 (3): 1-33.
 
 \bibitem[陈福荣\ {\bibetal}(2025)陈福荣, 朱贵富, 李淑琴, and 包铁]{chen2025tsadsurvey}
 陈福荣, 朱贵富, 李淑琴, 等.
@@ -149,9 +160,8 @@ Braei~M, Wagner~S.
 
 \bibitem[Sch{\"o}lkopf {\bibetal}(2001)Sch{\"o}lkopf, Platt, Shawe-Taylor, Smola, and Williamson]{scholkopf2001ocsvm}
 Sch{\"o}lkopf~B, Platt~J~C, Shawe-Taylor~J, et~al.
-\newblock Estimating the support of a high-dimensional distribution [C]//\allowbreak
-volume~13.
-\newblock 2001: 1443-1471.
+\newblock Estimating the support of a high-dimensional distribution [J].
+\newblock Neural Computation, 2001, 13\penalty0 (7): 1443-1471.
 
 \bibitem[Ester {\bibetal}(1996)Ester, Kriegel, Sander, and Xu]{ester1996dbscan}
 Ester~M, Kriegel~H~P, Sander~J, et~al.
@@ -168,11 +178,23 @@ Chalapathy~R, Chawla~S.
 \newblock Deep learning for anomaly detection: A survey [J].
 \newblock arXiv preprint arXiv:1901.03407, 2019.
 
+\bibitem[Chung {\bibetal}(2014)Chung, Gulcehre, Cho, and Bengio]{chung2014gru}
+Chung~J, Gulcehre~C, Cho~K, et~al.
+\newblock Empirical evaluation of gated recurrent neural networks on sequence modeling [C]//\allowbreak
+NIPS 2014 Workshop on Deep Learning.
+\newblock 2014.
+
 \bibitem[Malhotra {\bibetal}(2015)Malhotra, Vig, Shroff, and Agarwal]{malhotra2015lstm}
 Malhotra~P, Vig~L, Shroff~G, et~al.
 \newblock Long short term memory networks for anomaly detection in time series [C]//\allowbreak
 European Symposium on Artificial Neural Networks.
 \newblock 2015: 89-94.
+
+\bibitem[Zong {\bibetal}(2018)Zong, Song, Min, Cheng, Lumezanu, Cho, and Chen]{zong2018dagmm}
+Zong~B, Song~Q, Min~M~R, et~al.
+\newblock Deep autoencoding {Gaussian} mixture model for unsupervised anomaly detection [C]//\allowbreak
+International Conference on Learning Representations.
+\newblock 2018.
 
 \bibitem[Kingma {\bibetal}(2014)Kingma and Welling]{kingma2014vae}
 Kingma~D~P, Welling~M.
@@ -203,6 +225,12 @@ Zhang~H, Wang~Y, Huang~T.
 Proceedings of the 40th IEEE International Conference on Data Engineering.
 \newblock 2024{\natexlab{a}}: 1-12.
 
+\bibitem[Wu {\bibetal}(2023)Wu, Hu, Liu, Zhou, Wang, and Long]{wu2023timesnet}
+Wu~H, Hu~T, Liu~Y, et~al.
+\newblock {TimesNet}: Temporal 2d-variation modeling for general time series analysis [C]//\allowbreak
+International Conference on Learning Representations.
+\newblock 2023.
+
 \bibitem[Malhotra {\bibetal}(2016)Malhotra, Ramakrishnan, Anand, Vig, Agarwal, and Shroff]{malhotra2016lstmencoder}
 Malhotra~P, Ramakrishnan~A, Anand~G, et~al.
 \newblock {LSTM}-based encoder-decoder for multi-sensor anomaly detection [C]//\allowbreak
@@ -211,7 +239,8 @@ ICML Workshop on Anomaly Detection.
 
 \bibitem[Chen {\bibetal}(2023)Chen, Kang, Chen, and Wang]{chen2023dcdetector}
 Chen~Y, Kang~Y, Chen~Y, et~al.
-\newblock {DCdetector}: Dual attention contrastive representation learning for time series anomaly detection [J].
+\newblock {DCdetector}: Dual attention contrastive representation learning for time series anomaly detection [C]//\allowbreak
+Proceedings of the 29th ACM SIGKDD Conference on Knowledge Discovery and Data Mining.
 \newblock 2023: 218-228.
 
 \bibitem[Zhao {\bibetal}(2020)Zhao, Wang, Duan, Huang, Cao, Tong, Xu, Bai, Tong, and Zhang]{zhao2020mtadgat}
@@ -238,7 +267,8 @@ Wu~Z, Pan~S, Chen~F, et~al.
 
 \bibitem[Dai {\bibetal}(2022)Dai and Chen]{dai2022graph}
 Dai~E, Chen~J.
-\newblock Graph-augmented normalizing flows for anomaly detection of multiple time series [J].
+\newblock Graph-augmented normalizing flows for anomaly detection of multiple time series [C]//\allowbreak
+International Conference on Learning Representations.
 \newblock 2022.
 
 \bibitem[Zhang {\bibetal}(2024{\natexlab{b}})Zhang, Chen, and Li]{zhang2024gstpro}
@@ -270,12 +300,30 @@ International Conference on Artificial Neural Networks.
 
 \bibitem[Ren {\bibetal}(2019{\natexlab{b}})Ren, Xu, Wang, Yi, Huang, Kou, Xing, Yang, Tong, and Zhang]{ren2019srnn}
 Ren~H, Xu~B, Wang~Y, et~al.
-\newblock Time-series anomaly detection service at {Microsoft} [J].
-\newblock 2019: 3009-3017.
+\newblock Time-series anomaly detection service at {Microsoft} [C]//\allowbreak
+Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining.
+\newblock 2019{\natexlab{b}}: 3009-3017.
+
+\bibitem[Ca{\~n}izo {\bibetal}(2019)Ca{\~n}izo, Triguero, Conde, and Onieva]{canizo2019multihead}
+Ca{\~n}izo~M, Triguero~I, Conde~A, et~al.
+\newblock Multi-head {CNN-RNN} for multi-time series anomaly detection: An industrial case study [C]//\allowbreak
+Neurocomputing: volume 363.
+\newblock 2019: 246-260.
 
 \bibitem[Boniol {\bibetal}(2022)Boniol and Palpanas]{boniol2022dads}
 Boniol~P, Palpanas~T.
 \newblock Distributed detection of sequential anomalies in univariate time series [J].
 \newblock The VLDB Journal, 2022, 31: 233-256.
+
+\bibitem[Siffer {\bibetal}(2017)Siffer, Fouque, Termier, and Largouet]{siffer2017spot}
+Siffer~A, Fouque~P~A, Termier~A, et~al.
+\newblock Anomaly detection in streams with extreme value theory [C]//\allowbreak
+Proceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining.
+\newblock 2017: 1067-1075.
+
+\bibitem[Lin {\bibetal}(2007)Lin, Keogh, Wei, and Lonardi]{lin2007sax}
+Lin~J, Keogh~E, Wei~L, et~al.
+\newblock Experiencing sax: a novel symbolic representation of time series [J].
+\newblock Data Mining and Knowledge Discovery, 2007, 15\penalty0 (2): 107-144.
 
 \end{thebibliography}

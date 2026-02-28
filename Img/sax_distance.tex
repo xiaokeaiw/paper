@@ -1,0 +1,38 @@
+\begin{tikzpicture}
+% 左侧：传统SAX距离矩阵
+\node[font=\small\bfseries] at (3, 5.0) {(a) 传统SAX距离矩阵};
+\begin{scope}[xshift=0cm]
+\matrix (sax) [matrix of nodes,
+    nodes={minimum width=1.1cm, minimum height=0.7cm, anchor=center, font=\small, draw=gray!30, thin},
+    column sep=-\pgflinewidth, row sep=-\pgflinewidth,
+    row 1/.style={nodes={font=\small\bfseries, fill=blue!12, draw=gray!30}},
+    column 1/.style={nodes={font=\small\bfseries, fill=blue!12, draw=gray!30}},
+] at (3, 2) {
+          & $l_1$ & $l_2$ & $l_3$ & $l_4$ & $l_5$ \\
+    $l_1$ & 0     & |[fill=yellow!30]| 0     & 0.59  & 1.09  & 1.68  \\
+    $l_2$ & |[fill=yellow!30]| 0     & 0     & |[fill=yellow!30]| 0     & 0.59  & 1.09  \\
+    $l_3$ & 0.59  & |[fill=yellow!30]| 0     & 0     & |[fill=yellow!30]| 0     & 0.59  \\
+    $l_4$ & 1.09  & 0.59  & |[fill=yellow!30]| 0     & 0     & |[fill=yellow!30]| 0     \\
+    $l_5$ & 1.68  & 1.09  & 0.59  & |[fill=yellow!30]| 0     & 0     \\
+};
+\node[font=\tiny, text=red!70!black, text width=5.5cm, align=center] at (3, -0.5) {黄色：相邻符号距离$=0$（宽容性设计）};
+\end{scope}
+% 右侧：FR-SAX距离矩阵
+\node[font=\small\bfseries] at (10.5, 5.0) {(b) FR-SAX距离矩阵};
+\begin{scope}[xshift=7.5cm]
+\matrix (frsax) [matrix of nodes,
+    nodes={minimum width=1.1cm, minimum height=0.7cm, anchor=center, font=\small, draw=gray!30, thin},
+    column sep=-\pgflinewidth, row sep=-\pgflinewidth,
+    row 1/.style={nodes={font=\small\bfseries, fill=green!15, draw=gray!30}},
+    column 1/.style={nodes={font=\small\bfseries, fill=green!15, draw=gray!30}},
+] at (3, 2) {
+          & $l_1$ & $l_2$ & $l_3$ & $l_4$ & $l_5$ \\
+    $l_1$ & 0     & |[fill=orange!25]| 0.59  & 1.09  & 1.68  & 2.27  \\
+    $l_2$ & |[fill=orange!25]| 0.59  & 0     & |[fill=orange!25]| 0.50  & 1.09  & 1.68  \\
+    $l_3$ & 1.09  & |[fill=orange!25]| 0.50  & 0     & |[fill=orange!25]| 0.59  & 1.09  \\
+    $l_4$ & 1.68  & 1.09  & |[fill=orange!25]| 0.59  & 0     & |[fill=orange!25]| 0.59  \\
+    $l_5$ & 2.27  & 1.68  & 1.09  & |[fill=orange!25]| 0.59  & 0     \\
+};
+\node[font=\tiny, text=green!50!black, text width=5.5cm, align=center] at (3, -0.5) {橙色：相邻符号距离$>0$（严格距离设计）};
+\end{scope}
+\end{tikzpicture}

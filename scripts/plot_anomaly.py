@@ -5,7 +5,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
 
-cjk = FontProperties(fname='/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf', size=9)
+cjk = FontProperties(fname='/tmp/NotoSansSC.ttf', size=9)
 
 base = 'resources/data/test_data/\u6d4b\u8bd5\u6570\u636e/01'
 test = pd.read_csv(f'{base}/test-data.csv')
@@ -38,8 +38,8 @@ for _, row in anom_in_range.iterrows():
     ax.axvspan(a_start_m, a_end_m, color='#FFCDD2', alpha=0.6, zorder=0, label=lbl)
     first_shaded = False
 
-ax.set_xlabel('Time (min)', fontsize=11)
-ax.set_ylabel('RPC Router Connections', fontsize=11)
+ax.set_xlabel('时间（分钟）', fontsize=11, fontproperties=cjk)
+ax.set_ylabel('RPC Router 连接数', fontsize=11, fontproperties=cjk)
 ax.legend(loc='upper right', framealpha=0.9, prop=cjk)
 ax.set_xlim(subset['minutes'].iloc[0], subset['minutes'].iloc[-1])
 ax.grid(True, alpha=0.25, linestyle='--')

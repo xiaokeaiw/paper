@@ -1,0 +1,96 @@
+\usetikzlibrary{shapes.geometric, arrows.meta, fit, backgrounds, positioning, calc}
+\begin{tikzpicture}[
+    node distance=0.5cm,
+    % Box styles
+    basebox/.style={rectangle, rounded corners=3pt, align=center, font=\small, minimum height=0.9cm},
+    modbox/.style={basebox, minimum width=2.6cm, minimum height=1.1cm, text=white, font=\small\bfseries},
+    subtext/.style={font=\scriptsize, text=white, opacity=0.85},
+    widebox/.style={basebox, minimum width=8.6cm, minimum height=1.1cm, text=white, font=\small\bfseries},
+    labelbox/.style={basebox, minimum width=2.3cm, minimum height=0.8cm, font=\footnotesize},
+    % Group
+    grp/.style={draw=gray!35, rounded corners=5pt, inner sep=10pt, thin},
+    % Section title
+    stitle/.style={font=\footnotesize, text=gray!55!black},
+    % Arrows
+    arr/.style={-Stealth, thick, gray!55},
+    darr/.style={-Stealth, dashed, thin, gray!45}
+]
+
+% ============ 数据输入 (Left) ============
+\node[stitle] at (-3.8, 5.2) {数据输入};
+\node[labelbox, fill=blue!55, text=white, draw=blue!65, minimum width=3cm, minimum height=0.9cm] (input1) at (-3.8, 4.2) {多节点时序数据};
+\node[labelbox, fill=blue!45, text=white, draw=blue!55, minimum width=3cm, minimum height=0.9cm] (input2) at (-3.8, 3.0) {滑动窗口分割};
+\begin{scope}[on background layer]
+    \node[grp, fill=white] (ginput) [fit=(input1)(input2)] {};
+\end{scope}
+
+% ============ CSAD-AT 核心（中央） ============
+
+% --- 多方法异常评分模块 ---
+\node[stitle] at (3, 6.5) {多方法异常评分模块};
+
+\node[modbox, fill=green!50!black!70] (ae) at (0.6, 5.2) {\textbf{AE}};
+\node[subtext, below=-0.05cm of ae] {自编码器评分};
+
+\node[modbox, fill=blue!55] (euc) at (3, 5.2) {\textbf{Euclidean}};
+\node[subtext, below=-0.05cm of euc] {欧氏距离评分};
+
+\node[modbox, fill=orange!70] (adp) at (5.4, 5.2) {\textbf{Adaptive}};
+\node[subtext, below=-0.05cm of adp] {自适应密度评分};
+
+% --- Z-Score ---
+\node[widebox, fill=blue!45] (zs) at (3, 3.0) {\textbf{Z-Score}};
+\node[subtext, below=-0.05cm of zs] {标准化异常评分};
+
+% --- 评分融合模块 ---
+\node[stitle] at (3, 1.6) {评分融合模块};
+\node[widebox, fill=green!50!black!60] (wm) at (3, 0.6) {\textbf{Weighted Merge}};
+\node[subtext, below=-0.05cm of wm] {加权融合评分};
+
+% --- 自适应阈值检测模块 ---
+\node[stitle] at (3, -1.0) {自适应阈值检测模块};
+
+\node[modbox, fill=red!65, minimum width=3.6cm] (ispot) at (1.8, -2.1) {\textbf{I-SPOT}};
+\node[subtext, below=-0.05cm of ispot] {GPD};
+
+\node[modbox, fill=red!55!black!60, minimum width=3.6cm] (thresh) at (4.2, -2.1) {\textbf{动态阈值}};
+\node[subtext, below=-0.05cm of thresh] {异常判定};
+
+% CSAD-AT group
+\begin{scope}[on background layer]
+    \node[grp, fill=gray!3] (gcore) [fit=(ae)(euc)(adp)(zs)(wm)(ispot)(thresh), inner sep=14pt] {};
+\end{scope}
+\node[font=\normalsize\bfseries, text=gray!70!black] at (gcore.north) [above=2pt] {\textbf{CSAD-AT} 框架整体架构};
+
+% ============ 检测输出 (Right) ============
+\node[stitle] at (9.5, -0.7) {检测输出};
+\node[labelbox, fill=purple!55, text=white, draw=purple!65, minimum width=2.5cm, minimum height=0.9cm] (out1) at (9.5, -1.7) {异常节点};
+\node[labelbox, fill=purple!45, text=white, draw=purple!55, minimum width=2.5cm, minimum height=0.9cm] (out2) at (9.5, -2.8) {异常时段};
+\begin{scope}[on background layer]
+    \node[grp, fill=white] (gout) [fit=(out1)(out2)] {};
+\end{scope}
+
+% ============ Arrows ============
+% Input -> scoring
+\draw[arr] (ginput.east) -- (ae.west |- ginput.east);
+
+% Scoring -> Z-Score
+\draw[arr] (ae.south) -- ++(0,-0.5) -- (0.6, 3.55);
+\draw[arr] (euc.south) -- (euc |- zs.north);
+\draw[arr] (adp.south) -- ++(0,-0.5) -- (5.4, 3.55);
+
+% Z-Score -> Weighted Merge
+\draw[arr] (zs.south) -- (wm.north);
+
+% Weighted Merge -> I-SPOT + threshold
+\draw[arr] (wm.south) -- ++(0,-0.8) -| (ispot.north);
+\draw[arr] (wm.south) -- ++(0,-0.8) -| (thresh.north);
+
+% I-SPOT -> threshold (internal)
+\draw[arr] (ispot.east) -- (thresh.west);
+
+% Threshold -> output
+\draw[arr] (thresh.east) -- ++(1.2,0) |- (out1.west);
+\draw[arr] (thresh.east) -- ++(1.2,0) |- (out2.west);
+
+\end{tikzpicture}

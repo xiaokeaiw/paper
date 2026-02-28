@@ -18,7 +18,13 @@
 \setcounter{page}{1}% 开始页码
 \pagenumbering{Roman}% 页码符号
 
-% TODO: 待补充中文摘要内容
+分布式集群是支撑云计算与大数据处理的核心基础设施，其稳定运行直接关系到上层业务的连续性。现有的时序异常检测方法大多聚焦于时间维度和指标维度的二维分析，在面对负载敏感型指标时容易产生误报。针对这一问题，本文提出了基于多元时序曲线相似性的分布式集群异常检测方法，将节点维度系统性地引入检测模型，通过度量节点间监控曲线的偏离程度来识别异常节点。
+
+针对单指标多节点场景，本文基于联通大数据生产环境的YARN集群监控数据构建了高质量的标注数据集，分别采用欧氏距离、自编码器嵌入和密度聚类三种方法从不同视角度量节点曲线间的相似性。针对单一方法阈值敏感的问题，提出了CSAD-AT框架，通过分数归一化与加权聚合融合多视角评分，并使用改进的包容性SPOT算法实现阈值的动态自适应调整。实验结果表明，该方法在F1分数上显著优于多种主流的多元时序异常检测算法。
+
+针对多指标多节点场景，本文提出了NSFusion数值与形状双视角融合的异常检测框架。针对多指标数据规模增长带来的效率约束，框架采用轻量化的数值距离计算与无需训练的符号化形状度量相结合的方案替代单指标场景中计算开销较大的自编码器和密度偏离方法。数值视角采用优化的基于欧氏距离的多指标加权融合方法量化节点间的数值差异；形状视角提出全分辨率符号聚合近似算法，通过保留原始时间分辨率来提升对曲线形状变化的敏感性，弥补纯数值视角的检测盲区。在GPU集群故障数据集上的实验表明，双视角融合方法的故障检测准确率达到83.8\%，显著优于单一视角方法和传统基线方法。
+
+在工程实现方面，本文设计并开发了基于曲线相似性的分布式集群异常检测系统，采用前后端分离的四层架构，涵盖数据接入、检测引擎、常态化监控、告警管理和可视化看板五个功能模块。系统以模块化方式封装了全部检测算法，支持定时自动巡检和多级告警通知，具备对接生产环境监控体系的接口能力，单次巡检端到端耗时约20秒，满足分钟级巡检间隔的性能要求。
 
 \keywords{分布式集群，异常检测，多元时序，曲线相似性，自适应阈值}% 中文关键词
 %-
@@ -26,7 +32,13 @@
 %-
 \intobmk\chapter*{Abstract}% 显示在书签但不显示在目录
 
-% TODO: 待补充英文摘要内容
+Distributed clusters serve as the core infrastructure for cloud computing and big data processing, where operational stability is critical to business continuity. Existing time series anomaly detection methods primarily focus on temporal and feature dimensions, failing to exploit the strong behavioral similarity among cluster nodes, which leads to high false positive rates for load-sensitive metrics. To address this problem, this thesis proposes a distributed cluster anomaly detection approach based on multivariate time series curve similarity, systematically incorporating the node dimension into the detection model and identifying anomalous nodes by measuring the deviation of their monitoring curves from the cluster-wide behavioral pattern.
+
+For the single-metric multi-node scenario, this thesis constructs a high-quality labeled dataset from the YARN cluster monitoring data in a production environment, and employs three complementary methods, namely Euclidean distance, autoencoder embedding, and density-based clustering, to measure inter-node curve similarity from different perspectives. To overcome the threshold sensitivity of individual methods, the CSAD-AT (Curve Similarity-based Anomaly Detection with Adaptive Threshold) framework is proposed, which fuses multi-perspective scores through normalization and weighted aggregation and introduces an improved Inclusive SPOT algorithm for dynamic adaptive thresholding. Experimental results demonstrate that the proposed method significantly outperforms several state-of-the-art multivariate time series anomaly detection algorithms in terms of F1 score.
+
+For the multi-metric multi-node scenario, this thesis proposes the NSFusion dual-perspective fusion framework combining numerical and shape analysis. To address the efficiency constraints imposed by the substantial data volume growth in multi-metric settings, the framework replaces the computationally expensive autoencoder and density-based methods from the single-metric scenario with a lightweight combination of numerical distance computation and training-free symbolic shape measurement. The numerical perspective quantifies inter-node value differences through an optimized Euclidean distance-based multi-metric weighted fusion, while the shape perspective introduces a Full-Resolution Symbolic Aggregate Approximation algorithm that preserves the original temporal resolution to enhance sensitivity to curve shape variations, compensating for the detection blind spots of the purely numerical perspective. Experiments on a GPU cluster fault dataset show that the fusion method achieves a fault detection accuracy of 83.8\%, significantly outperforming single-perspective methods and traditional baselines.
+
+On the engineering side, this thesis designs and implements a curve similarity-based distributed cluster anomaly detection system with a four-layer front-back separated architecture, encompassing five functional modules: data ingestion, detection engine, routine monitoring, alert management, and visualization dashboard. The system encapsulates all detection algorithms in a modular manner, supports scheduled automatic patrol inspection and multi-level alert notification, and provides interfaces for integration with production monitoring systems. The end-to-end latency of a single patrol inspection is approximately 20 seconds, meeting the performance requirements for minute-level inspection intervals.
 
 \KEYWORDS{Distributed Cluster, Anomaly Detection, Multivariate Time Series, Curve Similarity, Adaptive Threshold}% 英文关键词
 

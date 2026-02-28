@@ -398,16 +398,6 @@ async function renderDetectionPage(container) {
                                     <label class="checkbox-label"><input type="checkbox" value="dbscan" checked> DBSCAN聚类</label>
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label">DBSCAN eps</label>
-                                    <input type="number" id="dbscanEps" value="0.5" step="0.1" class="form-input">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">I-SPOT q</label>
-                                    <input type="number" id="ispotQ" value="0.001" step="0.001" class="form-input">
-                                </div>
-                            </div>
                         </div>
                         <div id="multiParams" style="display:none;">
                             <div class="form-row">
@@ -581,8 +571,6 @@ async function runDetection() {
     const config = {
         window_size: parseInt(document.getElementById('windowSize')?.value || 60),
         methods: methods,
-        dbscan_eps: parseFloat(document.getElementById('dbscanEps')?.value || 0.5),
-        ispot_q: parseFloat(document.getElementById('ispotQ')?.value || 0.001),
         w_num: parseFloat(document.getElementById('wNum')?.value || 0.5),
         w_shape: parseFloat(document.getElementById('wShape')?.value || 0.5),
         alphabet_size: parseInt(document.getElementById('alphabetSize')?.value || 7),
@@ -632,18 +620,7 @@ function renderDetectionResults(result) {
     html += '</div>';
 
     if (isSingle) {
-        // 单指标场景：展示集成决策信息 + 异常片段
-        if (result.ensemble) {
-            const nMethods = Object.keys(result.methods || {}).length;
-            html += `<div class="panel"><div class="panel-header"><div class="panel-title"><i class="ri-shield-check-line"></i> 集成决策结果</div></div><div class="panel-body">`;
-            html += `<p style="color:#64748b;font-size:13px;">
-                采用 <strong>${nMethods}</strong> 种检测方法（${Object.keys(result.methods || {}).join('、')}），
-                经 I-SPOT 自适应阈值 + 保守集成（逻辑与）决策。
-                只有所有方法同时判定异常的时间窗口才被确认为异常。
-            </p>`;
-            html += '</div></div>';
-        }
-
+        // 单指标场景：展示异常片段
         // 异常片段图表：每个片段显示该时间窗口的曲线
         if (anomalySegments.length > 0 && result.chart_data) {
             html += '<div class="panel"><div class="panel-header"><div class="panel-title"><i class="ri-alarm-warning-line"></i> 异常时间片段</div></div><div class="panel-body">';

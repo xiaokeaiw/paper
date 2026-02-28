@@ -87,6 +87,25 @@ def admin_required(f):
 
 # ==================== 页面路由 ====================
 
+
+import numpy as _np
+
+def _make_json_safe(obj):
+    """递归将 numpy 类型转为 Python 原生类型，确保 JSON 可序列化"""
+    if isinstance(obj, _np.ndarray):
+        return obj.tolist()
+    if isinstance(obj, (_np.integer,)):
+        return int(obj)
+    if isinstance(obj, (_np.floating,)):
+        return float(obj)
+    if isinstance(obj, (_np.bool_,)):
+        return bool(obj)
+    if isinstance(obj, dict):
+        return {_make_json_safe(k): _make_json_safe(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [_make_json_safe(v) for v in obj]
+    return obj
+
 @app.route('/')
 def index():
     """主页面 - 单页应用入口"""
@@ -536,13 +555,32 @@ def run_detection():
         result = DetectionEngine.run_detection(processed, scenario=scenario, config=config)
 
         node_names = result.get('node_names', [])
-        node_scores = result.get('node_scores', result.get('fused_scores', []))
+        raw_scores = result.get('node_scores', result.get('fused_scores', []))
         anomaly_nodes = result.get('anomaly_nodes', [])
+
+        # fused_scores may be dict {node_idx: list} or plain list
+        if isinstance(raw_scores, dict):
+            node_scores = []
+            for i in range(len(node_names)):
+                v = raw_scores.get(i, raw_scores.get(str(i), 0))
+                if isinstance(v, (list, tuple)):
+                    node_scores.append(float(max(v)) if v else 0.0)
+                else:
+                    node_scores.append(float(v))
+        else:
+            node_scores = []
+            for v in raw_scores:
+                if isinstance(v, (list, tuple)):
+                    node_scores.append(float(max(v)) if v else 0.0)
+                elif hasattr(v, '__float__'):
+                    node_scores.append(float(v))
+                else:
+                    node_scores.append(0.0)
 
         scores_dict = {}
         for i, name in enumerate(node_names):
             if i < len(node_scores):
-                score = float(node_scores[i])
+                score = node_scores[i]
                 is_anomaly = name in anomaly_nodes
                 models.insert('detection_results', {
                     'task_id': task_id,
@@ -574,7 +612,7 @@ def run_detection():
 
         result['task_id'] = task_id
         result['chart_data'] = chart_data
-        return jsonify(result)
+        return jsonify(_make_json_safe(result))
 
     except Exception as e:
         traceback.print_exc()

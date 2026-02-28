@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>双视角融合异常检测框架流程图</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap');
+
+        body {
+            background-color: #ffffff;
+            font-family: 'Noto Sans SC', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+            color: #1e293b;
+        }
+
+        .canvas {
+            width: 1100px;
+            height: 500px;
+            background: #ffffff;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+        }
+
+        /* 阶段容器样式 */
+        .stage-box {
+            border: 1.5px solid #94a3b8;
+            border-radius: 8px;
+            padding: 35px 20px 20px 20px;
+            position: relative;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .stage-tag {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #475569;
+            color: white;
+            padding: 2px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* 节点块样式 */
+        .node {
+            width: 150px;
+            background: #ffffff;
+            border: 1.2px solid #64748b;
+            border-radius: 4px;
+            padding: 10px 8px;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.5;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+        }
+
+        /* 颜色分类 */
+        .bg-numeric { background-color: #f0f7ff; border-color: #3b82f6; }
+        .bg-shape { background-color: #f0fdf4; border-color: #22c55e; }
+        .bg-fusion { background-color: #fffbeb; border-color: #f59e0b; }
+        .bg-input { background-color: #f8fafc; border-style: dashed; border-color: #94a3b8; }
+
+        /* 连接线 */
+        .connector-h {
+            width: 30px;
+            height: 2px;
+            background: #cbd5e1;
+            position: relative;
+        }
+        .connector-h::after {
+            content: '';
+            position: absolute;
+            right: -2px;
+            top: -4px;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 8px solid #cbd5e1;
+        }
+
+        /* 流程分叉/聚合 */
+        .fork-branch {
+            width: 40px;
+            height: 180px;
+            border-left: 2px solid #cbd5e1;
+            border-top: 2px solid #cbd5e1;
+            border-bottom: 2px solid #cbd5e1;
+            border-radius: 6px 0 0 6px;
+            margin-right: -2px;
+            position: relative;
+        }
+
+        .merge-branch {
+            width: 40px;
+            height: 180px;
+            border-right: 2px solid #cbd5e1;
+            border-top: 2px solid #cbd5e1;
+            border-bottom: 2px solid #cbd5e1;
+            border-radius: 0 6px 6px 0;
+            margin-left: -2px;
+        }
+
+        /* 数学公式字体 */
+        .math {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="canvas">
+    <div class="flex items-center">
+
+        <!-- 数据输入 -->
+        <div class="flex flex-col items-center">
+            <div class="node bg-input">
+                <span class="font-bold">多维监控指标</span><br>
+                时序数据集 <span class="math">X<sub>t</sub></span>
+            </div>
+            <div class="text-[10px] text-slate-400 mt-2">（多节点、多指标）</div>
+        </div>
+
+        <!-- 分叉路径 -->
+        <div class="connector-h ml-3"></div>
+        <div class="fork-branch ml-0"></div>
+
+        <!-- 并行核心阶段 -->
+        <div class="flex flex-col gap-12">
+
+            <!-- 第一阶段 -->
+            <div class="stage-box" style="border-color: #3b82f6;">
+                <div class="stage-tag" style="background: #3b82f6;">阶段 I：数值特征异常检测</div>
+                <div class="flex items-center gap-3">
+                    <div class="node bg-numeric">
+                        基于欧氏距离的<br>节点相似度度量
+                    </div>
+                    <div class="connector-h"></div>
+                    <div class="node bg-numeric">
+                        指标层面异常分数<br>加权融合
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第二阶段 -->
+            <div class="stage-box" style="border-color: #22c55e;">
+                <div class="stage-tag" style="background: #22c55e;">阶段 II：形状特征异常检测</div>
+                <div class="flex items-center gap-3">
+                    <div class="node bg-shape">
+                        FR-SAX<br>符号化映射
+                    </div>
+                    <div class="connector-h"></div>
+                    <div class="node bg-shape">
+                        离散符号序列间<br>模式距离计算
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 聚合路径 -->
+        <div class="merge-branch mr-0"></div>
+        <div class="connector-h ml-3"></div>
+
+        <!-- 第三阶段 -->
+        <div class="stage-box" style="border-color: #f59e0b; width: 220px;">
+            <div class="stage-tag" style="background: #f59e0b;">阶段 III：融合与定位</div>
+            <div class="flex flex-col items-center gap-4">
+                <div class="node bg-fusion w-full">
+                    双视角加权融合策略<br>
+                    <span class="math text-[11px] text-amber-700">S = α·S<sub>num</sub> + (1-α)·S<sub>sha</sub></span>
+                </div>
+                <div class="h-6 w-[1.5px] bg-amber-300"></div>
+                <div class="node bg-fusion w-full">
+                    异常评分降序排列<br>及候选节点锁定
+                </div>
+            </div>
+        </div>
+
+        <div class="connector-h ml-4"></div>
+
+        <!-- 最终结果 -->
+        <div class="flex flex-col items-center ml-3">
+            <div class="node bg-slate-800 text-white font-bold border-none" style="width: 130px; border-radius: 20px;">
+                故障候选节点<br>Top-K 列表
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

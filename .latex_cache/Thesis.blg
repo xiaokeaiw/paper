@@ -10,50 +10,44 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: Biblio/ref.bib
-`booktitle' is a missing field, not a string, for entry scholkopf2001ocsvm
-while executing---line 2272 of file Biblio/gbt7714-numerical.bst
-Warning--empty journal in chen2023dcdetector
-Warning--empty journal in dai2022graph
-Warning--empty journal in ren2019srnn
-You've used 49 entries,
+You've used 57 entries,
             4948 wiz_defined-function locations,
-            1241 strings with 16845 characters,
-and the built_in function-call counts, 415624 in all, are:
-= -- 7222
-> -- 49488
-< -- 61800
-+ -- 16829
-- -- 3000
-* -- 2205
-:= -- 57368
-add.period$ -- 147
-call.type$ -- 49
-change.case$ -- 97
-chr.to.int$ -- 15324
-cite$ -- 52
-duplicate$ -- 1039
-empty$ -- 2928
-format.name$ -- 1563
-if$ -- 108040
+            1277 strings with 18317 characters,
+and the built_in function-call counts, 489132 in all, are:
+= -- 8548
+> -- 58232
+< -- 72705
++ -- 19806
+- -- 3542
+* -- 2581
+:= -- 67492
+add.period$ -- 171
+call.type$ -- 57
+change.case$ -- 113
+chr.to.int$ -- 18013
+cite$ -- 57
+duplicate$ -- 1219
+empty$ -- 3469
+format.name$ -- 1848
+if$ -- 127228
 int.to.chr$ -- 4
-int.to.str$ -- 50
+int.to.str$ -- 58
 missing$ -- 0
-newline$ -- 281
-num.names$ -- 147
-pop$ -- 22472
+newline$ -- 329
+num.names$ -- 171
+pop$ -- 26424
 preamble$ -- 1
-purify$ -- 49
+purify$ -- 57
 quote$ -- 0
-skip$ -- 43460
+skip$ -- 51166
 stack$ -- 0
-substring$ -- 18836
-swap$ -- 63
-text.length$ -- 824
+substring$ -- 22135
+swap$ -- 71
+text.length$ -- 971
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 591
-warning$ -- 3
-while$ -- 1030
+type$ -- 679
+warning$ -- 0
+while$ -- 1211
 width$ -- 0
-write$ -- 662
-(There was 1 error message)
+write$ -- 774

@@ -86,7 +86,8 @@ def scores_to_global_timeline(scores_dict, n_nodes, n_windows):
     index_map = []
     for w in range(n_windows):
         for i in range(n_nodes):
-            timeline.append(scores_dict[i][w])
+            val = scores_dict[i][w]
+            timeline.append(float(val) if not isinstance(val, (list, np.ndarray)) else float(np.mean(val)))
             index_map.append((w, i))
     return np.array(timeline), index_map
 

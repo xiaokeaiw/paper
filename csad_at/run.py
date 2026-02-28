@@ -77,8 +77,8 @@ def parse_args():
                         help='自编码器学习率（默认: 0.001）')
 
     # I-SPOT 参数
-    parser.add_argument('--anomaly-ratio', type=float, default=0.0085,
-                        help='I-SPOT 目标误报率 q（默认: 0.0085）')
+    parser.add_argument('--anomaly-ratio', type=float, default=0.0065,
+                        help='I-SPOT 目标误报率 q（默认: 0.0065）')
     parser.add_argument('--ispot-level', type=float, default=0.98,
                         help='I-SPOT 初始阈值分位数（默认: 0.98）')
     parser.add_argument('--ispot-t-update', type=int, default=50,
@@ -94,8 +94,8 @@ def parse_args():
     parser.add_argument('--ground-truth', default=None,
                         help='异常标注文件路径（CSV: node, start, end, label）'
                              '提供此参数时自动运行评估')
-    parser.add_argument('--overlap-threshold', type=float, default=0.5,
-                        help='评估时的时间重叠比例阈值（默认: 0.5）')
+    parser.add_argument('--overlap-threshold', type=float, default=0.1,
+                        help='评估时的时间重叠比例阈值（默认: 0.1）')
 
     return parser.parse_args()
 

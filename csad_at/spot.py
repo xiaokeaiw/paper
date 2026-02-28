@@ -70,6 +70,7 @@ class SPOT:
 
         low = -1 / y_max
         high = 2 * (y_mean - y_min) / max(y_min ** 2, 1e-10)
+        mid = high * y_min / max(y_mean, 1e-10)
 
         candidate_x = np.zeros(k)
         try:
@@ -83,7 +84,7 @@ class SPOT:
             solution = minimize(
                 optimize_func, x0=x0[-k // 2:],
                 method='L-BFGS-B', jac=True,
-                bounds=np.array([low + 1e-6, high]).reshape(1, -1).repeat(
+                bounds=np.array([mid, high]).reshape(1, -1).repeat(
                     k // 2, axis=0))
             candidate_x[-k // 2:] = solution.x
         except Exception:
@@ -95,6 +96,9 @@ class SPOT:
         log_prob = self.log_prob(y, gamma, sigma_recip)
 
         target_index = np.argmax(log_prob)
+        # Guard against divide-by-zero
+        if sigma_recip[target_index] == 0:
+            return 0.0, max(y_mean, 1e-6), candidate_x
         return (gamma[target_index],
                 1 / sigma_recip[target_index],
                 candidate_x)
@@ -134,7 +138,7 @@ class SPOT:
 
         Parameters / Returns: same as ISPOT.run()
         """
-        scores = np.array(scores, dtype=np.float64)
+        scores = np.asarray(scores).flatten().astype(np.float64)
         total_len = len(scores)
 
         initial_seq_len = max(20, int(total_len * initial_seq_ratio))

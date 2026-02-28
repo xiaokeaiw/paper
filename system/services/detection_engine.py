@@ -1,28 +1,41 @@
 """
-检测引擎调度模块
+检测引擎调度模块（集成 csad_at 模块）
 
 负责根据用户配置的场景类型和算法参数，协调调用相应的检测算法，
 并组织检测结果。支持两种检测场景：
-1. 单指标多节点场景（第三章CSAD-AT框架）
-2. 多指标多节点场景（第四章双视角融合框架）
+1. 单指标多节点场景（第三章CSAD-AT框架）-- 使用 csad_at 模块
+2. 多指标多节点场景（第四章双视角融合框架）-- 保留原有 algorithms/
 
-单指标多节点场景的检测流程：
-  三种方法(欧氏距离、自编码器、DBSCAN)各自产出 (T', N) 的时序异常分数,
-  由 I-SPOT 为每种方法的每个节点计算自适应阈值,
-  再通过保守集成(逻辑与)得到最终的 (T', N) 二值标签矩阵,
-  最后从标签矩阵中提取异常时间片段。
-  不存在"聚合单个曲线异常分数为节点分数"这一步。
+单指标多节点场景的检测流程（来自 csad_at.pipeline）：
+  三种方法(欧氏距离、自编码器、DBSCAN)各自产出 {node_idx: [scores]} 的时序异常分数,
+  截断负值 + 全局 Min-Max 归一化到 [0, 1],
+  加权融合三种归一化分数,
+  融合分数 -> 全局时间线 -> I-SPOT 自适应阈值 -> 最终异常矩阵,
+  从异常矩阵中提取异常节点和时间片段。
 
 对应论文第五章 5.3 节
 """
 
+import sys
+import os
 import numpy as np
-from algorithms.euclidean import EuclideanDetector, MultiMetricEuclideanDetector
-from algorithms.autoencoder import AutoEncoderDetector
-from algorithms.dbscan_detector import DBSCANDetector
-from algorithms.ispot import ISPOT
-from algorithms.ensemble import ConservativeEnsemble
-from algorithms.sax_improved import ImprovedSAXDetector
+
+# --- 将 csad_at 所在目录加入 sys.path ---
+_current_dir = os.path.dirname(os.path.abspath(__file__))
+_files_dir = os.path.abspath(os.path.join(_current_dir, '..', '..'))
+if _files_dir not in sys.path:
+    sys.path.insert(0, _files_dir)
+
+from csad_at.euc_detector import run_euc_detector
+from csad_at.ae_detector import run_ae_detector
+from csad_at.dbscan_detector import run_dbscan_detector
+from csad_at.pipeline import (
+    clip_and_minmax,
+    weighted_fusion,
+    global_ispot_detect,
+)
+
+# 多指标场景仍使用原有的 DualPerspectiveFusion
 from algorithms.fusion import DualPerspectiveFusion
 
 
@@ -40,19 +53,79 @@ class DetectionEngine:
     """异常检测引擎"""
 
     @staticmethod
-    def _extract_segments_from_labels(labels, node_names, window_size=1):
+    def _extract_segments_from_matrix(anomaly_matrix, curve_names,
+                                      window_starts=None, window_ends=None):
         """
-        从集成决策的二值标签矩阵中提取异常片段
+        从 csad_at 的异常矩阵 (n_windows, n_nodes) 中提取异常片段
 
         参数:
-            labels: shape=(T', N) 的二值标签，1=异常，0=正常
-            node_names: 节点名称列表
-            window_size: 滑动窗口大小，用于映射回原始时间索引
+            anomaly_matrix: shape=(n_windows, n_nodes) 的二值矩阵
+            curve_names: 节点名称列表
+            window_starts: 窗口起始时间戳（可选）
+            window_ends: 窗口结束时间戳（可选）
 
         返回:
-            anomaly_nodes: 被判定为异常的节点名称列表
-            anomaly_segments: 异常片段列表，每项包含
-                node, node_idx, start, end, duration
+            anomaly_nodes: 异常节点名称列表
+            anomaly_segments: 异常片段列表
+        """
+        mat = np.array(anomaly_matrix)
+        if mat.ndim == 1:
+            mat = mat.reshape(-1, 1)
+        if mat.size == 0:
+            return [], []
+
+        T, N = mat.shape
+        anomaly_nodes = []
+        anomaly_segments = []
+
+        for ni in range(N):
+            col = mat[:, ni]
+            if col.sum() == 0:
+                continue
+
+            node_name = curve_names[ni] if ni < len(curve_names) else f'node_{ni}'
+            anomaly_nodes.append(node_name)
+
+            in_seg = False
+            seg_start = 0
+            for t in range(T):
+                if col[t] == 1 and not in_seg:
+                    seg_start = t
+                    in_seg = True
+                elif col[t] == 0 and in_seg:
+                    seg = {
+                        'node': node_name, 'node_idx': int(ni),
+                        'win_start': int(seg_start), 'win_end': int(t),
+                        'start': int(seg_start), 'end': int(t),
+                        'duration': int(t - seg_start),
+                    }
+                    if window_starts is not None:
+                        seg['start_time'] = str(window_starts[seg_start])
+                    if window_ends is not None:
+                        prev = max(0, t - 1)
+                        seg['end_time'] = str(window_ends[prev])
+                    anomaly_segments.append(seg)
+                    in_seg = False
+            if in_seg:
+                seg = {
+                    'node': node_name, 'node_idx': int(ni),
+                    'win_start': int(seg_start), 'win_end': int(T),
+                    'start': int(seg_start), 'end': int(T),
+                    'duration': int(T - seg_start),
+                }
+                if window_starts is not None:
+                    seg['start_time'] = str(window_starts[seg_start])
+                if window_ends is not None:
+                    prev = max(0, T - 1)
+                    seg['end_time'] = str(window_ends[prev])
+                anomaly_segments.append(seg)
+
+        return anomaly_nodes, anomaly_segments
+
+    @staticmethod
+    def _extract_segments_from_labels(labels, node_names, window_size=1):
+        """
+        从集成决策的二值标签矩阵中提取异常片段（兼容旧接口）
         """
         labels_arr = np.array(labels)
         if labels_arr.ndim == 1:
@@ -66,14 +139,12 @@ class DetectionEngine:
 
         for ni in range(N):
             node_labels = labels_arr[:, ni]
-            # 该节点是否有任何异常窗口
             if node_labels.sum() == 0:
                 continue
 
             node_name = node_names[ni] if ni < len(node_names) else f'node_{ni}'
             anomaly_nodes.append(node_name)
 
-            # 提取连续异常片段
             in_segment = False
             seg_start = 0
             for t in range(T):
@@ -87,7 +158,8 @@ class DetectionEngine:
                         'win_start': int(seg_start),
                         'win_end': int(t),
                         'start': int(seg_start),
-                        'end': int(min(t + window_size - 1, seg_start + window_size + (t - seg_start))),
+                        'end': int(min(t + window_size - 1,
+                                       seg_start + window_size + (t - seg_start))),
                         'duration': int(t - seg_start),
                     })
                     in_segment = False
@@ -98,7 +170,8 @@ class DetectionEngine:
                     'win_start': int(seg_start),
                     'win_end': int(T),
                     'start': int(seg_start),
-                    'end': int(min(T + window_size - 1, seg_start + window_size + (T - seg_start))),
+                    'end': int(min(T + window_size - 1,
+                                   seg_start + window_size + (T - seg_start))),
                     'duration': int(T - seg_start),
                 })
 
@@ -106,7 +179,7 @@ class DetectionEngine:
 
     @staticmethod
     def _extract_anomaly_segments(scores, node_names, threshold=3.0):
-        """从时序异常分数中提取异常片段（用于无集成决策时的后备方案）"""
+        """从时序异常分数中提取异常片段（后备方案）"""
         scores_arr = np.array(scores)
         if scores_arr.ndim == 1:
             scores_arr = scores_arr.reshape(-1, 1)
@@ -162,18 +235,25 @@ class DetectionEngine:
             return max(adjusted, 1)
         return window_size
 
+    # ================================================================
+    # 单指标多节点检测（CSAD-AT 框架，使用 csad_at 模块）
+    # ================================================================
+
     @staticmethod
     def run_single_metric(data, config=None):
         """
         单指标多节点检测流程（CSAD-AT框架）
 
-        流程：
-        1. 三种方法各自产出 (T', N) 的时序异常分数矩阵
-        2. I-SPOT 为每种方法每个节点计算自适应阈值
-        3. 保守集成(逻辑与)得到 (T', N) 的二值标签
-        4. 从标签矩阵提取异常时间片段
+        使用 csad_at 模块中的三种检测器 + clip_and_minmax 归一化
+        + weighted_fusion 加权融合 + global_ispot_detect 最终检测。
 
-        不进行节点分数聚合。异常判定完全来自集成决策。
+        流程：
+        1. 将 numpy 数据 (T, N) 转换为 csad_at 期望的 curves 格式
+        2. 三种方法各自产出 {node_idx: [scores]} 的偏离度分数
+        3. 截断负值 + 全局 Min-Max 归一化到 [0, 1]
+        4. 加权融合三种归一化分数
+        5. 融合分数 -> 全局时间线 -> I-SPOT 自适应阈值 -> 最终异常矩阵
+        6. 从异常矩阵提取异常节点和时间片段
         """
         if config is None:
             config = {}
@@ -184,6 +264,13 @@ class DetectionEngine:
         threshold = config.get('threshold', 3.0)
         methods = config.get('methods', ['euclidean', 'autoencoder', 'dbscan'])
 
+        # csad_at 参数
+        anomaly_ratio = config.get('anomaly_ratio', 0.0065)
+        ispot_level = config.get('ispot_level', 0.98)
+        ispot_t_update = config.get('ispot_t_update', 50)
+        ispot_w_max = config.get('ispot_w_max', None)
+        weights = config.get('weights', [1.0 / 3, 1.0 / 3, 1.0 / 3])
+
         if N < 2:
             return {
                 'scenario': 'single_metric', 'methods': {},
@@ -193,8 +280,8 @@ class DetectionEngine:
                 'warning': '节点数不足，至少需要2个节点进行相似性比较',
             }
 
-        n_windows = T - window_size + 1
-        if n_windows < 1:
+        n_windows_max = T - window_size + 1
+        if n_windows_max < 1:
             return {
                 'scenario': 'single_metric', 'methods': {},
                 'ensemble': None, 'threshold': threshold,
@@ -204,9 +291,16 @@ class DetectionEngine:
             }
 
         # 自动计算步长
-        stride = _auto_stride(n_windows)
+        stride = _auto_stride(n_windows_max)
+        step = stride
+
         print(f"[DetectionEngine] T={T}, N={N}, window={window_size}, "
-              f"n_windows={n_windows}, stride={stride}")
+              f"n_windows_max={n_windows_max}, step={step}")
+
+        # --- 将 numpy (T, N) 转换为 csad_at 期望的 curves 格式 ---
+        curves = [data[:, i].astype(np.float64) for i in range(N)]
+        timestamps = np.arange(T)
+        curve_names = [f'node_{i}' for i in range(N)]
 
         results = {
             'scenario': 'single_metric',
@@ -216,74 +310,135 @@ class DetectionEngine:
             'window_size': window_size,
         }
 
-        all_scores = []
+        method_results = {}
+        active_weights = []
+        n_windows = None
 
         # 1. 欧氏距离检测
         if 'euclidean' in methods:
             try:
-                detector = EuclideanDetector(
-                    window_size=window_size, stride=stride
-                )
-                euc_result = detector.detect(data, threshold=threshold)
-                results['methods']['euclidean'] = euc_result
-                all_scores.append(np.array(euc_result['scores']))
+                euc_res = run_euc_detector(curves, timestamps,
+                                           window_size, step)
+                method_results['euclidean'] = euc_res
+                n_windows = euc_res['n_windows']
+                active_weights.append(weights[0] if len(weights) > 0 else 1.0)
+                results['methods']['euclidean'] = {
+                    'scores': euc_res['scores'],
+                    'n_windows': euc_res['n_windows'],
+                }
             except Exception as e:
                 print(f"[DetectionEngine] 欧氏距离检测失败: {e}")
 
         # 2. 自编码器嵌入检测
         if 'autoencoder' in methods:
             try:
-                ae_detector = AutoEncoderDetector(
-                    window_size=window_size,
-                    hidden_dim=config.get('ae_hidden_dim', 32),
-                    latent_dim=config.get('ae_latent_dim', 8),
-                    epochs=config.get('ae_epochs', 30),
-                    stride=stride,
+                ae_res = run_ae_detector(
+                    curves, timestamps, window_size, step,
+                    latent_dim=config.get('ae_latent_dim', 5),
+                    epochs=config.get('ae_epochs', 50),
+                    lr=config.get('ae_lr', 1e-3),
                 )
-                train_size = max(data.shape[0] // 2, window_size + 1)
-                train_size = min(train_size, data.shape[0])
-                ae_detector.train(data[:train_size])
-                ae_result = ae_detector.detect(data, threshold=threshold)
-                results['methods']['autoencoder'] = ae_result
-                all_scores.append(np.array(ae_result['scores']))
+                method_results['autoencoder'] = ae_res
+                n_windows = ae_res['n_windows']
+                active_weights.append(weights[1] if len(weights) > 1 else 1.0)
+                results['methods']['autoencoder'] = {
+                    'scores': ae_res['scores'],
+                    'n_windows': ae_res['n_windows'],
+                }
             except Exception as e:
                 print(f"[DetectionEngine] 自编码器检测失败: {e}")
 
-        # 3. DBSCAN聚类检测
+        # 3. DBSCAN密度检测
         if 'dbscan' in methods:
             try:
-                db_detector = DBSCANDetector(
-                    window_size=window_size,
-                    eps=config.get('dbscan_eps', 0.5),
-                    min_samples=config.get('dbscan_min_samples', 3),
-                    stride=stride,
+                db_res = run_dbscan_detector(
+                    curves, timestamps, window_size, step,
+                    k_neighbors=config.get('k_neighbors', 5),
                 )
-                db_result = db_detector.detect(data)
-                results['methods']['dbscan'] = db_result
-                all_scores.append(np.array(db_result['scores']))
+                method_results['dbscan'] = db_res
+                n_windows = db_res['n_windows']
+                active_weights.append(weights[2] if len(weights) > 2 else 1.0)
+                results['methods']['dbscan'] = {
+                    'scores': db_res['scores'],
+                    'n_windows': db_res['n_windows'],
+                }
             except Exception as e:
                 print(f"[DetectionEngine] DBSCAN检测失败: {e}")
 
-        # 4. I-SPOT自适应阈值 + 保守集成决策
-        # 这是CSAD-AT框架的核心：通过集成决策直接得到异常标签
-        if len(all_scores) > 1:
-            try:
-                min_len = min(s.shape[0] for s in all_scores)
-                aligned_scores = [s[:min_len] for s in all_scores]
+        if not method_results or n_windows is None:
+            results['anomaly_nodes'] = []
+            results['anomaly_segments'] = []
+            results['warning'] = '所有检测方法均失败'
+            return results
 
-                ensemble = ConservativeEnsemble(
-                    n_methods=len(aligned_scores),
-                    q=config.get('ispot_q', 1e-3),
-                    init_window=min(config.get('ispot_init_window', 200), min_len),
-                )
-                ensemble_result = ensemble.ensemble_decide(aligned_scores)
-                results['ensemble'] = ensemble_result
-            except Exception as e:
-                print(f"[DetectionEngine] 集成决策失败: {e}")
+        # --- csad_at pipeline 流程 ---
+        # 4. 截断 + Min-Max 归一化
+        print("[DetectionEngine] 截断负值 + Min-Max 归一化...")
+        normalized_scores = {}
+        method_scores = []
+        for name, res in method_results.items():
+            normed = clip_and_minmax(res['scores'], N, n_windows)
+            normalized_scores[name] = normed
+            method_scores.append(normed)
 
-        # 不再聚合节点分数。异常判定完全来自集成决策的标签矩阵。
+        # 5. 加权融合
+        print(f"[DetectionEngine] 加权融合 (权重: {active_weights})...")
+        fused_scores = weighted_fusion(
+            method_scores, active_weights, N, n_windows)
+
+        # 6. 融合分数 -> 全局时间线 -> I-SPOT -> 最终检测
+        print(f"[DetectionEngine] 全局 I-SPOT (q={anomaly_ratio}, "
+              f"level={ispot_level}, t_update={ispot_t_update})...")
+        fused_ispot = global_ispot_detect(
+            fused_scores, N, n_windows, curve_names,
+            anomaly_ratio=anomaly_ratio,
+            level=ispot_level,
+            t_update=ispot_t_update,
+            w_max=ispot_w_max,
+        )
+
+        # 7. 提取异常节点和片段
+        window_starts = None
+        window_ends = None
+        if method_results:
+            first_res = next(iter(method_results.values()))
+            window_starts = first_res.get('window_starts')
+            window_ends = first_res.get('window_ends')
+
+        anomaly_nodes, anomaly_segments = (
+            DetectionEngine._extract_segments_from_matrix(
+                fused_ispot['anomaly_matrix'],
+                curve_names,
+                window_starts=window_starts,
+                window_ends=window_ends,
+            )
+        )
+
+        # 构建集成结果（兼容旧格式）
+        results['ensemble'] = {
+            'anomaly_matrix': fused_ispot['anomaly_matrix'],
+            'anomaly_nodes': fused_ispot['anomaly_nodes'],
+            'anomaly_details': fused_ispot['anomaly_details'],
+            'node_anomaly_counts': fused_ispot.get('node_anomaly_counts', {}),
+            'ensemble_labels': fused_ispot['anomaly_matrix'].tolist(),
+        }
+        results['normalized_scores'] = normalized_scores
+        results['fused_scores'] = fused_scores
+        results['fused_ispot'] = fused_ispot
+        results['anomaly_nodes'] = anomaly_nodes
+        results['anomaly_segments'] = anomaly_segments
+        results['n_windows'] = n_windows
+        results['curve_names'] = curve_names
+
+        print(f"[DetectionEngine] 检测完成: "
+              f"{len(anomaly_nodes)} 个异常节点, "
+              f"{len(anomaly_segments)} 个异常片段")
 
         return results
+
+    # ================================================================
+    # 多指标多节点检测（双视角融合框架，保留原有 algorithms/）
+    # ================================================================
 
     @staticmethod
     def run_multi_metric(data_dict, config=None):
@@ -301,6 +456,10 @@ class DetectionEngine:
         result = fusion.detect(data_dict)
         result['scenario'] = 'multi_metric'
         return result
+
+    # ================================================================
+    # 统一检测入口
+    # ================================================================
 
     @staticmethod
     def run_detection(data_dict, scenario='auto', config=None):
@@ -360,48 +519,57 @@ class DetectionEngine:
         # === 提取异常节点和异常片段 ===
 
         if result.get('scenario') == 'single_metric':
-            # 单指标场景：优先使用集成决策标签
-            if result.get('ensemble') and result['ensemble'].get('ensemble_labels'):
-                anomaly_nodes, anomaly_segments = (
-                    DetectionEngine._extract_segments_from_labels(
-                        result['ensemble']['ensemble_labels'],
-                        node_names,
-                        window_size=window_size,
-                    )
-                )
-                result['anomaly_nodes'] = anomaly_nodes
-                result['anomaly_segments'] = anomaly_segments
-            elif result.get('methods'):
-                # 后备：只有一种方法时无法集成，用分数阈值判定
-                first_method = next(iter(result['methods'].values()))
-                if 'scores' in first_method and first_method['scores']:
-                    anomaly_nodes, anomaly_segments = (
-                        DetectionEngine._extract_anomaly_segments(
-                            first_method['scores'], node_names, threshold
-                        )
-                    )
-                    result['anomaly_nodes'] = anomaly_nodes
-                    result['anomaly_segments'] = anomaly_segments
-
-            # 为异常片段添加时间戳映射
+            # 单指标场景：异常节点和片段已在 run_single_metric 中提取
+            # 补充时间戳映射
             if timestamps and result.get('anomaly_segments'):
                 for seg in result['anomaly_segments']:
-                    ts_start = min(
-                        seg['start'] + window_size - 1,
-                        len(timestamps) - 1
-                    )
-                    ts_end = min(
-                        seg['end'] + window_size - 1,
-                        len(timestamps) - 1
-                    )
-                    ts_start = max(0, min(ts_start, len(timestamps) - 1))
-                    ts_end = max(0, min(ts_end, len(timestamps) - 1))
-                    seg['start_time'] = timestamps[ts_start]
-                    seg['end_time'] = timestamps[ts_end]
+                    if 'start_time' not in seg:
+                        ts_start = min(
+                            seg['start'] + window_size - 1,
+                            len(timestamps) - 1
+                        )
+                        ts_end = min(
+                            seg['end'] + window_size - 1,
+                            len(timestamps) - 1
+                        )
+                        ts_start = max(0, min(ts_start, len(timestamps) - 1))
+                        ts_end = max(0, min(ts_end, len(timestamps) - 1))
+                        seg['start_time'] = timestamps[ts_start]
+                        seg['end_time'] = timestamps[ts_end]
+
+            # 将 curve_names (node_0, node_1...) 映射回真实 node_names
+            if (result.get('anomaly_nodes')
+                    and result['anomaly_nodes']
+                    and node_names):
+                mapped_nodes = []
+                for anode in result['anomaly_nodes']:
+                    if anode.startswith('node_'):
+                        try:
+                            idx = int(anode.split('_')[1])
+                            if idx < len(node_names):
+                                mapped_nodes.append(node_names[idx])
+                            else:
+                                mapped_nodes.append(anode)
+                        except (ValueError, IndexError):
+                            mapped_nodes.append(anode)
+                    else:
+                        mapped_nodes.append(anode)
+                result['anomaly_nodes'] = mapped_nodes
+
+                if result.get('anomaly_segments'):
+                    for seg in result['anomaly_segments']:
+                        ni = seg.get('node_idx')
+                        if ni is not None and ni < len(node_names):
+                            seg['node'] = node_names[ni]
 
         elif result.get('scenario') == 'multi_metric':
             # 多指标场景：使用融合分数判定
-            scores = result.get('fused_scores', result.get('node_scores', []))
+            raw_sc = result.get('fused_scores', result.get('node_scores', []))
+            # Handle dict or list with nested lists
+            if isinstance(raw_sc, dict):
+                scores = [float(max(raw_sc[k])) if isinstance(raw_sc[k], (list, tuple)) else float(raw_sc[k]) for k in sorted(raw_sc.keys(), key=lambda x: int(x) if str(x).isdigit() else 0)]
+            else:
+                scores = [float(max(v)) if isinstance(v, (list, tuple)) else float(v) for v in raw_sc]
             anomaly_nodes = []
             for i, s in enumerate(scores):
                 if s > threshold and node_names and i < len(node_names):

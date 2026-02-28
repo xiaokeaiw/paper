@@ -482,18 +482,18 @@ def fig5_threshold_f1():
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4.2))
 
     # Left: Score + threshold over time
-    ax1.plot(base, color=PAL['blue'], alpha=0.5, linewidth=0.6, label='Anomaly Score')
-    ax1.plot(threshold, color=PAL['red'], linewidth=1.8, label='I-SPOT Threshold')
-    ax1.axhline(y=t0, color=PAL['orange'], linestyle='--', linewidth=1.0, alpha=0.7, label='Initial $t_0$')
+    ax1.plot(base, color=PAL['blue'], alpha=0.5, linewidth=0.6, label='异常评分')
+    ax1.plot(threshold, color=PAL['red'], linewidth=1.8, label='I-SPOT 动态阈值')
+    ax1.axhline(y=t0, color=PAL['orange'], linestyle='--', linewidth=1.0, alpha=0.7, label='初始阈值 $t_0$')
 
     # Mark anomalies
     det_mask = base > threshold
-    ax1.scatter(np.where(det_mask)[0], base[det_mask], c=PAL['red'], s=15, zorder=5, label='Detected Anomaly')
+    ax1.scatter(np.where(det_mask)[0], base[det_mask], c=PAL['red'], s=15, zorder=5, label='检测异常')
 
-    ax1.set_xlabel('Time Window', fontsize=10)
-    ax1.set_ylabel('Anomaly Score', fontsize=10)
-    ax1.legend(loc='upper right', fontsize=8)
-    ax1.set_title('I-SPOT Dynamic Threshold', fontsize=12)
+    ax1.set_xlabel('时间窗口', fontproperties=_cjk_prop, fontsize=10)
+    ax1.set_ylabel('异常评分', fontproperties=_cjk_prop, fontsize=10)
+    ax1.legend(prop=_cjk_prop, fontsize=8, loc='upper right')
+    ax1.set_title('I-SPOT 动态阈值检测', fontproperties=_cjk_prop, fontsize=12)
     ax1.grid(True, alpha=0.2)
 
     # Right: F1 vs threshold
@@ -507,9 +507,9 @@ def fig5_threshold_f1():
                  fontsize=9, color=PAL['red'],
                  arrowprops=dict(arrowstyle='->', color=PAL['red'], lw=1.0))
 
-    ax2.set_xlabel('Threshold', fontsize=10)
+    ax2.set_xlabel('阈值', fontproperties=_cjk_prop, fontsize=10)
     ax2.set_ylabel('F1 Score', fontsize=10)
-    ax2.set_title('Threshold vs F1 Score', fontsize=12)
+    ax2.set_title('阈值与 F1 分数关系', fontproperties=_cjk_prop, fontsize=12)
     ax2.grid(True, alpha=0.2)
     ax2.set_ylim(-0.05, 1.05)
 

@@ -1,32 +1,28 @@
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {1-1}{\ignorespaces 论文研究内容框架图}}{5}{figure.caption.12}%
+\contentsline {figure}{\numberline {1-1}{\ignorespaces \enspace 论文研究内容框架图}}{6}{figure.caption.12}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2-1}{\ignorespaces 点异常示意图}}{8}{figure.caption.13}%
-\contentsline {figure}{\numberline {2-2}{\ignorespaces 片段异常示意图（从上到下依次为波形异常、季节性异常与趋势异常）}}{9}{figure.caption.14}%
-\contentsline {figure}{\numberline {2-3}{\ignorespaces 变量间关联异常示意图}}{9}{figure.caption.15}%
-\contentsline {figure}{\numberline {2-4}{\ignorespaces 节点级异常示意图}}{10}{figure.caption.16}%
-\contentsline {figure}{\numberline {2-5}{\ignorespaces Hadoop分布式集群架构示意图}}{14}{figure.caption.17}%
+\contentsline {figure}{\numberline {2-1}{\ignorespaces \enspace 点异常示意图}}{8}{figure.caption.13}%
+\contentsline {figure}{\numberline {2-2}{\ignorespaces \enspace 片段异常示意图}}{9}{figure.caption.14}%
+\contentsline {figure}{\numberline {2-3}{\ignorespaces \enspace 变量间关联异常示意图}}{9}{figure.caption.15}%
+\contentsline {figure}{\numberline {2-4}{\ignorespaces \enspace 节点级异常示意图}}{10}{figure.caption.16}%
+\contentsline {figure}{\numberline {2-5}{\ignorespaces \enspace Hadoop分布式集群架构示意图}}{14}{figure.caption.17}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3-1}{\ignorespaces YARN分布式集群架构与RPC Router连接数指标示意}}{20}{figure.caption.18}%
-\contentsline {figure}{\numberline {3-2}{\ignorespaces 数据标注流程示意图}}{21}{figure.caption.19}%
-\contentsline {figure}{\numberline {3-3}{\ignorespaces 测试集A典型异常片段时序可视化（红色曲线为异常节点，粉色阴影为标注的异常时段）}}{22}{figure.caption.21}%
-\contentsline {figure}{\numberline {3-4}{\ignorespaces CSAD-AT框架整体架构}}{30}{figure.caption.26}%
+\contentsline {figure}{\numberline {3-1}{\ignorespaces \enspace YARN分布式集群架构与RPC Router连接数指标示意}}{20}{figure.caption.18}%
+\contentsline {figure}{\numberline {3-2}{\ignorespaces \enspace 数据集预处理与半人工标注流程}}{20}{figure.caption.19}%
+\contentsline {figure}{\numberline {3-3}{\ignorespaces \enspace 测试集A典型异常片段时序可视化}}{22}{figure.caption.21}%
+\contentsline {figure}{\numberline {3-4}{\ignorespaces \enspace 自编码器网络结构示意图}}{25}{figure.caption.23}%
+\contentsline {figure}{\numberline {3-5}{\ignorespaces \enspace 三种检测方法在不同窗口大小下F1分数随阈值变化的折线图}}{28}{figure.caption.28}%
+\contentsline {figure}{\numberline {3-6}{\ignorespaces \enspace CSAD-AT框架整体架构}}{30}{figure.caption.29}%
+\contentsline {figure}{\numberline {3-7}{\ignorespaces \enspace 融合分数上经典SPOT与I-SPOT检测结果对比}}{37}{figure.caption.34}%
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {4-1}{\ignorespaces \enspace GPU集群典型故障案例的多指标多节点时序可视化}}{41}{figure.caption.37}%
+\contentsline {figure}{\numberline {4-2}{\ignorespaces \enspace NSFusion算法框架流程}}{43}{figure.caption.38}%
+\contentsline {figure}{\numberline {4-3}{\ignorespaces \enspace 传统SAX与FR-SAX的符号化过程对比}}{48}{figure.caption.39}%
+\contentsline {figure}{\numberline {4-4}{\ignorespaces \enspace 传统SAX与FR-SAX的符号距离矩阵对比}}{48}{figure.caption.40}%
+\contentsline {figure}{\numberline {4-5}{\ignorespaces \enspace FR-SAX方法优势案例}}{52}{figure.caption.42}%
+\contentsline {figure}{\numberline {4-6}{\ignorespaces \enspace 欧氏距离方法优势案例}}{53}{figure.caption.43}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5-1}{\ignorespaces 用户登录页面}}{56}{figure.caption.42}%
-\contentsline {figure}{\numberline {5-2}{\ignorespaces 用户权限管理页面}}{57}{figure.caption.43}%
-\contentsline {figure}{\numberline {5-3}{\ignorespaces 数据集管理页面}}{58}{figure.caption.44}%
-\contentsline {figure}{\numberline {5-4}{\ignorespaces 时序数据预览页面}}{58}{figure.caption.45}%
-\contentsline {figure}{\numberline {5-5}{\ignorespaces 数据预处理页面}}{59}{figure.caption.46}%
-\contentsline {figure}{\numberline {5-6}{\ignorespaces 预处理日志页面}}{60}{figure.caption.47}%
-\contentsline {figure}{\numberline {5-7}{\ignorespaces 异常检测配置页面}}{61}{figure.caption.48}%
-\contentsline {figure}{\numberline {5-8}{\ignorespaces 检测记录页面}}{61}{figure.caption.49}%
-\contentsline {figure}{\numberline {5-9}{\ignorespaces 集群监控管理页面}}{63}{figure.caption.50}%
-\contentsline {figure}{\numberline {5-10}{\ignorespaces 告警规则配置页面}}{65}{figure.caption.51}%
-\contentsline {figure}{\numberline {5-11}{\ignorespaces 告警日志页面}}{66}{figure.caption.52}%
-\contentsline {figure}{\numberline {5-12}{\ignorespaces 实时监控大屏}}{67}{figure.caption.53}%
-\contentsline {figure}{\numberline {5-13}{\ignorespaces 可视化分析页面}}{67}{figure.caption.54}%
-\contentsline {figure}{\numberline {5-14}{\ignorespaces 历史检测结果页面}}{68}{figure.caption.55}%
+\contentsline {figure}{\numberline {5-1}{\ignorespaces \enspace 异常检测系统检测结果可视化界面}}{63}{figure.caption.48}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

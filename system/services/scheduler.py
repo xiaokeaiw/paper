@@ -126,8 +126,27 @@ def run_detection_cycle(cluster_id):
 
         # Step 4: 保存结果
         node_names = result.get('node_names', [])
-        node_scores = result.get('node_scores', result.get('fused_scores', []))
+        raw_scores = result.get('node_scores', result.get('fused_scores', []))
         anomaly_nodes = result.get('anomaly_nodes', [])
+
+        # fused_scores may be dict {node_idx: list} or plain list
+        if isinstance(raw_scores, dict):
+            node_scores = []
+            for i in range(len(node_names)):
+                v = raw_scores.get(i, raw_scores.get(str(i), 0))
+                if isinstance(v, (list, tuple)):
+                    node_scores.append(float(max(v)) if v else 0.0)
+                else:
+                    node_scores.append(float(v))
+        else:
+            node_scores = []
+            for v in raw_scores:
+                if isinstance(v, (list, tuple)):
+                    node_scores.append(float(max(v)) if v else 0.0)
+                elif hasattr(v, '__float__'):
+                    node_scores.append(float(v))
+                else:
+                    node_scores.append(0.0)
 
         scores_dict = {}
         for i, name in enumerate(node_names):

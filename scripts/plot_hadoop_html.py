@@ -146,7 +146,7 @@ def main():
     txt(ax, 7.55, 3.78, 'Replica', 7, '#999999')
 
     # ── Legend ──
-    lx, ly = 9.5, 4.55
+    lx, ly = 9.3, 0.65
     rbox(ax, lx, ly, 2.4, 1.6, fc='#FFFFFFEE', ec='#DDDDDD', lw=0.8, zorder=8)
     # HDFS
     rbox(ax, lx+0.15, ly+1.15, 0.3, 0.22, fc=C_HDFS, ec='#888888', lw=0.6, zorder=9)

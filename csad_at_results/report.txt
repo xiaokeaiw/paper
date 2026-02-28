@@ -8,63 +8,18 @@ CSAD-AT 检测报告
 --- 各方法中间检测结果 ---
 
 euclidean:
-  异常节点: ['YARN6----hyg-gx-0004.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0018.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0041.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0121.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0180.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0239.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0253.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0273.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0303.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0323.odata.ncmp.unicom.local']
-    YARN6----hyg-gx-0004.odata.ncmp.unicom.local: 1 个异常窗口
-    YARN6----hyg-gx-0018.odata.ncmp.unicom.local: 143 个异常窗口
-    YARN6----hyg-gx-0041.odata.ncmp.unicom.local: 4 个异常窗口
-    YARN6----hyg-gx-0121.odata.ncmp.unicom.local: 4 个异常窗口
-    YARN6----hyg-gx-0180.odata.ncmp.unicom.local: 3 个异常窗口
-    YARN6----hyg-gx-0239.odata.ncmp.unicom.local: 6 个异常窗口
-    YARN6----hyg-gx-0253.odata.ncmp.unicom.local: 2 个异常窗口
-    YARN6----hyg-gx-0273.odata.ncmp.unicom.local: 2 个异常窗口
-    YARN6----hyg-gx-0303.odata.ncmp.unicom.local: 6 个异常窗口
-    YARN6----hyg-gx-0323.odata.ncmp.unicom.local: 4 个异常窗口
+  异常节点: ['YARN6----hyg-gx-0018.odata.ncmp.unicom.local']
+    YARN6----hyg-gx-0018.odata.ncmp.unicom.local: 113 个异常窗口
 
 autoencoder:
-  异常节点: ['YARN6----hyg-gx-0004.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0018.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0041.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0061.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0091.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0121.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0141.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0161.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0180.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0229.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0239.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0253.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0273.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0303.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0323.odata.ncmp.unicom.local']
-    YARN6----hyg-gx-0004.odata.ncmp.unicom.local: 7 个异常窗口
-    YARN6----hyg-gx-0018.odata.ncmp.unicom.local: 141 个异常窗口
-    YARN6----hyg-gx-0041.odata.ncmp.unicom.local: 10 个异常窗口
-    YARN6----hyg-gx-0061.odata.ncmp.unicom.local: 6 个异常窗口
-    YARN6----hyg-gx-0091.odata.ncmp.unicom.local: 4 个异常窗口
-    YARN6----hyg-gx-0121.odata.ncmp.unicom.local: 6 个异常窗口
-    YARN6----hyg-gx-0141.odata.ncmp.unicom.local: 1 个异常窗口
-    YARN6----hyg-gx-0161.odata.ncmp.unicom.local: 3 个异常窗口
-    YARN6----hyg-gx-0180.odata.ncmp.unicom.local: 6 个异常窗口
-    YARN6----hyg-gx-0229.odata.ncmp.unicom.local: 4 个异常窗口
-    YARN6----hyg-gx-0239.odata.ncmp.unicom.local: 8 个异常窗口
-    YARN6----hyg-gx-0253.odata.ncmp.unicom.local: 1 个异常窗口
-    YARN6----hyg-gx-0273.odata.ncmp.unicom.local: 4 个异常窗口
-    YARN6----hyg-gx-0303.odata.ncmp.unicom.local: 6 个异常窗口
-    YARN6----hyg-gx-0323.odata.ncmp.unicom.local: 4 个异常窗口
+  异常节点: ['YARN6----hyg-gx-0018.odata.ncmp.unicom.local']
+    YARN6----hyg-gx-0018.odata.ncmp.unicom.local: 92 个异常窗口
 
 dbscan:
-  异常节点: ['YARN6----hyg-gx-0018.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0041.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0091.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0121.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0161.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0180.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0239.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0253.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0273.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0303.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0323.odata.ncmp.unicom.local']
-    YARN6----hyg-gx-0018.odata.ncmp.unicom.local: 143 个异常窗口
-    YARN6----hyg-gx-0041.odata.ncmp.unicom.local: 2 个异常窗口
-    YARN6----hyg-gx-0091.odata.ncmp.unicom.local: 2 个异常窗口
-    YARN6----hyg-gx-0121.odata.ncmp.unicom.local: 6 个异常窗口
-    YARN6----hyg-gx-0161.odata.ncmp.unicom.local: 4 个异常窗口
-    YARN6----hyg-gx-0180.odata.ncmp.unicom.local: 2 个异常窗口
-    YARN6----hyg-gx-0239.odata.ncmp.unicom.local: 7 个异常窗口
-    YARN6----hyg-gx-0253.odata.ncmp.unicom.local: 2 个异常窗口
-    YARN6----hyg-gx-0273.odata.ncmp.unicom.local: 3 个异常窗口
-    YARN6----hyg-gx-0303.odata.ncmp.unicom.local: 7 个异常窗口
-    YARN6----hyg-gx-0323.odata.ncmp.unicom.local: 10 个异常窗口
+  异常节点: ['YARN6----hyg-gx-0018.odata.ncmp.unicom.local']
+    YARN6----hyg-gx-0018.odata.ncmp.unicom.local: 107 个异常窗口
 
 --- 融合后最终检测结果 ---
-异常节点: ['YARN6----hyg-gx-0004.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0018.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0041.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0061.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0091.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0121.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0161.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0180.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0229.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0239.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0273.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0303.odata.ncmp.unicom.local', 'YARN6----hyg-gx-0323.odata.ncmp.unicom.local']
-  YARN6----hyg-gx-0004.odata.ncmp.unicom.local: 2 个异常窗口
-  YARN6----hyg-gx-0018.odata.ncmp.unicom.local: 140 个异常窗口
-  YARN6----hyg-gx-0041.odata.ncmp.unicom.local: 4 个异常窗口
-  YARN6----hyg-gx-0061.odata.ncmp.unicom.local: 1 个异常窗口
-  YARN6----hyg-gx-0091.odata.ncmp.unicom.local: 1 个异常窗口
-  YARN6----hyg-gx-0121.odata.ncmp.unicom.local: 5 个异常窗口
-  YARN6----hyg-gx-0161.odata.ncmp.unicom.local: 2 个异常窗口
-  YARN6----hyg-gx-0180.odata.ncmp.unicom.local: 3 个异常窗口
-  YARN6----hyg-gx-0229.odata.ncmp.unicom.local: 1 个异常窗口
-  YARN6----hyg-gx-0239.odata.ncmp.unicom.local: 7 个异常窗口
-  YARN6----hyg-gx-0273.odata.ncmp.unicom.local: 4 个异常窗口
-  YARN6----hyg-gx-0303.odata.ncmp.unicom.local: 8 个异常窗口
-  YARN6----hyg-gx-0323.odata.ncmp.unicom.local: 6 个异常窗口
-异常片段数: 81
+异常节点: ['YARN6----hyg-gx-0018.odata.ncmp.unicom.local']
+  YARN6----hyg-gx-0018.odata.ncmp.unicom.local: 107 个异常窗口
+异常片段数: 38

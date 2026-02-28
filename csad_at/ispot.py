@@ -158,7 +158,7 @@ class ISPOT:
                 'anomaly_indices': list of int, 异常索引
             }
         """
-        scores = np.array(scores, dtype=np.float64)
+        scores = np.asarray(scores).flatten().astype(np.float64)
         total_len = len(scores)
 
         initial_seq_len = max(20, int(total_len * initial_seq_ratio))
