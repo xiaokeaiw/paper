@@ -15,16 +15,16 @@
     \bicaption{\enspace 故障类别及数量分布}{\enspace Fault Categories and Distribution}
     \label{tab:fault_category}
     \begin{tabular}{lrl}
-        \hline
+        \toprule
         故障类别 & 数量 & 典型根因 \\
-        \hline
+        \midrule
         GPU故障 & 51 & Double bit error、XID error、GPU利用率不均衡 \\
         机器故障 & 13 & 节点宕机、机器检查错误 \\
         网络故障 & 18 & 交换机问题、光模块故障、线缆故障、信号质量差 \\
         PCIe故障 & 9 & PCIe性能退化、PCIe信号质量差 \\
         NCCL故障 & 5 & NCCL分段错误、NCCL超时 \\
         其他 & 9 & 未明确分类的故障 \\
-        \hline
+        \bottomrule
     \end{tabular}
 \end{table}
 
@@ -37,9 +37,9 @@
     \bicaption{\enspace 监控指标列表及说明}{\enspace List of Monitoring Metrics and Descriptions}
     \label{tab:monitoring_metrics}
     \begin{tabular}{p{5.5cm}p{8cm}}
-        \hline
+        \toprule
         监控指标 & 说明 \\
-        \hline
+        \midrule
         CPU Usage & CPU繁忙处理任务的时间占比 \\
         Memory Usage & 系统RAM被程序和操作系统占用的比例 \\
         GPU PCIe Throughput & GPU与主板间通过PCIe传输数据的速率 \\
@@ -54,7 +54,7 @@
         Network Link Down Event$^*$ & 网络接口连接丢失的事件次数 \\
         Cable BER$^*$ & 线缆数据传输过程中的误码率 \\
         XID Errors$^*$ & GPU报告的严重错误次数 \\
-        \hline
+        \bottomrule
         \multicolumn{2}{l}{\footnotesize 注：带$^*$标记的为负载无关指标。}
     \end{tabular}
 \end{table}
@@ -365,33 +365,29 @@ FR-SAX算法由于取消了分段聚合，符号序列长度与原始序列一�
 
 \subsection{方法结果对比分析}
 
-表\ref{tab:multi_metric_results}展示了各方法在全部105个故障案例上的检测效果。
+表\ref{tab:multi_metric_results}展示了各方法在全部105个故障案例上的检测效果。从实验结果可以观察到几个值得关注的现象。首先，基于欧氏距离的数值检测方法在Acc@5指标上达到0.800，相比马氏距离基线方法的0.453有大幅提升。这一结果表明，在GPU集群场景中，基于节点间曲线逐点比较的相似性度量方式比基于多变量协方差结构的统计方法更能有效地识别异常节点。其主要原因在于，马氏距离方法需要估计高维协方差矩阵，而在节点数量有限的情况下协方差估计的精度难以保证，从而影响了检测效果。
 
 \begin{table}[htbp]
     \centering
     \bicaption{\enspace 多指标多节点异常检测方法对比}{\enspace Comparison of Multi-metric Multi-node Anomaly Detection Methods}
     \label{tab:multi_metric_results}
     \begin{tabular}{lcc}
-        \hline
+        \toprule
         算法 & Acc@5 & Avg Rank \\
-        \hline
+        \midrule
         马氏距离 & 0.453 & 1.20 \\
         数值方法 & 0.800 & 1.25 \\
         形状方法 & 0.762 & 1.30 \\
-        数值-形状融合 & 0.838 & 1.18 \\
-        \hline
+        数值-形状融合 & \textbf{0.838} & 1.18 \\
+        \bottomrule
     \end{tabular}
 \end{table}
-
-从实验结果可以观察到几个值得关注的现象。首先，基于欧氏距离的数值检测方法在Acc@5指标上达到0.800，相比马氏距离基线方法的0.453有大幅提升。这一结果表明，在GPU集群场景中，基于节点间曲线逐点比较的相似性度量方式比基于多变量协方差结构的统计方法更能有效地识别异常节点。其主要原因在于，马氏距离方法需要估计高维协方差矩阵，而在节点数量有限的情况下协方差估计的精度难以保证，从而影响了检测效果。
 
 其次，基于FR-SAX的形状检测方法取得了0.762的Acc@5。虽然这一数值略低于数值检测方法，但形状方法能够成功检测到一部分数值方法遗漏的故障案例，说明两种方法在异常模式的覆盖范围上确实存在互补性。将两种方法进行加权融合后，Acc@5进一步提升至0.838，同时Avg Rank降至1.18，验证了双视角融合策略的有效性。
 
 \subsection{融合方法优势分析}
 
-融合方法相比单一视角方法在两个层面上展现出明显优势。
-
-在异常覆盖的全面性方面，数值方法擅长识别幅度显著偏离的异常，而形状方法则能够捕捉那些数值范围正常但变化模式异常的隐蔽故障。通过对105个故障案例的逐一分析，约有15\%的案例主要表现为形态层面的异常而非数值层面的异常。这些案例中，故障节点的各项指标数值始终处于正常范围之内，但其变化趋势或波动模式与集群中其他节点存在明显差异。如果仅依赖数值方法进行检测，这部分案例将无法被有效覆盖。
+融合方法相比单一视角方法在两个层面上展现出明显优势。在异常覆盖的全面性方面，数值方法擅长识别幅度显著偏离的异常，而形状方法则能够捕捉那些数值范围正常但变化模式异常的隐蔽故障。通过对105个故障案例的逐一分析，约有15\%的案例主要表现为形态层面的异常而非数值层面的异常。这些案例中，故障节点的各项指标数值始终处于正常范围之内，但其变化趋势或波动模式与集群中其他节点存在明显差异。如果仅依赖数值方法进行检测，这部分案例将无法被有效覆盖。
 
 在检测性能的稳定性方面，单一方法往往在其擅长的故障类型上表现优异，但在其他类型的故障上效果可能明显下降。融合方法通过综合两个视角各自的判断结果，能够在不同故障类型之间获得更为均衡的检测表现，降低了算法性能对特定故障类型的依赖程度。
 
@@ -424,14 +420,14 @@ FR-SAX算法由于取消了分段聚合，符号序列长度与原始序列一�
     \bicaption{\enspace 算法优化前后效率对比}{\enspace Efficiency Comparison Before and After Algorithm Optimization}
     \label{tab:efficiency_compare}
     \begin{tabular}{@{}l@{\hspace{2em}}c@{\hspace{2em}}c@{\hspace{2em}}c@{}}
-        \hline
+        \toprule
         算法 & 平均耗时 & 最大耗时 & 加速比 \\
-        \hline
+        \midrule
         欧氏距离（优化前） & 149.97s & 269.58s & 1.0$\times$ \\
         欧氏距离（优化后） & 3.78s & 6.59s & 39.7$\times$ \\
         FR-SAX（优化前） & 217.92s & 483.56s & 1.0$\times$ \\
         FR-SAX（优化后） & 7.44s & 18.02s & 29.3$\times$ \\
-        \hline
+        \bottomrule
     \end{tabular}
 \end{table}
 
@@ -444,15 +440,15 @@ FR-SAX算法由于取消了分段聚合，符号序列长度与原始序列一�
     \bicaption{\enspace 优化后不同节点规模下的平均检测耗时统计}{\enspace Average Detection Time Statistics under Different Node Scales after Optimization}
     \label{tab:efficiency_scale}
     \begin{tabular}{lcccc}
-        \hline
+        \toprule
         节点规模 & 任务数 & 欧氏距离 & FR-SAX & 融合总耗时 \\
-        \hline
+        \midrule
         $\sim$500 & 33 & 3.73s & 7.33s & 11.05s \\
         $\sim$600 & 20 & 4.50s & 8.93s & 13.44s \\
         $\sim$700 & 34 & 5.96s & 11.90s & 17.86s \\
-        \hline
+        \midrule
         全部 & 113 & 3.78s & 7.44s & 11.22s \\
-        \hline
+        \bottomrule
     \end{tabular}
 \end{table}
 

@@ -1,0 +1,90 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand*\HyPL@Entry[1]{}
+\HyPL@Entry{0<</S/D>>}
+\citation{su2019omni}
+\citation{audibert2020usad}
+\citation{tuli2022tranad}
+\citation{deng2021graph}
+\citation{zhao2020mtadgat}
+\citation{li2019madgan}
+\citation{siffer2017spot}
+\@writefile{toc}{\contentsline {section}{\numberline {1}引言}{2}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}相关工作}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}数据集构建}{2}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}数据来源与采集}{2}{subsection.3.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces YARN分布式集群架构与RPC Router连接数指标示意 {\small YARN cluster architecture and RPC Router connection count}}}{3}{figure.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:yarn_arch}{{1}{3}{YARN分布式集群架构与RPC Router连接数指标示意\\{\small YARN cluster architecture and RPC Router connection count}}{figure.caption.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}数据集预处理与标注}{3}{subsection.3.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces 数据集预处理与半人工标注流程 {\small Dataset preprocessing and semi-manual annotation workflow}}}{3}{figure.caption.2}\protected@file@percent }
+\newlabel{fig:annotation_flow}{{2}{3}{数据集预处理与半人工标注流程\\{\small Dataset preprocessing and semi-manual annotation workflow}}{figure.caption.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}数据集统计与可视化}{3}{subsection.3.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces 数据集统计数据 {\small Dataset statistics}}}{3}{table.caption.3}\protected@file@percent }
+\newlabel{tab:dataset_stats}{{1}{3}{数据集统计数据\\{\small Dataset statistics}}{table.caption.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces 测试集A典型异常片段时序可视化（红色曲线为异常节点，粉色阴影为异常时段） {\small Visualization of typical anomaly segments in Test Set A}}}{3}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:anomaly_curve}{{3}{3}{测试集A典型异常片段时序可视化（红色曲线为异常节点，粉色阴影为异常时段）\\{\small Visualization of typical anomaly segments in Test Set A}}{figure.caption.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}基于曲线相似性的异常评分方法}{3}{section.4}\protected@file@percent }
+\citation{tuli2022tranad}
+\citation{audibert2020usad}
+\citation{su2019omni}
+\citation{deng2021graph}
+\citation{li2019madgan}
+\citation{zhao2020mtadgat}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}基于欧氏距离的数值相似性度量}{4}{subsection.4.1}\protected@file@percent }
+\newlabel{subsec:euclidean}{{4.1}{4}{基于欧氏距离的数值相似性度量}{subsection.4.1}{}}
+\newlabel{eq:euc_score}{{3}{4}{基于欧氏距离的数值相似性度量}{equation.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}基于自编码器嵌入的形态相似性度量}{4}{subsection.4.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces 自编码器网络结构示意图 {\small Architecture of the autoencoder network}}}{4}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:autoencoder}{{4}{4}{自编码器网络结构示意图\\{\small Architecture of the autoencoder network}}{figure.caption.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}基于局部密度的偏离评分}{4}{subsection.4.3}\protected@file@percent }
+\newlabel{subsec:density}{{4.3}{4}{基于局部密度的偏离评分}{subsection.4.3}{}}
+\newlabel{eq:density_score}{{5}{4}{基于局部密度的偏离评分}{equation.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}参数敏感性分析}{4}{subsection.4.4}\protected@file@percent }
+\newlabel{subsec:sensitivity}{{4.4}{4}{参数敏感性分析}{subsection.4.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces 三种检测方法在不同窗口大小下F1分数随阈值变化的折线图 {\small F1 score vs.\ threshold for three detection methods under different window sizes}}}{4}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:threshold_sensitivity}{{5}{4}{三种检测方法在不同窗口大小下F1分数随阈值变化的折线图\\{\small F1 score vs.\ threshold for three detection methods under different window sizes}}{figure.caption.7}{}}
+\citation{siffer2017spot}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces 基线算法与曲线相似性方法异常检测结果 {\small Anomaly detection results of baseline algorithms and curve similarity methods}}}{5}{table.caption.6}\protected@file@percent }
+\newlabel{tab:baseline_results}{{2}{5}{基线算法与曲线相似性方法异常检测结果\\{\small Anomaly detection results of baseline algorithms and curve similarity methods}}{table.caption.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}CSAD-AT框架}{5}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}框架概述}{5}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}分数归一化与聚合}{5}{subsection.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}I-SPOT自适应阈值算法}{5}{subsection.5.3}\protected@file@percent }
+\newlabel{subsec:ispot}{{5.3}{5}{I-SPOT自适应阈值算法}{subsection.5.3}{}}
+\newlabel{eq:spot_threshold}{{10}{5}{I-SPOT自适应阈值算法}{equation.10}{}}
+\citation{tuli2022tranad}
+\citation{audibert2020usad}
+\citation{su2019omni}
+\citation{deng2021graph}
+\citation{li2019madgan}
+\citation{zhao2020mtadgat}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces CSAD-AT框架整体架构 {\small Overall architecture of the CSAD-AT framework}}}{6}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:csad_framework}{{6}{6}{CSAD-AT框架整体架构\\{\small Overall architecture of the CSAD-AT framework}}{figure.caption.8}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces I-SPOT自适应阈值算法}}{6}{algorithm.1}\protected@file@percent }
+\newlabel{alg:ispot}{{1}{6}{I-SPOT自适应阈值算法}{algorithm.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}实验验证与分析}{6}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}实验设置}{6}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}整体性能分析}{6}{subsection.6.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces CSAD-AT整体性能对比 {\small Overall performance comparison of CSAD-AT}}}{6}{table.caption.9}\protected@file@percent }
+\newlabel{tab:overall_results}{{3}{6}{CSAD-AT整体性能对比\\{\small Overall performance comparison of CSAD-AT}}{table.caption.9}{}}
+\bibcite{su2019omni}{1}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}分数聚合策略对比}{7}{subsection.6.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces 不同分数聚合策略的性能对比 {\small Performance comparison of different score aggregation strategies}}}{7}{table.caption.10}\protected@file@percent }
+\newlabel{tab:agg_compare}{{4}{7}{不同分数聚合策略的性能对比\\{\small Performance comparison of different score aggregation strategies}}{table.caption.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}消融实验}{7}{subsection.6.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces 消融实验：各评分方法与I-SPOT结合的性能 {\small Ablation study: each scoring method combined with I-SPOT}}}{7}{table.caption.11}\protected@file@percent }
+\newlabel{tab:ablation}{{5}{7}{消融实验：各评分方法与I-SPOT结合的性能\\{\small Ablation study: each scoring method combined with I-SPOT}}{table.caption.11}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}I-SPOT与经典SPOT对比}{7}{subsection.6.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces 经典SPOT与I-SPOT性能对比 {\small Performance comparison of classic SPOT and I-SPOT}}}{7}{table.caption.12}\protected@file@percent }
+\newlabel{tab:spot_compare}{{6}{7}{经典SPOT与I-SPOT性能对比\\{\small Performance comparison of classic SPOT and I-SPOT}}{table.caption.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces 融合分数上经典SPOT与I-SPOT检测结果对比 {\small Comparison of classic SPOT and I-SPOT on fused scores}}}{7}{figure.caption.13}\protected@file@percent }
+\newlabel{fig:spot_vs_ispot}{{7}{7}{融合分数上经典SPOT与I-SPOT检测结果对比\\{\small Comparison of classic SPOT and I-SPOT on fused scores}}{figure.caption.13}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}结论}{7}{section.7}\protected@file@percent }
+\bibcite{audibert2020usad}{2}
+\bibcite{tuli2022tranad}{3}
+\bibcite{deng2021graph}{4}
+\bibcite{zhao2020mtadgat}{5}
+\bibcite{li2019madgan}{6}
+\bibcite{siffer2017spot}{7}
+\gdef \@abspage@last{8}

@@ -43,9 +43,9 @@
     \bicaption{\enspace 系统算法模块组织结构}{\enspace Organization of System Algorithm Modules}
     \label{tab:code_structure}
     \begin{tabular}{lll}
-        \hline
+        \toprule
         模块 & 核心组件 & 对应章节 \\
-        \hline
+        \midrule
         \texttt{euc\_detector} & 欧氏距离偏离度计算 & 第三章 3.3.1 \\
         \texttt{ae\_detector} & 自编码器嵌入偏离度计算 & 第三章 3.3.2 \\
         \texttt{dbscan\_detector} & 密度偏离度计算 & 第三章 3.3.3 \\
@@ -54,7 +54,7 @@
         \texttt{fusion} & 双视角融合检测 & 第四章 4.2 \\
         \texttt{evaluate} & 检测结果评估 & 第三章 3.5 \\
         \texttt{visualize} & 检测结果可视化 & --- \\
-        \hline
+        \bottomrule
     \end{tabular}
 \end{table}
 
@@ -138,9 +138,9 @@ I-SPOT算法的核心参数设置为：目标误报率$q = 0.0065$，初始阈�
     \bicaption{\enspace 系统核心API接口设计}{\enspace Design of Core System API Endpoints}
     \label{tab:api_design}
     \begin{tabular}{llp{5cm}}
-        \hline
+        \toprule
         接口路径 & 请求方法 & 功能说明 \\
-        \hline
+        \midrule
         /api/auth/login & POST & 用户登录认证 \\
         /api/datasets & GET/POST & 数据集列表查询与上传 \\
         /api/datasets/\{id\}/preview & GET & 数据集时序曲线预览 \\
@@ -151,7 +151,7 @@ I-SPOT算法的核心参数设置为：目标误报率$q = 0.0065$，初始阈�
         /api/alerts/rules & GET/POST/PUT & 告警规则配置管理 \\
         /api/alerts/logs & GET & 告警记录查询与筛选 \\
         /api/dashboard/overview & GET & 监控大屏数据聚合 \\
-        \hline
+        \bottomrule
     \end{tabular}
 \end{table}
 
@@ -179,13 +179,13 @@ I-SPOT算法的核心参数设置为：目标误报率$q = 0.0065$，初始阈�
     \bicaption{\enspace 系统检测性能（单位：秒）}{\enspace System Detection Performance (Unit: Seconds)}
     \label{tab:system_performance}
     \begin{tabular}{lcccc}
-        \hline
+        \toprule
         数据规模 & 欧氏距离 & 自编码器 & 密度偏离 & CSAD-AT流水线 \\
-        \hline
+        \midrule
         15节点$\times$500步 & 0.8 & 12.5 & 1.2 & 14.8 \\
         30节点$\times$500步 & 1.5 & 15.3 & 2.1 & 19.4 \\
         50节点$\times$1000步 & 3.2 & 28.7 & 4.5 & 37.1 \\
-        \hline
+        \bottomrule
     \end{tabular}
 \end{table}
 
@@ -196,16 +196,15 @@ I-SPOT算法的核心参数设置为：目标误报率$q = 0.0065$，初始阈�
     \bicaption{\enspace 常态化巡检端到端耗时分布（30节点$\times$500步）}{\enspace End-to-End Latency Distribution of Routine Inspection (30 Nodes $\times$ 500 Steps)}
     \label{tab:e2e_performance}
     \begin{tabular}{lcc}
-        \hline
+        \toprule
         处理阶段 & 平均耗时（秒） & 占比 \\
-        \hline
+        \midrule
         Prometheus数据拉取 & 1.2 & 6.2\% \\
         数据预处理 & 0.8 & 4.1\% \\
         CSAD-AT检测流水线 & 16.5 & 85.1\% \\
         结果存储与告警检查 & 0.9 & 4.6\% \\
-        \hline
         总计 & 19.4 & 100\% \\
-        \hline
+        \bottomrule
     \end{tabular}
 \end{table}
 

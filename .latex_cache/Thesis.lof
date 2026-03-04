@@ -8,7 +8,7 @@
 \contentsline {figure}{\numberline {2-5}{\ignorespaces \enspace Hadoop分布式集群架构示意图}}{14}{figure.caption.17}%
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {3-1}{\ignorespaces \enspace YARN分布式集群架构与RPC Router连接数指标示意}}{20}{figure.caption.18}%
-\contentsline {figure}{\numberline {3-2}{\ignorespaces \enspace 数据集预处理与半人工标注流程}}{20}{figure.caption.19}%
+\contentsline {figure}{\numberline {3-2}{\ignorespaces \enspace 数据集预处理与半人工标注流程}}{21}{figure.caption.19}%
 \contentsline {figure}{\numberline {3-3}{\ignorespaces \enspace 测试集A典型异常片段时序可视化}}{22}{figure.caption.21}%
 \contentsline {figure}{\numberline {3-4}{\ignorespaces \enspace 自编码器网络结构示意图}}{25}{figure.caption.23}%
 \contentsline {figure}{\numberline {3-5}{\ignorespaces \enspace 三种检测方法在不同窗口大小下F1分数随阈值变化的折线图}}{28}{figure.caption.28}%
@@ -19,7 +19,7 @@
 \contentsline {figure}{\numberline {4-2}{\ignorespaces \enspace NSFusion算法框架流程}}{43}{figure.caption.38}%
 \contentsline {figure}{\numberline {4-3}{\ignorespaces \enspace 传统SAX与FR-SAX的符号化过程对比}}{48}{figure.caption.39}%
 \contentsline {figure}{\numberline {4-4}{\ignorespaces \enspace 传统SAX与FR-SAX的符号距离矩阵对比}}{48}{figure.caption.40}%
-\contentsline {figure}{\numberline {4-5}{\ignorespaces \enspace FR-SAX方法优势案例}}{52}{figure.caption.42}%
+\contentsline {figure}{\numberline {4-5}{\ignorespaces \enspace FR-SAX方法优势案例}}{53}{figure.caption.42}%
 \contentsline {figure}{\numberline {4-6}{\ignorespaces \enspace 欧氏距离方法优势案例}}{53}{figure.caption.43}%
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {5-1}{\ignorespaces \enspace 异常检测系统检测结果可视化界面}}{63}{figure.caption.48}%

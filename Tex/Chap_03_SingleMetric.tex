@@ -12,7 +12,7 @@
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.85\textwidth]{Img/yarn_arch.pdf}
+    \includegraphics[width=\textwidth]{Img/yarn_arch.pdf}
     \bicaption{\enspace YARN分布式集群架构与RPC Router连接数指标示意}{\enspace YARN Cluster Architecture and RPC Router Connection Count}
     \label{fig:yarn_arch}
 \end{figure}
@@ -31,7 +31,7 @@
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.95\textwidth]{Img/draft/annotation_flow_new.pdf}
+    \includegraphics[width=\textwidth]{Img/draft/annotation_flow_new.pdf}
     \bicaption{\enspace 数据集预处理与半人工标注流程}{\enspace Dataset Preprocessing and Semi-manual Annotation Workflow}
     \label{fig:annotation_flow}
 \end{figure}
@@ -51,14 +51,14 @@
     \bicaption{\enspace 数据集统计数据}{\enspace Dataset Statistics}
     \label{tab:dataset_stats}
     \begin{tabular}{@{}l@{\hspace{1.5em}}c@{\hspace{1.5em}}c@{\hspace{1.5em}}c@{\hspace{1.5em}}c@{\hspace{1.5em}}c@{}}
-        \hline
+        \toprule
         & 节点数 & 数据点数量 & 异常片段数 & 异常点数量 & 异常比例 \\
-        \hline
+        \midrule
         训练集 & 30 & 86400 & / & / & / \\
         测试集A & 15 & 11520 & 72 & 901 & 7.82\% \\
         测试集B & 15 & 11520 & 33 & 907 & 7.87\% \\
         测试集 & 30 & 23040 & 105 & 1808 & 7.85\% \\
-        \hline
+        \bottomrule
     \end{tabular}
 \end{table}
 
@@ -386,8 +386,8 @@ I-SPOT算法维护一个最大容量为$W_{\max}$的先进先出（FIFO）数据
 
 此外，I-SPOT引入自适应重置机制：当累计异常数或已处理数据点数达到预设阈值时，触发数据池的完全重置，以应对突发性的分布变化。I-SPOT算法的完整流程如算法\ref{alg:ispot}所示。
 
-\begin{algorithm}[htbp]
-    \caption{I-SPOT自适应阈值算法}
+\begin{algorithm}[H]
+    \bicaption{\enspace I-SPOT自适应阈值算法}{\enspace I-SPOT Adaptive Threshold Algorithm}
     \label{alg:ispot}
     \begin{algorithmic}[1]
         \Require 异常分数流 $\{s_1, s_2, \ldots\}$，风险水平 $q$，分位数水平 $\textit{level}$，数据池容量 $W_{\max}$，重估间隔 $T_{\text{update}}$，初始长度 $n_0$
@@ -434,11 +434,11 @@ I-SPOT算法的超参数设置为：风险水平$q = 0.0065$，分位数水平$\
 
 \subsection{整体性能分析}
 
-表\ref{tab:overall_results}展示了CSAD-AT框架与各基线算法以及三种单独评分方法在测试集上的检测性能对比。
+表\ref{tab:overall_results}展示了CSAD-AT算法与各基线算法以及三种单独评分方法在测试集上的检测性能对比。
 
 \begin{table}[htbp]
     \centering
-    \bicaption{\enspace CSAD-AT与基线算法及相似性算法的整体性能对比}{\enspace Overall Performance Comparison of CSAD-AT with Baselines and Similarity-based Methods}
+    \bicaption{\enspace 各算法异常检测性能对比}{\enspace Anomaly Detection Performance Comparison of All Methods}
     \label{tab:overall_results}
     \begin{tabular}{@{}l@{\hspace{1.5em}}l@{\hspace{2em}}c@{\hspace{2em}}c@{\hspace{2em}}c@{}}
         \toprule
@@ -455,7 +455,7 @@ I-SPOT算法的超参数设置为：风险水平$q = 0.0065$，分位数水平$\
         & 自编码器嵌入 & 0.9792 & 0.9592 & 0.9691 \\
         & 密度偏离 & 0.9605 & 0.9659 & 0.9632 \\
         \midrule
-        本文框架 & CSAD-AT & 1.0000 & 0.9732 & \textbf{0.9864} \\
+        本章算法 & CSAD-AT & 1.0000 & 0.9732 & \textbf{0.9864} \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -500,8 +500,7 @@ I-SPOT算法的超参数设置为：风险水平$q = 0.0065$，分位数水平$\
         欧氏距离 + I-SPOT & 1.0000 & 0.9187 & \underline{0.9576} \\
         自编码器嵌入 + I-SPOT & 0.9891 & 0.8667 & 0.9239 \\
         密度偏离 + I-SPOT & 1.0000 & 0.8917 & 0.9427 \\
-        \midrule
-        CSAD-AT（三种融合 + I-SPOT） & 1.0000 & 0.9732 & \textbf{0.9864} \\
+        CSAD-AT & 1.0000 & 0.9732 & \textbf{0.9864} \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -521,12 +520,12 @@ I-SPOT算法的超参数设置为：风险水平$q = 0.0065$，分位数水平$\
     \bicaption{\enspace 经典SPOT与I-SPOT性能对比}{\enspace Performance Comparison of Classic SPOT and I-SPOT}
     \label{tab:spot_compare}
     \begin{tabular}{@{}l@{\hspace{2em}}c@{\hspace{2em}}c@{\hspace{2em}}c@{}}
-        \hline
+        \toprule
         阈值算法 & Precision & Recall & F1 \\
-        \hline
+        \midrule
         经典SPOT & 0.3218 & 1.0000 & 0.4870 \\
         I-SPOT & 1.0000 & 0.9732 & 0.9864 \\
-        \hline
+        \bottomrule
     \end{tabular}
 \end{table}
 
