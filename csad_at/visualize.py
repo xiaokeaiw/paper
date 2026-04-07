@@ -18,11 +18,18 @@ import matplotlib.pyplot as plt
 import os
 
 
-try:
-    plt.rcParams['font.sans-serif'] = ['SimHei', 'DejaVu Sans']
+import matplotlib.font_manager as fm
+
+def _setup_cn_font():
+    font_path = '/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf'
+    try:
+        fm.fontManager.addfont(font_path)
+    except Exception:
+        pass
+    plt.rcParams['font.family'] = ['DejaVu Sans']
     plt.rcParams['axes.unicode_minus'] = False
-except Exception:
-    pass
+
+_setup_cn_font()
 
 
 def _desensitize_names(curve_names):
@@ -52,26 +59,26 @@ def plot_ispot_detection(timeline, ispot_result, index_map, n_nodes, n_windows,
     # 0. Shade initialization phase
     if init_len > 0:
         ax.axvspan(0, init_len, color='#E0E0E0', alpha=0.5, zorder=0,
-                   label='Initialization')
+                   label='Initialization phase')
 
     # 1. Score series
     ax.plot(x, timeline, color='#4A90D9', alpha=0.7, linewidth=0.8,
-            label='Score', zorder=2)
+            label='Anomaly score', zorder=2)
 
     # 2. t0 threshold (red dashed)
     ax.plot(x, t0_values, 'r--', linewidth=1.0, alpha=0.6,
-            label='$t$ (initial threshold)', zorder=3)
+            label='t (initial threshold)', zorder=3)
 
     # 3. z_q dynamic threshold (orange solid)
     ax.plot(x, thresholds, color='orange', linewidth=2.0, alpha=0.8,
-            label='$z_q$ (dynamic threshold)', zorder=4)
+            label='zq (dynamic threshold)', zorder=4)
 
     # 4. Anomaly points (red scatter)
     if len(anomaly_idxs) > 0:
         ax.scatter(anomaly_idxs, timeline[anomaly_idxs],
                    c='red', s=25, zorder=5, edgecolors='darkred',
                    linewidths=0.5,
-                   label=f'Anomaly ({len(anomaly_idxs)} pts)')
+                   label=f'Anomalies ({len(anomaly_idxs)})')
 
     # 5. Window boundaries
     if n_nodes > 1:
@@ -90,7 +97,7 @@ def plot_ispot_detection(timeline, ispot_result, index_map, n_nodes, n_windows,
                     ha='center', va='top', fontsize=6, color='gray', alpha=0.7)
 
     ax.set_xlabel('Global Timeline Index (window $\\times$ node)', fontsize=11)
-    ax.set_ylabel('Score', fontsize=11)
+    ax.set_ylabel('Anomaly Score', fontsize=12)
     ax.set_title(title, fontsize=14, fontweight='bold')
     ax.legend(loc='upper right', fontsize=10)
     ax.grid(True, alpha=0.2)
@@ -172,7 +179,7 @@ def plot_node_scores_comparison(scores_dict, n_nodes, n_windows, curve_names,
                        linewidths=0.5)
 
     ax.set_xlabel('Window Index', fontsize=11)
-    ax.set_ylabel('Score', fontsize=11)
+    ax.set_ylabel('Anomaly Score', fontsize=12)
     ax.set_title(title, fontsize=14, fontweight='bold')
 
     if n_nodes <= 15:
@@ -189,12 +196,13 @@ def plot_node_scores_comparison(scores_dict, n_nodes, n_windows, curve_names,
 
 
 def plot_spot_vs_ispot(timeline, spot_result, ispot_result,
-                       n_nodes, n_windows, title, output_path):
+                       n_nodes, n_windows, title, output_path, xlim=None):
     """
     SPOT vs I-SPOT comparison: top panel = classic SPOT, bottom panel = I-SPOT.
     Both share x-axis. Initialization phase shaded in both.
     No weight labels in title.
     """
+    _setup_cn_font()
     fig, (ax_top, ax_bot) = plt.subplots(2, 1, figsize=(24, 12),
                                           sharex=True)
 
@@ -213,26 +221,26 @@ def plot_spot_vs_ispot(timeline, spot_result, ispot_result,
         # Initialization shading
         if init_len > 0:
             ax.axvspan(0, init_len, color='#E0E0E0', alpha=0.5, zorder=0,
-                       label='Initialization')
+                       label='Initialization phase')
 
         # Score
         ax.plot(x, timeline, color='#4A90D9', alpha=0.7, linewidth=0.8,
-                label='Score', zorder=2)
+                label='Anomaly score', zorder=2)
 
         # t0
         ax.plot(x, t0_values, 'r--', linewidth=1.0, alpha=0.6,
-                label='$t$ (initial threshold)', zorder=3)
+                label='t (initial threshold)', zorder=3)
 
         # z_q
         ax.plot(x, thresholds, color='orange', linewidth=2.0, alpha=0.8,
-                label='$z_q$ (dynamic threshold)', zorder=4)
+                label='zq (dynamic threshold)', zorder=4)
 
         # Anomaly points
         if len(anomaly_idxs) > 0:
             ax.scatter(anomaly_idxs, timeline[anomaly_idxs],
                        c='red', s=25, zorder=5, edgecolors='darkred',
                        linewidths=0.5,
-                       label=f'Anomaly ({len(anomaly_idxs)} pts)')
+                       label=f'Anomalies ({len(anomaly_idxs)})')
 
         # Window boundaries
         if n_nodes > 1:
@@ -242,9 +250,10 @@ def plot_spot_vs_ispot(timeline, spot_result, ispot_result,
                     ax.axvline(x=boundary, color='gray', alpha=0.15,
                                linewidth=0.5, linestyle=':')
 
-        ax.set_ylabel('Score', fontsize=11)
-        ax.set_title(method_label, fontsize=13, fontweight='bold', loc='left')
-        ax.legend(loc='upper right', fontsize=9)
+        ax.set_ylabel('Anomaly Score', fontsize=12)
+        ax.text(0.01, 0.95, method_label, transform=ax.transAxes,
+                fontsize=14, fontweight='bold', va='top', ha='left')
+        ax.legend(loc='upper right', fontsize=10)
         ax.grid(True, alpha=0.2)
 
     # Window labels on bottom axis
@@ -256,10 +265,14 @@ def plot_spot_vs_ispot(timeline, spot_result, ispot_result,
                         ha='center', va='top', fontsize=6,
                         color='gray', alpha=0.7)
 
-    ax_bot.set_xlabel('Global Timeline Index (window $\\times$ node)',
-                      fontsize=11)
+    ax_bot.set_xlabel('Global Timeline Index (Window x Node)',
+                      fontsize=12)
 
-    fig.suptitle(title, fontsize=14, fontweight='bold', y=1.01)
+    # Apply xlim if specified
+    if xlim is not None:
+        ax_top.set_xlim(xlim)
+        ax_bot.set_xlim(xlim)
+
     plt.tight_layout()
     plt.savefig(output_path, dpi=200, bbox_inches='tight')
     plt.close(fig)
@@ -378,6 +391,7 @@ def generate_all_plots(results, output_dir):
         n_windows=n_windows,
         title='Fused Scores: Classic SPOT vs I-SPOT',
         output_path=os.path.join(plot_dir, 'spot_vs_ispot_fused.png'),
+        xlim=(3000, 10000),
     )
 
     # Per-method SPOT vs I-SPOT

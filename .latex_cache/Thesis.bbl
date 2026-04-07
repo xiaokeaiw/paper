@@ -1,4 +1,4 @@
-\begin{thebibliography}{57}
+\begin{thebibliography}{84}
 \providecommand{\biband}{和}
 \providecommand{\bibetal}{等}
 \providecommand{\natexlab}[1]{#1}
@@ -38,6 +38,21 @@ Cleveland~R~B, Cleveland~W~S, McRae~J~E, et~al.
 \newblock Stl: A seasonal-trend decomposition procedure based on loess [J].
 \newblock Journal of Official Statistics, 1990, 6\penalty0 (1): 3-73.
 
+\bibitem[Defreitas {\bibetal}(2022)Defreitas, Alexander, Devenport, et~al.]{defreitas2022pca}
+Defreitas~A, Alexander~W~N, Devenport~W, et~al.
+\newblock Anomaly detection in wind tunnel experiments by principal component analysis [J].
+\newblock AIAA Journal, 2022, 60\penalty0 (4): 2297-2307.
+
+\bibitem[Sharpnack {\bibetal}(2015)Sharpnack, Rinaldo, and Singh]{sharpnack2015fourier}
+Sharpnack~J, Rinaldo~A, Singh~A.
+\newblock Detecting anomalous activity on networks with the graph {Fourier} scan statistic [J].
+\newblock IEEE Transactions on Signal Processing, 2015, 64\penalty0 (2): 364-379.
+
+\bibitem[Gran{\'e} {\bibetal}(2010)Gran{\'e} and Veiga]{grane2010wavelet}
+Gran{\'e}~A, Veiga~H.
+\newblock Wavelet-based detection of outliers in financial time series [J].
+\newblock Computational Statistics \& Data Analysis, 2010, 54\penalty0 (11): 2580-2593.
+
 \bibitem[Ramaswamy {\bibetal}(2000)Ramaswamy, Rastogi, and Shim]{ramaswamy2000}
 Ramaswamy~S, Rastogi~R, Shim~K.
 \newblock Efficient algorithms for mining outliers from large data sets [C]//\allowbreak
@@ -54,6 +69,34 @@ Liu~F~T, Ting~K~M, Zhou~Z~H.
 \newblock Isolation forest [C]//\allowbreak
 Proceedings of the 8th IEEE International Conference on Data Mining.
 \newblock 2008: 413-422.
+
+\bibitem[MacQueen {\bibetal}(1967)MacQueen et~al.]{macqueen1967kmeans}
+MacQueen~J~B, et~al.
+\newblock Some methods for classification and analysis of multivariate observations [C]//\allowbreak
+Proceedings of the 5th Berkeley Symposium on Mathematical Statistics and Probability: volume~1.
+\newblock 1967: 281-297.
+
+\bibitem[Celebi(2013)]{celebi2013kmeans}
+Celebi~M~E.
+\newblock A comparative study of efficient initialization methods for the k-means clustering algorithm [J].
+\newblock Expert Systems with Applications, 2013, 40\penalty0 (1): 4708-4718.
+
+\bibitem[Li {\bibetal}(2021)Li, Izakian, Pedrycz, et~al.]{li2021clustering}
+Li~J, Izakian~H, Pedrycz~W, et~al.
+\newblock Clustering-based anomaly detection in multivariate time series data [J].
+\newblock Applied Soft Computing, 2021, 100: 106919.
+
+\bibitem[Angiulli {\bibetal}(2002)Angiulli and Pizzuti]{angiulli2002outlier}
+Angiulli~F, Pizzuti~C.
+\newblock Fast outlier detection in high dimensional spaces [C]//\allowbreak
+Proceedings of the European Conference on Principles of Data Mining and Knowledge Discovery.
+\newblock 2002: 15-27.
+
+\bibitem[Chen {\bibetal}(2016)Chen and Guestrin]{chen2016xgboost}
+Chen~T, Guestrin~C.
+\newblock {XGBoost}: A scalable tree boosting system [C]//\allowbreak
+Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining.
+\newblock 2016: 785-794.
 
 \bibitem[Choi {\bibetal}(2021)Choi, Yi, Park, and Yoon]{choi2021deepreview}
 Choi~K, Yi~J, Park~C, et~al.
@@ -106,6 +149,23 @@ Chen~W, Liu~Y, Zhang~M.
 Proceedings of the 42nd International Conference on Machine Learning.
 \newblock 2025{\natexlab{a}}.
 
+\bibitem[He {\bibetal}(2016{\natexlab{a}})He, Zhang, Ren, and Sun]{he2016resnet}
+He~K, Zhang~X, Ren~S, et~al.
+\newblock Deep residual learning for image recognition [C]//\allowbreak
+Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition.
+\newblock 2016{\natexlab{a}}: 770-778.
+
+\bibitem[Hundman {\bibetal}(2018)Hundman, Constantinou, Laporte, et~al.]{hundman2018lstm}
+Hundman~K, Constantinou~V, Laporte~C, et~al.
+\newblock Detecting spacecraft anomalies using {LSTMs} and nonparametric dynamic thresholding [C]//\allowbreak
+Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery \& Data Mining.
+\newblock 2018: 387-395.
+
+\bibitem[Munir {\bibetal}(2018)Munir, Siddiqui, Dengel, and Ahmed]{munir2018deepant}
+Munir~M, Siddiqui~S~A, Dengel~A, et~al.
+\newblock {DeepAnT}: A deep learning approach for unsupervised anomaly detection in time series [J].
+\newblock IEEE Access, 2018, 7: 1991-2005.
+
 \bibitem[Ren {\bibetal}(2019{\natexlab{a}})Ren, Xu, Wang, Yi, Huang, Kou, Xing, Yang, Tong, and Zhang]{ren2019sranomaly}
 Ren~H, Xu~B, Wang~Y, et~al.
 \newblock Time-series anomaly detection service at {Microsoft} [C]//\allowbreak
@@ -138,6 +198,38 @@ Carbone~P, Katsifodimos~A, Ewen~S, et~al.
 \newblock Apache {Flink}: Stream and batch processing in a single engine [J].
 \newblock IEEE Data Engineering Bulletin, 2015, 36\penalty0 (4): 28-38.
 
+\bibitem[Devlin {\bibetal}(2018)Devlin, Chang, Lee, and Toutanova]{devlin2018bert}
+Devlin~J, Chang~M~W, Lee~K, et~al.
+\newblock {BERT}: Pre-training of deep bidirectional transformers for language understanding [J].
+\newblock arXiv preprint arXiv:1810.04805, 2018.
+
+\bibitem[Radford {\bibetal}(2018)Radford, Narasimhan, Salimans, and Sutskever]{radford2018gpt}
+Radford~A, Narasimhan~K, Salimans~T, et~al.
+\newblock Improving language understanding by generative pre-training [R].
+\newblock OpenAI, 2018.
+
+\bibitem[Dang {\bibetal}(2020)Dang, Zhou, Zhang, et~al.]{dang2020tsad}
+Dang~W, Zhou~B, Zhang~W, et~al.
+\newblock Time series anomaly detection based on language model [C]//\allowbreak
+Proceedings of the 11th ACM International Conference on Future Energy Systems.
+\newblock 2020: 544-547.
+
+\bibitem[Dang {\bibetal}(2021)Dang, Zhou, Wei, et~al.]{dang2021tsbert}
+Dang~W, Zhou~B, Wei~L, et~al.
+\newblock {TS-Bert}: Time series anomaly detection via pre-training model {Bert} [C]//\allowbreak
+Computational Science -- ICCS 2021, Lecture Notes in Computer Science.
+\newblock Springer, 2021: 209-223.
+
+\bibitem[Alnegheimish {\bibetal}(2024)Alnegheimish, Nguyen, Berti-Equille, et~al.]{alnegheimish2024sigllm}
+Alnegheimish~S, Nguyen~L, Berti-Equille~L, et~al.
+\newblock Large language models can be zero-shot anomaly detectors for time series? [J].
+\newblock arXiv preprint arXiv:2405.14755, 2024.
+
+\bibitem[裴丹\ {\bibetal}(2017)裴丹 and 张圣林]{pei2017mlops}
+裴丹, 张圣林.
+\newblock 基于机器学习的智能运维 [J].
+\newblock 中国计算机学会通讯, 2017, 13\penalty0 (12): 68-73.
+
 \bibitem[Chandola {\bibetal}(2009)Chandola, Banerjee, and Kumar]{chandola2009anomaly}
 Chandola~V, Banerjee~A, Kumar~V.
 \newblock Anomaly detection: A survey [J].
@@ -167,6 +259,18 @@ Sch{\"o}lkopf~B, Platt~J~C, Shawe-Taylor~J, et~al.
 Ester~M, Kriegel~H~P, Sander~J, et~al.
 \newblock A density-based algorithm for discovering clusters in large spatial databases with noise [J].
 \newblock KDD, 1996, 96\penalty0 (34): 226-231.
+
+\bibitem[Ishimtsev {\bibetal}(2017)Ishimtsev, Bernstein, Burnaev, et~al.]{ishimtsev2017conformal}
+Ishimtsev~V, Bernstein~A, Burnaev~E, et~al.
+\newblock Conformal k-{NN} anomaly detector for univariate data streams [C]//\allowbreak
+Proceedings of Conformal and Probabilistic Prediction and Applications.
+\newblock 2017: 213-227.
+
+\bibitem[Jin {\bibetal}(2019)Jin, Chen, Li, et~al.]{jin2019ocsvm}
+Jin~B, Chen~Y, Li~D, et~al.
+\newblock A one-class support vector machine calibration method for time series change point detection [C]//\allowbreak
+Proceedings of IEEE International Conference on Prognostics and Health Management.
+\newblock 2019: 1-5.
 
 \bibitem[Schmidl {\bibetal}(2022)Schmidl, Wenig, and Papenbrock]{schmidl2022anomaly}
 Schmidl~S, Wenig~P, Papenbrock~T.
@@ -231,11 +335,34 @@ Wu~H, Hu~T, Liu~Y, et~al.
 International Conference on Learning Representations.
 \newblock 2023.
 
+\bibitem[Yu {\bibetal}(2023)Yu, Ma, Zheng, Chen, Pei, Rajmohan, Zhang, and Lin]{yu2023autokad}
+Yu~Z, Ma~M, Zheng~Z, et~al.
+\newblock Autokad: Empowering kpi anomaly detection with label-free deployment [C]//\allowbreak
+Proceedings of the 34th IEEE International Symposium on Software Reliability Engineering (ISSRE).
+\newblock 2023: 364-375.
+
+\bibitem[Zhou {\bibetal}(2025)Zhou, Ma, Pei, Rajmohan, Zhang, Lin, and Zhang]{zhou2025kanad}
+Zhou~Q, Ma~M, Pei~D, et~al.
+\newblock Kan-ad: Time series anomaly detection with kolmogorov-arnold networks [C]//\allowbreak
+Proceedings of the 42nd International Conference on Machine Learning (ICML).
+\newblock 2025.
+
 \bibitem[Malhotra {\bibetal}(2016)Malhotra, Ramakrishnan, Anand, Vig, Agarwal, and Shroff]{malhotra2016lstmencoder}
 Malhotra~P, Ramakrishnan~A, Anand~G, et~al.
 \newblock {LSTM}-based encoder-decoder for multi-sensor anomaly detection [C]//\allowbreak
 ICML Workshop on Anomaly Detection.
 \newblock 2016.
+
+\bibitem[Chen {\bibetal}(2018)Chen, Yeo, Lee, and Lau]{chen2018autoencoder}
+Chen~Z, Yeo~C~K, Lee~B~S, et~al.
+\newblock Autoencoder-based network anomaly detection [C]//\allowbreak
+2018 Wireless Telecommunications Symposium.
+\newblock 2018: 1-5.
+
+\bibitem[Park {\bibetal}(2018)Park, Hoshi, and Kemp]{park2018lstmvae}
+Park~D, Hoshi~Y, Kemp~C~C.
+\newblock A multimodal anomaly detector for robot-assisted feeding using an {LSTM}-based variational autoencoder [J].
+\newblock IEEE Robotics and Automation Letters, 2018, 3\penalty0 (3): 1544-1551.
 
 \bibitem[Chen {\bibetal}(2023)Chen, Kang, Chen, and Wang]{chen2023dcdetector}
 Chen~Y, Kang~Y, Chen~Y, et~al.
@@ -309,6 +436,30 @@ Ca{\~n}izo~M, Triguero~I, Conde~A, et~al.
 \newblock Multi-head {CNN-RNN} for multi-time series anomaly detection: An industrial case study [C]//\allowbreak
 Neurocomputing: volume 363.
 \newblock 2019: 246-260.
+
+\bibitem[Wang {\bibetal}(2024)Wang, Ma, et~al.]{wang2024fcvae}
+Wang~Z, Ma~M, et~al.
+\newblock Revisiting {VAE} for unsupervised time series anomaly detection: A frequency perspective [C]//\allowbreak
+Proceedings of the ACM on Web Conference 2024.
+\newblock 2024: 3096-3105.
+
+\bibitem[Zhang {\bibetal}(2022)Zhang, Zhou, Wen, et~al.]{zhang2022tfad}
+Zhang~C, Zhou~T, Wen~Q, et~al.
+\newblock {TFAD}: A decomposition time series anomaly detection architecture with time-frequency analysis [C]//\allowbreak
+Proceedings of the 31st ACM International Conference on Information \& Knowledge Management.
+\newblock 2022: 2497-2507.
+
+\bibitem[He {\bibetal}(2016{\natexlab{b}})He, Zhu, He, and Lyu]{he2016loganalysis}
+He~S, Zhu~J, He~P, et~al.
+\newblock Experience report: System log analysis for anomaly detection [C]//\allowbreak
+Proceedings of the 27th International Symposium on Software Reliability Engineering.
+\newblock 2016{\natexlab{b}}: 207-218.
+
+\bibitem[Ma {\bibetal}(2021)Ma, Zhang, Chen, et~al.]{ma2021jumpstarter}
+Ma~M, Zhang~S, Chen~J, et~al.
+\newblock Jump-starting multivariate time series anomaly detection for online service systems [C]//\allowbreak
+Proceedings of the 2021 USENIX Annual Technical Conference.
+\newblock 2021: 413-426.
 
 \bibitem[Boniol {\bibetal}(2022)Boniol and Palpanas]{boniol2022dads}
 Boniol~P, Palpanas~T.

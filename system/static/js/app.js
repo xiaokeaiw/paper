@@ -1,5 +1,5 @@
 /**
- * 基于曲线相似性的分布式集群异常检测系统 - 前端SPA
+ * 异常节点检测系统 - 前端SPA
  * 多页面路由、ECharts可视化、全功能交互
  */
 
@@ -74,7 +74,7 @@ function showApp() {
     document.getElementById('appMain').style.display = 'flex';
     document.getElementById('currentUserName').textContent = currentUser.display_name || currentUser.username;
     initRouter();
-    startClock();
+    // startClock();
     loadAlertBadge();
 }
 
@@ -266,7 +266,7 @@ async function renderDataPage(container) {
         const datasets = await api('/api/datasets');
         const el = document.getElementById('datasetList');
         if (datasets.length === 0) {
-            el.innerHTML = '<div class="empty-state"><i class="ri-inbox-line"></i><p>暂无数据集，请上传文件或加载演示数据</p></div>';
+            el.innerHTML = '<div class="empty-state"><i class="ri-inbox-line"></i><p>暂无数据集，请上传文件或生成演示数据</p></div>';
         } else {
             let html = '<table class="data-table"><thead><tr><th>ID</th><th>名称</th><th>来源</th><th>指标数</th><th>节点数</th><th>时间步</th><th>上传者</th><th>时间</th><th>操作</th></tr></thead><tbody>';
             datasets.forEach(ds => {
@@ -371,10 +371,10 @@ async function renderDetectionPage(container) {
                                 ${datasetsHtml}
                             </select>
                             <div style="display:flex;gap:8px;margin-top:8px;">
-                                <button class="btn btn-outline btn-sm" onclick="loadDemoData()"><i class="ri-play-circle-line"></i> 演示数据</button>
+                                <button class="btn btn-outline btn-sm" onclick="loadDemoData()"><i class="ri-play-circle-line"></i> 生成演示数据</button>
                                 <button class="btn btn-outline btn-sm" onclick="location.hash='data'"><i class="ri-upload-2-line"></i> 去上传</button>
                             </div>
-                            <p class="form-hint" id="dataStatus">${currentDataId ? '当前数据: ' + currentDataId : '请选择数据集或加载演示数据'}</p>
+                            <p class="form-hint" id="dataStatus">${currentDataId ? '当前数据: ' + currentDataId : '请选择数据集或生成演示数据'}</p>
                         </div>
                         <div class="form-group">
                             <label class="form-label">检测场景</label>

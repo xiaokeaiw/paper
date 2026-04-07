@@ -3,12 +3,11 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from matplotlib.font_manager import FontProperties
 
-# 使用系统自带的 Droid Sans Fallback，中英文风格统一
-cjk = FontProperties(fname='/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf', size=11)
-cjk_legend = FontProperties(fname='/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf', size=10)
+# 字体配置：DejaVu Sans 处理英文/数字，Droid Sans Fallback 处理中文
+matplotlib.rcParams['font.family'] = ['DejaVu Sans', 'Droid Sans Fallback']
 matplotlib.rcParams['axes.unicode_minus'] = False
+matplotlib.rcParams['font.size'] = 11
 
 base = 'resources/data/test_data/\u6d4b\u8bd5\u6570\u636e/01'
 test = pd.read_csv(f'{base}/test-data.csv')
@@ -41,9 +40,9 @@ for _, row in anom_in_range.iterrows():
     ax.axvspan(a_start_m, a_end_m, color='#FFCDD2', alpha=0.6, zorder=0, label=lbl)
     first_shaded = False
 
-ax.set_xlabel('时间（分钟）', fontsize=12, fontproperties=cjk)
-ax.set_ylabel('RPC Router 连接数', fontsize=12, fontproperties=cjk)
-ax.legend(loc='upper right', framealpha=0.9, prop=cjk_legend)
+ax.set_xlabel('\u65f6\u95f4\uff08\u5206\u949f\uff09', fontsize=12)
+ax.set_ylabel('RPC Router \u8fde\u63a5\u6570', fontsize=12)
+ax.legend(loc='upper right', framealpha=0.9, fontsize=10)
 ax.set_xlim(subset['minutes'].iloc[0], subset['minutes'].iloc[-1])
 ax.grid(True, alpha=0.25, linestyle='--')
 ax.tick_params(labelsize=10)

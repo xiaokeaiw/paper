@@ -1,27 +1,27 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {3-1}{\ignorespaces \enspace 数据集统计数据}}{21}{table.caption.20}%
-\contentsline {table}{\numberline {3-2}{\ignorespaces \enspace 基线算法异常检测结果}}{23}{table.caption.22}%
-\contentsline {table}{\numberline {3-3}{\ignorespaces \enspace 基于曲线相似性方法在最优参数下的异常检测结果}}{26}{table.caption.24}%
-\contentsline {table}{\numberline {3-4}{\ignorespaces \enspace 欧氏距离方法在不同阈值和时间窗口下的异常检测分数}}{27}{table.caption.25}%
-\contentsline {table}{\numberline {3-5}{\ignorespaces \enspace 自编码器嵌入方法在不同阈值和时间窗口下的异常检测分数}}{27}{table.caption.26}%
-\contentsline {table}{\numberline {3-6}{\ignorespaces \enspace 密度偏离方法在不同参数下的异常检测分数}}{28}{table.caption.27}%
-\contentsline {table}{\numberline {3-7}{\ignorespaces \enspace 各算法异常检测性能对比}}{34}{table.caption.30}%
-\contentsline {table}{\numberline {3-8}{\ignorespaces \enspace 不同分数聚合策略的性能对比}}{35}{table.caption.31}%
-\contentsline {table}{\numberline {3-9}{\ignorespaces \enspace 消融实验：各评分方法与I-SPOT结合的性能}}{36}{table.caption.32}%
-\contentsline {table}{\numberline {3-10}{\ignorespaces \enspace 经典SPOT与I-SPOT性能对比}}{37}{table.caption.33}%
+\contentsline {table}{\numberline {3-1}{\ignorespaces \enspace 数据集统计数据}}{23}{table.caption.20}%
+\contentsline {table}{\numberline {3-2}{\ignorespaces \enspace 基线算法异常检测结果}}{25}{table.caption.22}%
+\contentsline {table}{\numberline {3-3}{\ignorespaces \enspace 基于曲线相似性方法在最优参数下的异常检测结果}}{28}{table.caption.24}%
+\contentsline {table}{\numberline {3-4}{\ignorespaces \enspace 欧氏距离方法的参数敏感性实验结果}}{29}{table.caption.25}%
+\contentsline {table}{\numberline {3-5}{\ignorespaces \enspace 自编码器嵌入方法的参数敏感性实验结果}}{29}{table.caption.26}%
+\contentsline {table}{\numberline {3-6}{\ignorespaces \enspace 密度偏离方法的参数敏感性实验结果}}{30}{table.caption.27}%
+\contentsline {table}{\numberline {3-7}{\ignorespaces \enspace 各算法异常检测性能对比}}{36}{table.caption.30}%
+\contentsline {table}{\numberline {3-8}{\ignorespaces \enspace 不同分数聚合策略的性能对比}}{37}{table.caption.31}%
+\contentsline {table}{\numberline {3-9}{\ignorespaces \enspace 消融实验：各评分方法与I-SPOT结合的性能}}{38}{table.caption.32}%
+\contentsline {table}{\numberline {3-10}{\ignorespaces \enspace 经典SPOT与I-SPOT性能对比}}{38}{table.caption.33}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {4-1}{\ignorespaces \enspace 故障类别及数量分布}}{40}{table.caption.35}%
-\contentsline {table}{\numberline {4-2}{\ignorespaces \enspace 监控指标列表及说明}}{41}{table.caption.36}%
-\contentsline {table}{\numberline {4-3}{\ignorespaces \enspace 多指标多节点异常检测方法对比}}{51}{table.caption.41}%
-\contentsline {table}{\numberline {4-4}{\ignorespaces \enspace 算法优化前后效率对比}}{54}{table.caption.44}%
-\contentsline {table}{\numberline {4-5}{\ignorespaces \enspace 优化后不同节点规模下的平均检测耗时统计}}{55}{table.caption.45}%
+\contentsline {table}{\numberline {4-1}{\ignorespaces \enspace 故障类别及数量分布}}{41}{table.caption.35}%
+\contentsline {table}{\numberline {4-2}{\ignorespaces \enspace 监控指标列表及说明}}{42}{table.caption.36}%
+\contentsline {table}{\numberline {4-3}{\ignorespaces \enspace 多指标多节点异常检测方法对比}}{53}{table.caption.41}%
+\contentsline {table}{\numberline {4-4}{\ignorespaces \enspace 算法优化前后效率对比}}{56}{table.caption.44}%
+\contentsline {table}{\numberline {4-5}{\ignorespaces \enspace 优化后不同节点规模下的平均检测耗时统计}}{56}{table.caption.45}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {5-1}{\ignorespaces \enspace 系统算法模块组织结构}}{59}{table.caption.46}%
-\contentsline {table}{\numberline {5-2}{\ignorespaces \enspace 系统核心API接口设计}}{62}{table.caption.47}%
-\contentsline {table}{\numberline {5-3}{\ignorespaces \enspace 系统检测性能（单位：秒）}}{63}{table.caption.49}%
-\contentsline {table}{\numberline {5-4}{\ignorespaces \enspace 常态化巡检端到端耗时分布（30节点$\times $500步）}}{64}{table.caption.50}%
+\contentsline {table}{\numberline {5-1}{\ignorespaces \enspace 系统算法模块组织结构}}{61}{table.caption.46}%
+\contentsline {table}{\numberline {5-2}{\ignorespaces \enspace 系统核心API接口设计}}{64}{table.caption.47}%
+\contentsline {table}{\numberline {5-3}{\ignorespaces \enspace 系统检测性能（单位：秒）}}{66}{table.caption.49}%
+\contentsline {table}{\numberline {5-4}{\ignorespaces \enspace 常态化巡检端到端耗时分布（30节点$\times $500步）}}{66}{table.caption.50}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

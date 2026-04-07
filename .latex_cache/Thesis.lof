@@ -1,28 +1,28 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {1-1}{\ignorespaces \enspace 论文研究内容框架图}}{6}{figure.caption.12}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2-1}{\ignorespaces \enspace 点异常示意图}}{8}{figure.caption.13}%
-\contentsline {figure}{\numberline {2-2}{\ignorespaces \enspace 片段异常示意图}}{9}{figure.caption.14}%
-\contentsline {figure}{\numberline {2-3}{\ignorespaces \enspace 变量间关联异常示意图}}{9}{figure.caption.15}%
-\contentsline {figure}{\numberline {2-4}{\ignorespaces \enspace 节点级异常示意图}}{10}{figure.caption.16}%
-\contentsline {figure}{\numberline {2-5}{\ignorespaces \enspace Hadoop分布式集群架构示意图}}{14}{figure.caption.17}%
+\contentsline {figure}{\numberline {2-1}{\ignorespaces \enspace 点异常示意图}}{10}{figure.caption.13}%
+\contentsline {figure}{\numberline {2-2}{\ignorespaces \enspace 片段异常示意图}}{11}{figure.caption.14}%
+\contentsline {figure}{\numberline {2-3}{\ignorespaces \enspace 变量间关联异常示意图}}{11}{figure.caption.15}%
+\contentsline {figure}{\numberline {2-4}{\ignorespaces \enspace 节点级异常示意图}}{12}{figure.caption.16}%
+\contentsline {figure}{\numberline {2-5}{\ignorespaces \enspace Hadoop分布式集群架构示意图}}{17}{figure.caption.17}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3-1}{\ignorespaces \enspace YARN分布式集群架构与RPC Router连接数指标示意}}{20}{figure.caption.18}%
-\contentsline {figure}{\numberline {3-2}{\ignorespaces \enspace 数据集预处理与半人工标注流程}}{21}{figure.caption.19}%
-\contentsline {figure}{\numberline {3-3}{\ignorespaces \enspace 测试集A典型异常片段时序可视化}}{22}{figure.caption.21}%
-\contentsline {figure}{\numberline {3-4}{\ignorespaces \enspace 自编码器网络结构示意图}}{25}{figure.caption.23}%
-\contentsline {figure}{\numberline {3-5}{\ignorespaces \enspace 三种检测方法在不同窗口大小下F1分数随阈值变化的折线图}}{28}{figure.caption.28}%
-\contentsline {figure}{\numberline {3-6}{\ignorespaces \enspace CSAD-AT框架整体架构}}{30}{figure.caption.29}%
-\contentsline {figure}{\numberline {3-7}{\ignorespaces \enspace 融合分数上经典SPOT与I-SPOT检测结果对比}}{37}{figure.caption.34}%
+\contentsline {figure}{\numberline {3-1}{\ignorespaces \enspace YARN分布式集群架构与RPC Router连接数指标示意}}{22}{figure.caption.18}%
+\contentsline {figure}{\numberline {3-2}{\ignorespaces \enspace 数据集预处理与半人工标注流程}}{22}{figure.caption.19}%
+\contentsline {figure}{\numberline {3-3}{\ignorespaces \enspace 测试集A典型异常片段时序可视化}}{24}{figure.caption.21}%
+\contentsline {figure}{\numberline {3-4}{\ignorespaces \enspace 自编码器网络结构示意图}}{27}{figure.caption.23}%
+\contentsline {figure}{\numberline {3-5}{\ignorespaces \enspace 三种检测方法在不同窗口大小下F1分数随阈值变化的折线图}}{30}{figure.caption.28}%
+\contentsline {figure}{\numberline {3-6}{\ignorespaces \enspace CSAD-AT算法整体架构}}{32}{figure.caption.29}%
+\contentsline {figure}{\numberline {3-7}{\ignorespaces \enspace 融合分数上经典SPOT与I-SPOT检测结果对比}}{39}{figure.caption.34}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4-1}{\ignorespaces \enspace GPU集群典型故障案例的多指标多节点时序可视化}}{41}{figure.caption.37}%
-\contentsline {figure}{\numberline {4-2}{\ignorespaces \enspace NSFusion算法框架流程}}{43}{figure.caption.38}%
-\contentsline {figure}{\numberline {4-3}{\ignorespaces \enspace 传统SAX与FR-SAX的符号化过程对比}}{48}{figure.caption.39}%
-\contentsline {figure}{\numberline {4-4}{\ignorespaces \enspace 传统SAX与FR-SAX的符号距离矩阵对比}}{48}{figure.caption.40}%
-\contentsline {figure}{\numberline {4-5}{\ignorespaces \enspace FR-SAX方法优势案例}}{53}{figure.caption.42}%
-\contentsline {figure}{\numberline {4-6}{\ignorespaces \enspace 欧氏距离方法优势案例}}{53}{figure.caption.43}%
+\contentsline {figure}{\numberline {4-1}{\ignorespaces \enspace GPU集群典型故障案例的多指标多节点时序可视化}}{43}{figure.caption.37}%
+\contentsline {figure}{\numberline {4-2}{\ignorespaces \enspace NSFusion算法框架流程}}{45}{figure.caption.38}%
+\contentsline {figure}{\numberline {4-3}{\ignorespaces \enspace 传统SAX与FR-SAX的符号化过程对比}}{50}{figure.caption.39}%
+\contentsline {figure}{\numberline {4-4}{\ignorespaces \enspace 传统SAX与FR-SAX的符号距离矩阵对比}}{50}{figure.caption.40}%
+\contentsline {figure}{\numberline {4-5}{\ignorespaces \enspace FR-SAX方法优势案例}}{54}{figure.caption.42}%
+\contentsline {figure}{\numberline {4-6}{\ignorespaces \enspace 欧氏距离方法优势案例}}{55}{figure.caption.43}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5-1}{\ignorespaces \enspace 异常检测系统检测结果可视化界面}}{63}{figure.caption.48}%
+\contentsline {figure}{\numberline {5-1}{\ignorespaces \enspace 异常检测系统检测结果可视化界面}}{65}{figure.caption.48}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

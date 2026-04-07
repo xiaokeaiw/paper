@@ -1,0 +1,635 @@
+% 面向分布式集群时序指标的异常节点检测算法
+% 《数据与计算发展前沿》投稿格式
+\documentclass[10.5pt,a4paper,twocolumn]{ctexart}
+
+% ==================== 宏包 ====================
+\usepackage[left=2cm,right=2cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}       % 三线表
+\usepackage{multirow}
+\usepackage{amsmath,amssymb}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage[hidelinks]{hyperref}
+\usepackage{cite}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{float}
+
+% ==================== 格式设置 ====================
+\setlength{\columnsep}{0.7cm}
+\renewcommand{\abstractname}{}
+\CTEXsetup[format={\bfseries\zihao{4}},name={,}]{section}
+\CTEXsetup[format={\bfseries\zihao{5}}]{subsection}
+\CTEXsetup[format={\bfseries\zihao{5}}]{subsubsection}
+\captionsetup{font=small,labelsep=space}
+\captionsetup[table]{position=top}
+\captionsetup[figure]{position=bottom}
+
+% 图片路径
+\graphicspath{{img/}}
+
+% ==================== 自定义双语标题命令 ====================
+\newcommand{\bicaption}[2]{%
+  \caption{#1\\{\small #2}}%
+}
+
+% ==================== 文档开始 ====================
+\begin{document}
+
+% ==================== 标题区（单栏） ====================
+\twocolumn[
+\begin{@twocolumnfalse}
+\begin{center}
+
+{\zihao{2}\bfseries 面向分布式集群时序指标的异常节点检测算法\par}
+\vspace{0.8em}
+
+{\zihao{5} 杨婧雯$^{1,2}$，裴昶华$^{1*}$，王泽鑫$^{1}$，李菁菁$^{1}$\par}
+\vspace{0.3em}
+{\zihao{6} 1.~中国科学院计算机网络信息中心，北京~~100083\par}
+\vspace{0.1em}
+{\zihao{6} 2.~中国科学院大学，北京~~100049\par}
+\vspace{1em}
+
+% ---------- 中文摘要 ----------
+\parbox{0.92\textwidth}{\zihao{5}
+\textbf{摘\quad 要：}【目的】分布式集群中负载均衡类监控指标的正常波动具有高度随机性，现有时序异常检测方法主要聚焦于时间维度和指标维度的二维分析，面对此类指标易产生高误报，而通过引入节点维度、基于曲线相似度识别离群节点的方法对阈值参数高度敏感，制约了其在生产环境中的实际部署。本文旨在提出一种无需人工阈值调优的端到端自适应异常节点检测算法。【方法】本文提出CSAD-AT（Curve Similarity-based Anomaly Detection with Adaptive Threshold）算法，融合欧氏距离、自编码器嵌入和局部密度偏离三种互补的曲线相似性评分方法，通过MinMax归一化与加权聚合统一多视角评分，并提出I-SPOT自适应阈值算法，采用包容性数据池更新与周期性广义帕累托分布（GPD）重估机制动态确定异常判定边界。【结果】在基于中国联通大数据生产环境构建的单指标多节点数据集上，CSAD-AT在无需人工阈值调整的条件下取得了0.9864的F1分数，优于三种基础评分方法在最优人工调参下的表现，且显著优于六种主流多元时序异常检测基线算法。消融实验表明三种评分方法具有良好的互补性，I-SPOT相比经典SPOT的F1分数提升约50个百分点。【结论】基于节点曲线相似性的检测思路能够有效应对负载均衡类指标的随机波动问题，I-SPOT自适应阈值算法成功消除了人工调参依赖，所提算法具有良好的实际部署价值。
+}
+\vspace{0.4em}
+
+\parbox{0.92\textwidth}{\zihao{5}
+\textbf{关键词：}异常检测；分布式集群；曲线相似度；自适应阈值；极值理论
+}
+\vspace{1.2em}
+
+% ---------- 英文标题 ----------
+{\zihao{4}\bfseries Anomaly Node Detection Algorithm for Time Series Metrics\\ in Distributed Clusters\par}
+\vspace{0.6em}
+{\zihao{5} YANG Jingwen$^{1,2}$, PEI Changhua$^{1*}$, WANG Zexin$^{1}$, LI Jingjing$^{1}$\par}
+\vspace{0.3em}
+{\zihao{6} 1.~Computer Network Information Center, Chinese Academy of Sciences, Beijing 100083, China\par}
+\vspace{0.1em}
+{\zihao{6} 2.~University of Chinese Academy of Sciences, Beijing 100049, China\par}
+\vspace{0.8em}
+
+% ---------- 英文摘要 ----------
+\parbox{0.92\textwidth}{\zihao{5}
+\textbf{Abstract:} [Objective] Load-balanced monitoring metrics in distributed clusters exhibit highly random normal fluctuations. Existing time series anomaly detection methods primarily focus on temporal and feature dimensions, making them prone to high false positive rates on such metrics. Introducing the node dimension and identifying outlier nodes based on curve similarity offers a promising alternative, yet such methods are highly sensitive to threshold parameters, hindering practical deployment. This paper aims to propose an end-to-end adaptive anomaly node detection algorithm that eliminates the need for manual threshold tuning. [Methods] We propose CSAD-AT (Curve Similarity-based Anomaly Detection with Adaptive Threshold), which integrates three complementary curve similarity scoring methods: Euclidean distance, autoencoder embedding, and local density deviation. Scores are unified through MinMax normalization and weighted aggregation. An improved I-SPOT adaptive threshold algorithm with inclusive data pool updates and periodic Generalized Pareto Distribution (GPD) re-estimation dynamically determines anomaly detection boundaries. [Results] On a single-metric multi-node dataset constructed from China Unicom production environments, CSAD-AT achieves an F1 score of 0.9864 without manual threshold tuning, outperforming all three base scoring methods under optimal manual tuning and significantly surpassing six state-of-the-art multivariate time series anomaly detection baselines. Ablation studies confirm the complementarity of the three scoring methods, and I-SPOT improves F1 by approximately 50 percentage points compared to classic SPOT. [Conclusions] Curve similarity-based detection effectively addresses the random fluctuation challenge in load-balanced metrics. The I-SPOT adaptive threshold algorithm successfully eliminates manual parameter tuning dependency, demonstrating strong practical deployment potential.
+}
+\vspace{0.4em}
+
+\parbox{0.92\textwidth}{\zihao{5}
+\textbf{Keywords:} anomaly detection; distributed cluster; curve similarity; adaptive threshold; extreme value theory
+}
+\vspace{1.5em}
+\end{center}
+\end{@twocolumnfalse}
+]
+
+
+%=====================================================================
+%  引言（不编号）
+%=====================================================================
+\section*{引言}
+\addcontentsline{toc}{section}{引言}
+
+随着云计算和大数据技术的快速发展，分布式集群已成为支撑大规模数据处理与计算服务的核心基础设施\cite{hundman2018detecting}。在企业级生产环境中，分布式集群通常由数十至数百个计算节点组成，依托资源调度框架实现计算资源的统一管理与动态分配，并通过分布式存储与网络互联构建高可用的协同计算体系。集群中各节点的运行状态由Prometheus等监控系统以分钟级乃至秒级间隔持续采集，形成海量的多节点多指标时间序列监控数据。及时、准确地从中检测出异常节点，对于保障服务质量、预防级联故障和降低运维成本意义重大。
+
+然而，分布式集群环境中的异常检测面临独特的技术挑战。与传统IT系统中CPU利用率、内存占用等具有相对稳定基线的指标不同，分布式集群中存在大量与用户负载强相关的监控指标，例如RPC连接数、请求队列长度、网络I/O吞吐量。这类指标的正常波动随工作负载的变化而剧烈波动，呈现高度的随机性和不可预测性，难以通过先验知识定义统一的正常模式。现有的多元时序异常检测方法，如OmniAnomaly\cite{su2019omni}、TranAD\cite{tuli2022tranad}、GDN\cite{deng2021graph}，主要面向多变量间的关联异常设计，假设不同变量之间存在相对稳定的关联模式，异常表现为关联模式的异变。但在分布式集群的单指标多节点场景中，这一假设并不成立：各节点的同一指标并非独立变量间的关联关系，而是同一物理量在不同载体上的表现。传统方法面对此类指标时往往因无法建立稳定的正常基线而导致高误报或高漏报。
+
+另一方面，在负载均衡机制的作用下，分布式集群中正常运行的各节点承担相近的工作负载，其同一监控指标的时序曲线呈现高度的形态相似性和数值聚集性。当个别节点发生网络连接异常、磁盘I/O瓶颈或内存泄漏等故障时，其曲线会显著偏离群体模式，形成可识别的"离群曲线"。这一"正常聚集、异常离群"的数据特性为异常检测提供了新思路：不再依赖单节点历史模式的学习，而是通过度量节点间曲线的差异程度来识别偏离群体行为的异常节点。
+
+然而，基于曲线相似度的方法在实际部署中面临一个核心难题：检测阈值的选择。实验表明，此类方法的检测性能对阈值参数高度敏感，最优参数处于极窄的有效区间内，细微的阈值偏移便可导致性能骤变，例如阈值从3.6调整为3.8时F1分数从0.97骤降至0.0，呈现显著的"悬崖效应"。由于不同集群的节点数量、负载模式、指标量纲各异，在一个集群上调优的阈值参数难以直接迁移至另一集群，而获取高质量标注数据用于参数调优的成本又极为高昂。因此，如何实现阈值的动态自适应调整，成为将基于曲线相似度的方法推向实际应用的关键瓶颈。
+
+针对上述挑战，本文提出CSAD-AT（Curve Similarity-based Anomaly Detection with Adaptive Threshold）算法。该算法融合欧氏距离、自编码器嵌入和局部密度偏离三种互补的曲线相似性评分方法，通过MinMax归一化与加权聚合实现多视角分数融合，并基于经典SPOT算法\cite{siffer2017spot}改进提出I-SPOT（Inclusive SPOT）自适应阈值算法，利用极值理论（EVT）动态确定异常判定边界，实现端到端的无人工调参异常检测。本文的主要贡献如下：
+
+（1）针对分布式集群单指标多节点场景，设计了基于欧氏距离、自编码器嵌入和局部密度偏离的三种互补曲线相似性评分方法，分别从数值距离、形态特征和密度分布三个视角全面度量节点的异常程度，并通过消融实验验证了三种方法的互补性。
+
+（2）提出I-SPOT自适应阈值算法，通过包容性数据池更新与周期性GPD重估机制解决了SPOT的阈值衰减问题，消除了人工阈值调优的依赖，使得算法能够在无标注数据条件下自动确定检测边界。
+
+（3）在基于中国联通大数据生产环境构建的真实数据集上进行了系统性实验评估，CSAD-AT在无需人工阈值调整的条件下取得了0.9864的F1分数，显著优于六种主流基线算法和三种基础评分方法，并通过阈值敏感性分析、聚合策略对比、消融实验等多维度验证了算法各模块的有效性。
+
+
+%=====================================================================
+%  1 相关工作
+%=====================================================================
+\section{相关工作}
+
+\subsection{多元时序异常检测算法}
+
+时间序列异常检测是智能运维（AIOps）领域的核心任务之一\cite{pei2017mlops}。纵观该领域的发展历程，研究方法经历了清晰的演进脉络：从基于统计假设的传统方法（如3-$\sigma$规则、ARIMA模型\cite{box1970arima}），到依赖特征工程的经典机器学习方法（如孤立森林\cite{liu2008isolation}、One-Class SVM\cite{scholkopf2001ocsvm}），再到能够端到端自动学习复杂模式的深度学习方法\cite{choi2021deepreview,pang2021deepsurvey}。传统统计方法和经典机器学习方法原理清晰、计算高效，但前者严重依赖分布假设，后者难以捕捉复杂的非线性时序依赖。当前，基于深度学习的多元时序异常检测方法已成为主流，按技术路线可分为以下三类。
+
+\textbf{基于重构的方法}是多元时序异常检测中最具代表性的范式之一，其核心思想是在正常数据上训练模型学习低维表示，当异常数据输入时产生较大的重构误差。OmniAnomaly\cite{su2019omni}采用随机变分自编码器学习多元时间序列的正常模式分布，通过重构概率识别异常。USAD\cite{audibert2020usad}引入对抗训练框架，通过两个解码器之间的博弈增强对微小异常的敏感度。此类方法的局限在于隐空间假设对复杂多模态分布拟合能力有限，且对抗训练的不稳定性影响实际部署的可靠性。
+
+\textbf{基于预测的方法}通过学习时序演化规律预测未来取值，将预测误差作为异常评分依据。TranAD\cite{tuli2022tranad}采用两阶段对抗训练机制，通过Transformer的多头自注意力机制捕捉长距离时序依赖，在多个公开基准数据集上取得了优异表现。Anomaly Transformer\cite{xu2022anomaly}提出关联差异性概念，利用异常点在时序关联模式上的特殊性进行检测。MTAD-GAT\cite{zhao2020mtadgat}结合图注意力网络和时间卷积网络，同时建模变量间关联和时间维度依赖。
+
+\textbf{其他技术路线}方面，图神经网络通过显式建模变量间的拓扑关系进行异常检测，GDN\cite{deng2021graph}利用注意力机制自动学习传感器之间的图结构，将偏离已学习关系结构的行为识别为异常。因果分析方法将异常视为偏离正常因果机制的实例，CAROTS\cite{chen2025carots}将因果关系融入对比学习框架，通过设计保持和破坏因果结构的数据增强策略区分正常与异常样本。此外，MAD-GAN\cite{li2019madgan}将LSTM与生成对抗网络相结合，通过判别器分数和重构误差共同识别异常。这些方法分别从关系建模、因果推断和分布学习的角度丰富了多元时序异常检测的技术体系，但均假设变量间存在相对稳定的关联模式，在动态变化的场景中适用性受限。
+
+上述方法的共同思路是挖掘多个变量之间的关联关系，通过关联模式的异变来识别异常。然而，这一范式在分布式集群的单指标多节点场景下存在根本性局限。首先，集群节点间的相似性并非固定的变量间关联，而是由负载均衡动态产生的群体行为一致性，随负载变化而随机波动。其次，负载相关指标的正常波动本身具有随机性和不可预测性，难以从单节点历史数据中学习稳定的正常模式。此外，这些方法均需要对检测阈值进行精心调优，而在实际运维场景中获取高质量标注数据的成本极高。因此，需要一种针对分布式集群节点间相似性特征的专用检测方法。
+
+\subsection{基于曲线相似度的异常检测方法}
+
+曲线相似度度量是时间序列分析的基础技术，广泛应用于时序分类、聚类和异常检测。现有方法可大致分为基于距离的方法和基于密度的方法两类。基于距离的方法直接度量序列间的差异程度，代表性方法包括逐点计算的欧氏距离、允许时间轴弹性匹配的动态时间弯曲（DTW）\cite{berndt1994dtw}，以及利用深度学习提取特征表示后在嵌入空间中计算距离的方法。基于密度的方法则从数据分布的角度刻画离群程度，通过比较样本点的局部密度与其邻域密度的差异来识别异常，代表性算法包括局部离群因子（LOF）\cite{breunig2000lof}和基于密度聚类的DBSCAN\cite{ester1996dbscan}等。在分布式集群场景中，这些方法的核心思路一致：正常节点由于负载均衡而曲线聚集，异常节点因故障而偏离群体，通过度量这种偏离识别异常。下面介绍本文涉及的几类核心方法。
+
+\textbf{欧氏距离}是最经典的逐点距离度量方法。给定两条等长时间序列$\mathbf{x}$和$\mathbf{y}$，欧氏距离定义为$d(\mathbf{x}, \mathbf{y}) = \sqrt{\sum_i(x_i - y_i)^2}$，计算复杂度$O(n)$，效率极高，物理含义直观，直接度量同一时刻两条曲线数值偏差的累积。然而，欧氏距离对时序的平移和伸缩高度敏感：两条形态相似但整体存在数值偏移的曲线，欧氏距离可能给出较大的值，导致误判。同时，欧氏距离要求两条序列严格对齐，无法处理时间轴上的微小相位偏移。
+
+\textbf{动态时间弯曲（DTW）}\cite{berndt1994dtw}通过非线性时间轴对齐克服了欧氏距离的刚性匹配局限。DTW允许时间轴上的弹性匹配，通过动态规划寻找两条序列之间的最优对齐路径，从而捕捉形态层面的相似性。然而，DTW的计算复杂度为$O(n^2)$，在节点数多、窗口长度大的分布式集群实时监控场景下，每个时间步需要计算$O(N^2)$对节点间的DTW距离，总复杂度达到$O(N^2 n^2)$，难以满足在线检测的实时性需求。
+
+\textbf{自编码器嵌入}是利用深度学习进行非线性特征提取的代表性方法。自编码器\cite{hinton2006autoencoder}通过编码器将高维输入压缩为低维嵌入向量，解码器从嵌入向量重构原始输入。训练完成后，嵌入空间保留了输入数据最本质的特征表示。在曲线相似度度量中，可以利用编码器将时间窗口序列映射到低维空间，然后在嵌入空间中计算欧氏距离，从而实现对曲线形态特征的抽象比较，降低了对绝对数值的敏感性。
+
+\textbf{局部离群因子（LOF）}\cite{breunig2000lof}是经典的基于密度的离群点检测方法，通过比较每个数据点的局部可达密度与其$k$近邻的局部密度来判断离群程度。若一个点的密度显著低于其邻域的平均密度，则被判定为离群点。LOF能够处理密度分布不均匀的场景，但其性能高度依赖邻居数$k$的选择，且输出为相对密度比值，需要设定合理的阈值才能做出二元异常判定。
+
+\textbf{DBSCAN}\cite{ester1996dbscan}是一种基于密度的聚类算法，通过连接密度可达的数据点形成簇，将不属于任何簇的点标记为噪声即离群点。其关键参数是邻域半径$\varepsilon$和最小邻居数$\text{MinPts}$。在分布式集群异常检测中，每个时间窗口内各节点的监控序列可视为数据点，正常节点由于曲线相似而聚集形成密集簇，异常节点则因曲线偏离而被标记为噪声。然而，DBSCAN的检测效果对参数$\varepsilon$极为敏感，其最优值随窗口大小和数据分布特征的变化而变化，跨场景复用困难。
+
+综上所述，现有的基于曲线相似度的方法虽然在理论上适合分布式集群的节点级异常检测，但均面临一个共同瓶颈：\textbf{阈值敏感性}。基于距离的欧氏距离、DTW需要设定异常判定阈值，基于密度的LOF、DBSCAN需要设定密度相关参数，这些参数的选择直接决定检测效果，且最优参数因场景而异、难以跨集群复用。本文提出的CSAD-AT算法正是针对这一瓶颈，通过多视角评分融合降低单一方法的局限性，并通过I-SPOT自适应阈值算法消除人工参数调优的需求。
+
+
+%=====================================================================
+%  2 问题定义
+%=====================================================================
+\section{问题定义}
+
+\subsection{数据模型}
+
+考虑一个包含$N$个节点的分布式集群，每个节点$i$（$i = 1, 2, \ldots, N$）在时刻$t$的某一监控指标观测值记为$x_i^t \in \mathbb{R}$。在时间跨度$[1, T]$内，集群的监控数据可表示为矩阵$\mathbf{X} \in \mathbb{R}^{N \times T}$，其中第$i$行$\mathbf{x}_i = [x_i^1, x_i^2, \ldots, x_i^T]$为节点$i$的完整时间序列。在实际系统中，监控数据以60秒为固定采样间隔采集，经过缺失值插值和时间戳对齐预处理后，所有节点的时间序列保持严格的时间同步。
+
+\subsection{异常节点检测问题}
+
+分布式集群异常节点检测问题定义为：给定集群监控数据矩阵$\mathbf{X}$，设计检测函数$f: \mathbb{R}^{N \times T} \to \{0, 1\}^{N \times T}$，使得对于每个节点$i$在每个时刻$t$，输出异常判定$y_i^t \in \{0, 1\}$，其中$y_i^t = 1$表示节点$i$在时刻$t$异常，$y_i^t = 0$表示正常。
+
+该问题区别于传统多元时序异常检测的关键在于：传统方法将$N$个节点视为$N$个独立变量，试图学习变量间的关联模式；而本文将$N$个节点视为同一指标的$N$个并行观测，利用节点间的行为一致性来识别偏离群体的异常节点。
+
+\subsection{关键数据特性}
+
+在负载均衡机制的作用下，分布式集群监控数据具有"正常聚集、异常离群"的特性。正常运行状态下，各节点同一指标的时序曲线呈现高度的形态同步性与数值聚集性，形成清晰的"正常行为簇"；当个别节点发生故障时，其曲线显著偏离"行为簇"，表现为"离群曲线"。图\ref{fig:anomaly_curve}直观展示了这一特性：绝大部分时间内多数节点的曲线紧密聚集，而异常节点（红色曲线）在粉色阴影标注的异常时段内明显偏离群体。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\columnwidth]{dataset_anomaly_example.pdf}
+    \bicaption{分布式集群典型异常片段的时序可视化（红色曲线为异常节点，粉色阴影为异常时段）}{Visualization of typical anomaly segments (red: anomalous node; pink shading: anomalous period)}
+    \label{fig:anomaly_curve}
+\end{figure}
+
+上述数据特性构成了本文算法设计的基础假设：同一集群内正常节点的时序曲线具有高度一致性，而异常节点的曲线将显著偏离群体分布。基于这一假设，本文将异常检测问题建模为节点间曲线偏离程度的度量问题，从而无需依赖历史标注数据学习正常行为模式，而是通过节点间的横向比较直接识别离群个体。
+
+
+%=====================================================================
+%  3 方法介绍
+%=====================================================================
+\section{方法介绍}
+
+\subsection{算法框架概述}
+
+本文提出的CSAD-AT算法包含三个核心模块，整体框架如图\ref{fig:csad_framework}所示。\textbf{多视角曲线相似性评分模块}从数值距离、嵌入空间距离和局部密度三个互补视角为每个节点在每个时间窗口计算异常分数；\textbf{分数归一化与聚合模块}通过MinMax归一化消除量纲差异，以加权平均将多视角分数聚合为统一的融合分数；\textbf{I-SPOT自适应阈值检测模块}基于极值理论利用广义帕累托分布对融合分数的尾部建模，动态确定异常判定边界，无需人工阈值调优。
+
+\begin{figure*}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{image4-6.pdf}
+    \bicaption{CSAD-AT算法整体框架}{Overall framework of the CSAD-AT algorithm}
+    \label{fig:csad_framework}
+\end{figure*}
+
+\subsection{多视角曲线相似性评分}
+
+\subsubsection{基于欧氏距离的数值相似性评分}
+
+采用滑动窗口机制对原始序列进行分段处理。对于长度为$w$的时间窗口，节点$i$在时刻$t$的窗口序列表示为$\mathbf{x}_i^t = [x_i^{t-w+1}, \ldots, x_i^t]^T \in \mathbb{R}^w$。节点$i$与节点$j$在时刻$t$的欧氏距离定义为：
+\begin{equation}
+    d_{ij}^t = \|\mathbf{x}_i^t - \mathbf{x}_j^t\|_2 = \sqrt{\sum_{k=t-w+1}^{t}(x_i^k - x_j^k)^2}
+\end{equation}
+
+计算所有节点两两之间的欧氏距离构成距离矩阵$\mathbf{D}^t \in \mathbb{R}^{N \times N}$，统计矩阵上三角元素的均值$\mu_t$和标准差$\sigma_t$。对每个节点$i$计算其与其他所有节点的平均距离$\bar{d}_i^t = \frac{1}{N-1}\sum_{j \neq i} d_{ij}^t$，异常分数采用Z-score标准化形式：
+\begin{equation}\label{eq:euc_score}
+    s_{\text{euc},i}^t = \frac{\bar{d}_i^t - \mu_t}{\sigma_t}
+\end{equation}
+
+该方法直接度量节点间数值层面的偏离程度，计算效率高，对数值尺度上的显著偏离具有强检测能力。
+
+\subsubsection{基于自编码器嵌入的形态相似性评分}
+
+欧氏距离方法对曲线绝对数值高度敏感，可能忽略形态层面的相似性。例如两条曲线形态完全一致但存在整体数值偏移时，欧氏距离会给出较大的值。为克服此局限，引入自编码器进行深度特征提取，将原始序列映射到低维嵌入空间，在嵌入空间中计算距离以捕捉曲线的形态特征。
+
+编码器$f_{\text{enc}}$通过三层全连接网络（维度$w \to 128 \to 128 \to 5$）将输入序列$\mathbf{x}_i^t$压缩为低维嵌入向量$\mathbf{z}_i^t = f_{\text{enc}}(\mathbf{x}_i^t) \in \mathbb{R}^5$，解码器$f_{\text{dec}}$以对称结构（$5 \to 128 \to 128 \to w$）重构原始输入$\hat{\mathbf{x}}_i^t = f_{\text{dec}}(\mathbf{z}_i^t)$。隐藏层采用ReLU激活函数，使用学习率为0.001的Adam优化器，以均方误差为损失函数训练50个epoch。训练数据为正常运行期间所有节点的窗口序列。
+
+应用阶段仅使用编码器部分，基于嵌入向量计算节点间距离$d_{ij}^t = \|\mathbf{z}_i^t - \mathbf{z}_j^t\|_2$，后续Z-score异常分数计算方式与欧氏距离方法一致，记为$s_{\text{ae},i}^t$。由于嵌入向量保留了曲线最本质的形态特征而过滤了绝对数值信息，该方法对数值偏移的鲁棒性优于欧氏距离方法。
+
+\subsubsection{基于局部密度偏离的评分}
+
+前两种方法均从"距离"视角出发，而密度视角能够捕捉不同类型的异常模式。借鉴局部离群因子（LOF）\cite{breunig2000lof}的思想，设计基于$k$近邻可达密度的连续异常评分方法。对每个时间窗口内的每个节点$i$，基于原始空间的欧氏距离矩阵找到其$k_{\text{nn}}$个最近邻节点集合$\mathcal{N}_i$，计算局部可达密度：
+\begin{equation}
+    \text{LRD}_i = \frac{1}{\frac{1}{|\mathcal{N}_i|}\sum_{j \in \mathcal{N}_i} d_{ij} + \epsilon}
+\end{equation}
+其中$\epsilon$为防止除零的小常数。密度偏离分数通过三个Z-score标准化子分数的加权组合得到：
+\begin{equation}\label{eq:density_score}
+    s_{\text{den},i}^t = w_1 \cdot z_{\text{LRD}} + w_2 \cdot z_{k\text{th}} + w_3 \cdot z_{\text{nbr}}
+\end{equation}
+其中$z_{\text{LRD}}$、$z_{k\text{th}}$、$z_{\text{nbr}}$分别为局部可达密度、第$k$近邻距离和邻居数量的Z-score标准化值。该方法从密度视角捕捉那些虽然距离不是全局最大、但在局部邻域中密度显著偏低的孤立型异常模式，与前两种方法形成互补。
+
+\subsection{分数归一化与聚合}
+
+三种评分方法输出的原始分数在量纲和数值范围上存在显著差异，例如欧氏距离分数可能在$[-2, 15]$范围波动，密度分数则在$[-3, 8]$范围内，需要统一归一化后聚合。
+
+第一步，负值截断。Z-score标准化可能产生负值，负分数表示节点比群体平均更接近，不具有异常指示意义：
+\begin{equation}
+    s'^{(m)} = \max(s^{(m)}, 0)
+\end{equation}
+
+第二步，MinMax归一化，将各方法分数映射至$[0, 1]$区间：
+\begin{equation}
+    \tilde{s}^{(m)} = \frac{s'^{(m)} - s'^{(m)}_{\min}}{s'^{(m)}_{\max} - s'^{(m)}_{\min}}
+\end{equation}
+
+最终通过加权平均聚合：
+\begin{equation}\label{eq:fusion}
+    s_{\text{fused}} = \sum_{m=1}^{M} w_m \cdot \tilde{s}^{(m)}, \quad \sum_{m=1}^{M} w_m = 1
+\end{equation}
+其中$M=3$，默认等权$w_1 = w_2 = w_3 = 1/3$。选择加权平均而非最大值融合或投票机制，原因在于加权平均保留了连续分数信息，而最大值融合丢失了非最大方法的贡献；同时，连续值输出有利于后续GPD尾部建模，投票机制输出的离散值则不适合GPD拟合。
+
+\subsection{I-SPOT自适应阈值算法}
+
+\subsubsection{经典SPOT算法及其局限}
+
+经典SPOT\cite{siffer2017spot}算法是基于极值理论的流数据异常检测方法，利用GPD对分数分布的尾部进行建模。给定异常分数序列，选取初始阈值$t_0$为训练数据的高分位数，超额值$Y = S - t_0$在$S > t_0$条件下的分布近似为GPD：
+\begin{equation}
+    G_{\xi,\sigma}(y) = 1 - \left(1 + \frac{\xi y}{\sigma}\right)^{-1/\xi}, \quad y > 0
+\end{equation}
+其中$\xi$为形状参数，$\sigma > 0$为尺度参数。通过Grimshaw最大似然估计拟合GPD参数后，对于给定风险水平$q$，异常检测阈值为：
+\begin{equation}\label{eq:spot_threshold}
+    z_q = t_0 + \frac{\hat{\sigma}}{\hat{\xi}}\left[\left(\frac{n}{N_t \cdot q}\right)^{-\hat{\xi}} - 1\right]
+\end{equation}
+
+然而，经典SPOT采用\textbf{排他性更新策略}：仅将判定为正常的数据点纳入历史数据池。在实际应用中，集群负载和数据分布可能随时间发生缓慢的概念漂移。当数据池始终排除高分数数据点时，池内数据分布会逐渐偏向低分数区域，导致GPD拟合的阈值持续下降。阈值降低又会使更多正常数据点被误判为异常并排除在外，形成"阈值衰减"的正反馈循环，最终导致大量误报。
+
+\subsubsection{I-SPOT算法设计}
+
+本文提出I-SPOT（Inclusive SPOT）算法，核心改进为\textbf{包容性更新策略}。维护最大容量$W_{\max}$的FIFO数据池$\mathcal{D}_t$：
+\begin{equation}
+    \mathcal{D}_{t+1} = \begin{cases}
+        \mathcal{D}_t \cup \{s_t\}, & \text{if } |\mathcal{D}_t| < W_{\max} \\
+        (\mathcal{D}_t \setminus \{s_{\text{oldest}}\}) \cup \{s_t\}, & \text{otherwise}
+    \end{cases}
+\end{equation}
+
+关键区别在于：\textbf{所有数据点}（无论是否超过阈值）均纳入数据池。这确保了数据池始终反映当前数据流的真实分布，而非被过滤后的偏斜分布。同时，采用FIFO（先进先出）策略使数据池自然适应概念漂移：当数据分布发生变化时，旧数据逐渐被新数据替换，GPD拟合自动适应新分布，无需人工干预。
+
+I-SPOT的运行过程分为初始化阶段与在线检测阶段。在初始化阶段，算法从分数流中收集前$n_0$个数据点构建初始数据池$\mathcal{D}_0 = \{s_1, s_2, \ldots, s_{n_0}\}$，以其$\textit{level}$分位数作为初始阈值$t_0$，对超额值集合$\{s - t_0 \mid s \in \mathcal{D}_0, s > t_0\}$通过Grimshaw最大似然估计拟合GPD参数$(\hat{\xi}, \hat{\sigma})$，并依据式(\ref{eq:spot_threshold})计算初始异常检测阈值$z_q$。
+
+在线检测阶段，算法逐一处理后续分数$s_t$。对于每个新到达的分数，首先将其与当前阈值$z_q$进行比较：若$s_t > z_q$则判定时刻$t$为异常。随后，无论该数据点是否被判定为异常，均将其纳入数据池$\mathcal{D}$；若数据池已达最大容量$W_{\max}$，则移除最早进入的数据点以腾出空间。每累积$T_{\text{update}}$个新数据点后，算法在更新后的数据池上重新计算分位数阈值$t_0$、重新拟合GPD参数并更新异常检测阈值$z_q$。这一周期性重估机制确保阈值能够跟踪数据分布的长期演变，避免因分布漂移导致的阈值失效。
+
+\subsubsection{全局序列设计}
+
+CSAD-AT将所有节点的聚合分数按窗口交织为全局时间序列$\mathbf{S}_{\text{global}}$。对于时间窗口$t$，将$N$个节点的融合分数$[s_{\text{fused},1}^t, s_{\text{fused},2}^t, \ldots, s_{\text{fused},N}^t]$依次拼接，在全局序列上运行单个I-SPOT实例。这一设计使所有节点共享同一阈值，降低了计算开销；全局序列的样本量是单节点的$N$倍，使GPD参数拟合更加稳健；共享阈值还隐含了"节点间应具有相似分数分布"的先验，与负载均衡场景的特性天然吻合。
+
+
+%=====================================================================
+%  4 效果评估
+%=====================================================================
+\section{效果评估}
+
+\subsection{数据集}
+
+实验数据来源于中国联通大数据生产底座平台，该平台采用YARN架构进行分布式计算资源调度。ResourceManager作为集群的中央调度器，通过RPC Router接收各NodeManager的心跳与资源请求。本研究选取RPC Router连接数作为核心研究指标，该指标与用户负载强相关，正常波动模式难以预测，但在负载均衡机制下各节点呈现高度同步。
+
+数据通过Prometheus API接口采集，经过线性插值填充缺失值、对齐至60秒间隔时间戳、剔除长时间缺失节点三项预处理操作，并采用多算法初筛与专家判读相结合的半人工标注策略完成异常标注。详细统计信息如表\ref{tab:dataset_stats}所示。
+
+\begin{table}[htbp]
+    \centering
+    \bicaption{数据集统计信息}{Dataset statistics}
+    \label{tab:dataset_stats}
+    \begin{tabular}{lccccc}
+        \toprule
+         & 节点数 & 数据点 & 异常段 & 异常点 & 异常比例 \\
+        \midrule
+        训练集   & 30 & 86400 & /  & /    & /      \\
+        测试集A  & 15 & 11520 & 72 & 901  & 7.82\% \\
+        测试集B  & 15 & 11520 & 33 & 907  & 7.87\% \\
+        测试集   & 30 & 23040 & 105& 1808 & 7.85\% \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+训练集覆盖30天连续运行数据，包含30个节点、采样间隔60秒，用于自编码器模型训练和I-SPOT初始化。测试集覆盖8天连续运行数据，来自两个不同的生产集群A和B各15个节点，共包含105个异常段、1808个异常数据点，异常比例为7.85\%。
+
+\subsection{实验设置}
+
+评估指标采用精确率（Precision）、召回率（Recall）和F1分数。I-SPOT超参数设置为：风险水平$q = 0.0065$，分位数水平$\text{level} = 0.98$，重估间隔$T_{\text{update}} = 50$，初始池长度$n_0 = 1500$。基线算法包括以下六种主流方法：TranAD\cite{tuli2022tranad}、USAD\cite{audibert2020usad}、OmniAnomaly\cite{su2019omni}、GDN\cite{deng2021graph}、MAD-GAN\cite{li2019madgan}和MTAD-GAT\cite{zhao2020mtadgat}，均使用各方法开源代码和默认参数配置。曲线相似性方法的滑动窗口大小通过在训练集上进行网格搜索确定。
+
+\subsection{整体性能对比}
+
+表\ref{tab:overall_results}展示了CSAD-AT与各对比方法的性能。
+
+\begin{table}[htbp]
+    \centering
+    \bicaption{CSAD-AT与各对比方法的整体性能}{Overall performance comparison}
+    \label{tab:overall_results}
+    \begin{tabular}{lccc}
+        \toprule
+        算法 & Precision & Recall & F1 \\
+        \midrule
+        TranAD\cite{tuli2022tranad}      & 0.8889 & 0.3932 & 0.5452 \\
+        USAD\cite{audibert2020usad}       & 0.6892 & 0.5567 & 0.6159 \\
+        OmniAnomaly\cite{su2019omni}      & 0.6054 & 0.4593 & 0.5224 \\
+        GDN\cite{deng2021graph}           & 0.3101 & 0.5218 & 0.3890 \\
+        MAD-GAN\cite{li2019madgan}        & 0.6309 & 0.6309 & 0.6891 \\
+        MTAD-GAT\cite{zhao2020mtadgat}    & 0.3492 & 0.1573 & 0.2169 \\
+        \midrule
+        欧氏距离（最优阈值）     & 0.9826 & 0.9657 & \underline{0.9741} \\
+        自编码器嵌入（最优阈值） & 0.9792 & 0.9592 & 0.9691 \\
+        密度偏离（最优阈值）     & 0.9605 & 0.9659 & 0.9632 \\
+        \midrule
+        \textbf{CSAD-AT}        & \textbf{1.0000} & 0.9732 & \textbf{0.9864} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+实验结果揭示了三方面发现。六种基线算法的F1分数均低于0.69，其中最优的MAD-GAN也仅为0.6891，表明基于多变量关联的传统范式不适用于单指标多节点的集群场景，这些方法试图从单节点历史中学习正常模式，但负载相关指标的随机波动使得历史模式不可靠。三种曲线相似性方法在最优人工阈值下F1分数均超过0.96，相比基线算法提升了约30个百分点，验证了利用节点间曲线相似性进行异常检测在集群场景中的有效性。CSAD-AT在无需人工阈值调整的条件下F1分数达到0.9864、精确率为1.0，不仅优于各单一评分方法在最优人工调参下的性能，更表明多视角融合与自适应阈值能够替代甚至超越精心的人工调参。
+
+\subsection{人工阈值的局限性分析}
+
+CSAD-AT的核心设计动机在于消除人工阈值调优的依赖。为验证这一动机的合理性，本节系统考察三种基础评分方法在采用人工固定阈值时的性能表现，分别从时间窗口大小与检测阈值两个维度揭示人工调参方案的固有局限。实验结果分别如表\ref{tab:euclidean_sensitivity}、表\ref{tab:ae_sensitivity}和表\ref{tab:density_sensitivity}所示，图\ref{fig:threshold_sensitivity}以折线图形式直观呈现了F1分数随参数变化的趋势。
+
+\begin{table}[htbp]
+    \centering
+    \bicaption{欧氏距离方法的参数敏感性实验结果}{Parameter sensitivity results of Euclidean distance method}
+    \label{tab:euclidean_sensitivity}
+    \resizebox{\columnwidth}{!}{
+    \begin{tabular}{lccccccccc}
+        \toprule
+        & \multicolumn{3}{c}{$w=10$} & \multicolumn{3}{c}{$w=20$} & \multicolumn{3}{c}{$w=30$} \\
+        \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
+        阈值$\tau$ & Prec. & Rec. & F1 & Prec. & Rec. & F1 & Prec. & Rec. & F1 \\
+        \midrule
+        3.0 & 0.5485 & 1.0000 & 0.7084 & 0.7251 & 1.0000 & 0.8406 & 0.8214 & 1.0000 & 0.9020 \\
+        3.2 & 0.6797 & 1.0000 & 0.8093 & 0.7892 & 1.0000 & 0.8822 & 0.8593 & 1.0000 & 0.9243 \\
+        3.4 & 0.8116 & 1.0000 & \underline{0.8960} & 0.8974 & 1.0000 & \underline{0.9459} & 0.9256 & 1.0000 & \textbf{0.9614} \\
+        3.6 & 0.9532 & 0.9655 & \textbf{0.9593} & 0.9826 & 0.9657 & \textbf{0.9741} & 0.9727 & 0.9469 & \underline{0.9596} \\
+        3.8 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \\
+        \bottomrule
+    \end{tabular}
+    }
+\end{table}
+
+欧氏距离方法的最优参数为$\tau=3.6$、$w=20$，此时F1分数达到0.9741。当阈值偏低（如$\tau=3.0$或3.2）时，召回率维持在1.0但精确率显著下降，表明产生了大量误报；当阈值升至3.8时检测完全失效（F1=0.0），呈现典型的"悬崖效应"。窗口大小的影响相对温和，较大的窗口有助于平滑噪声，但各窗口下的整体趋势一致。
+
+\begin{table}[htbp]
+    \centering
+    \bicaption{自编码器嵌入方法的参数敏感性实验结果}{Parameter sensitivity results of autoencoder embedding method}
+    \label{tab:ae_sensitivity}
+    \resizebox{\columnwidth}{!}{
+    \begin{tabular}{lccccccccc}
+        \toprule
+        & \multicolumn{3}{c}{$w=10$} & \multicolumn{3}{c}{$w=20$} & \multicolumn{3}{c}{$w=30$} \\
+        \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
+        阈值$\tau$ & Prec. & Rec. & F1 & Prec. & Rec. & F1 & Prec. & Rec. & F1 \\
+        \midrule
+        3.0 & 0.4370 & 0.9833 & 0.6051 & 0.6028 & 1.0000 & 0.7522 & 0.7206 & 1.0000 & 0.8376 \\
+        3.2 & 0.6070 & 1.0000 & 0.7554 & 0.7860 & 1.0000 & 0.8802 & 0.8391 & 1.0000 & 0.9125 \\
+        3.4 & 0.7814 & 0.9732 & \underline{0.8668} & 0.9106 & 0.9819 & \underline{0.9449} & 0.9333 & 0.9859 & \underline{0.9589} \\
+        3.6 & 0.9507 & 0.8977 & \textbf{0.9234} & 0.9793 & 0.9404 & \textbf{0.9595} & 0.9792 & 0.9592 & \textbf{0.9691} \\
+        3.8 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \\
+        \bottomrule
+    \end{tabular}
+    }
+\end{table}
+
+自编码器嵌入方法呈现类似的敏感性特征，最优参数为$\tau=3.6$、$w=30$，F1分数为0.9691。与欧氏距离方法相比，自编码器在低阈值时的精确率更低（如$\tau=3.0$、$w=10$时仅0.4370），表明重构误差分布较为分散，需要更严格的阈值设定才能有效区分正常与异常样本。阈值超过3.6后同样出现性能归零的"悬崖效应"。
+
+\begin{table}[htbp]
+    \centering
+    \bicaption{密度偏离方法的参数敏感性实验结果}{Parameter sensitivity results of density deviation method}
+    \label{tab:density_sensitivity}
+    \resizebox{\columnwidth}{!}{
+    \begin{tabular}{lccccccccc}
+        \toprule
+        & \multicolumn{3}{c}{$w=10$} & \multicolumn{3}{c}{$w=20$} & \multicolumn{3}{c}{$w=30$} \\
+        \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
+        $\varepsilon$ & Prec. & Rec. & F1 & Prec. & Rec. & F1 & Prec. & Rec. & F1 \\
+        \midrule
+        200 & 0.2296 & 1.0000 & 0.3735 & 0.0301 & 1.0000 & 0.0585 & 0.0157 & 1.0000 & 0.0309 \\
+        400 & 0.9160 & 1.0000 & \underline{0.9562} & 0.8208 & 1.0000 & 0.9016 & 0.5698 & 1.0000 & 0.7260 \\
+        600 & 0.9813 & 0.9677 & \textbf{0.9745} & 0.9766 & 0.9709 & \textbf{0.9738} & 0.9726 & 0.9595 & \textbf{0.9660} \\
+        800 & 1.0000 & 0.8238 & 0.9034 & 1.0000 & 0.8988 & \underline{0.9467} & 0.9923 & 0.9281 & \underline{0.9591} \\
+        1000 & 1.0000 & 0.7685 & 0.8691 & 1.0000 & 0.8313 & 0.9079 & 1.0000 & 0.8207 & 0.9015 \\
+        \bottomrule
+    \end{tabular}
+    }
+\end{table}
+
+密度偏离方法的控制参数为邻域半径$\varepsilon$。当$\varepsilon$偏小（如200）时，算法将多数样本视为离群点，精确率极低；当$\varepsilon$过大（如1000）时，真实异常点也被纳入主簇而被漏检。最优参数$\varepsilon=600$、$w=10$下F1分数为0.9745，但该参数在不同窗口大小下的最优取值差异显著，进一步说明跨场景参数复用的困难。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\columnwidth]{threshold_sensitivity.pdf}
+    \bicaption{三种评分方法在不同窗口大小下F1分数随参数变化的趋势}{F1 score vs.\ parameter for three scoring methods under different window sizes}
+    \label{fig:threshold_sensitivity}
+\end{figure}
+
+综合三张表的实验结果，人工固定阈值方案暴露出两方面固有局限。其一，最优阈值处于极窄的有效区间内，细微偏移即导致性能骤变（如欧氏距离方法阈值从3.6调整到3.8，F1从0.9741骤降至0.0），这种"悬崖效应"使得在缺乏标注数据的条件下几乎不可能通过人工试探获得最优阈值。其二，最优参数因场景而异且不可迁移：不同集群的节点数量、负载模式与指标量纲各异，一个集群上调优的参数在另一集群上可能完全失效，且系统运行环境随时间演化，固定阈值会因概念漂移而逐渐过时。上述局限充分说明了CSAD-AT采用I-SPOT自适应阈值模块的必要性：以数据驱动的方式自动确定检测阈值并动态适应分布变化，从根本上消除对人工调参的依赖。
+
+\subsection{分数聚合策略对比}
+
+表\ref{tab:agg_compare}对比了不同归一化与聚合策略的组合效果。
+
+\begin{table}[htbp]
+    \centering
+    \bicaption{不同分数聚合策略的性能对比}{Performance comparison of different score aggregation strategies}
+    \label{tab:agg_compare}
+    \begin{tabular}{ccccc}
+        \toprule
+        归一化 & 聚合策略 & Precision & Recall & F1 \\
+        \midrule
+        Z-score & 加权平均 & 0.9157 & 0.9806 & 0.9470 \\
+        MinMax  & 最大值   & 1.0000 & 0.8426 & 0.9146 \\
+        MinMax  & 投票     & 0.9831 & 0.9587 & \underline{0.9707} \\
+        MinMax  & 加权平均 & 1.0000 & 0.9732 & \textbf{0.9864} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+结果表明，在归一化方面，MinMax归一化在所有聚合策略下均优于Z-score归一化。后者虽然在理论上更适合高斯分布数据，但实际分数分布存在显著的长尾特征，Z-score归一化后极端高分数被过度压缩，削弱了对真实异常的区分度；MinMax归一化则保留了分数的原始排序关系和相对差异。在聚合策略方面，加权平均在MinMax归一化下达到最优F1为0.9864，投票策略F1为0.9707，最大值策略F1仅0.9146。最大值策略的召回率偏低至0.8426，因为仅依赖单一最高分数，一旦某种方法对特定异常模式不敏感便会导致漏报。投票策略鲁棒性较好，但输出离散值不利于I-SPOT的GPD尾部建模。加权平均兼顾了连续性与综合性，取得了最佳的整体平衡。
+
+\subsection{消融实验}
+
+为验证三种评分方法的互补性，表\ref{tab:ablation}展示了各方法单独与I-SPOT结合的性能。
+
+\begin{table}[htbp]
+    \centering
+    \bicaption{消融实验：各评分方法单独与I-SPOT结合的性能}{Ablation study: each scoring method combined with I-SPOT}
+    \label{tab:ablation}
+    \begin{tabular}{lccc}
+        \toprule
+        检测配置 & Precision & Recall & F1 \\
+        \midrule
+        欧氏距离 + I-SPOT     & 1.0000 & 0.9187 & \underline{0.9576} \\
+        自编码器嵌入 + I-SPOT  & 0.9891 & 0.8667 & 0.9239 \\
+        密度偏离 + I-SPOT      & 1.0000 & 0.8917 & 0.9427 \\
+        \midrule
+        CSAD-AT（三种融合）    & 1.0000 & 0.9732 & \textbf{0.9864} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+三方法融合方案F1达到0.9864，显著优于任何单一方法的最优F1值0.9576。提升主要来自召回率：从单方法最优的0.9187提升至0.9732，表明三种方法在异常模式覆盖上形成了有效互补。欧氏距离擅长捕捉数值尺度上的显著偏离，如节点指标值突然飙升或骤降；自编码器嵌入更善于识别形态层面的异常，如波动频率或趋势方向异于群体；密度偏离则能发现那些虽然距离不是全局最大但在局部邻域中显著孤立的异常模式。三个视角互不冗余，融合后覆盖了更广泛的异常类型。
+
+\subsection{I-SPOT与经典SPOT对比}
+
+表\ref{tab:spot_compare}对比了两种自适应阈值算法在完全相同的超参数和融合分数输入下的性能。
+
+\begin{table}[htbp]
+    \centering
+    \bicaption{经典SPOT与I-SPOT性能对比}{Performance comparison of classic SPOT and I-SPOT}
+    \label{tab:spot_compare}
+    \begin{tabular}{lccc}
+        \toprule
+        阈值算法 & Precision & Recall & F1 \\
+        \midrule
+        经典SPOT & 0.3218 & 1.0000 & 0.4870 \\
+        I-SPOT   & 1.0000 & 0.9732 & \textbf{0.9864} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+经典SPOT精确率仅0.3218，意味着超过三分之二的报警为误报，在实际运维场景中完全不可接受，运维人员会被海量虚假报警淹没而忽略真正的异常。I-SPOT实现了1.0的精确率和零误报，F1提升约50个百分点。
+
+图\ref{fig:spot_vs_ispot}展示了两种算法的阈值动态行为差异。上半部分中经典SPOT的阈值呈现明显的单调下降趋势：初始阈值较为合理，但随着越来越多的高分数数据点被排除在更新池外，阈值持续走低，后半段大量正常数据点也被判定为异常，印证了排他性更新策略导致的阈值衰减正反馈循环。下半部分中I-SPOT的阈值始终维持在稳定水平，偶尔因概念漂移而发生小幅自适应调整，检测标记仅出现在真实异常点附近，验证了包容性更新策略在维持阈值稳定性方面的有效性。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\columnwidth]{spot_vs_ispot_fused.png}
+    \bicaption{融合分数上经典SPOT与I-SPOT检测结果对比}{Comparison of classic SPOT and I-SPOT on fused scores}
+    \label{fig:spot_vs_ispot}
+\end{figure}
+
+
+%=====================================================================
+%  5 总结与展望
+%=====================================================================
+\section{总结与展望}
+
+本文针对分布式集群中单指标多节点场景下的异常节点检测问题，提出了CSAD-AT算法。该算法基于负载均衡机制下正常节点时序曲线具有高度一致性这一数据特性，将异常检测问题建模为节点间曲线偏离程度的度量问题，无需依赖历史标注数据学习正常行为模式，而是通过节点间的横向比较直接识别离群节点。
+
+在技术层面，CSAD-AT从数值距离、形态特征和密度分布三个互补视角设计了曲线相似性评分方法，消融实验证明三种方法能够覆盖不同类型的异常模式。通过MinMax归一化与加权平均聚合统一多视角分数后，I-SPOT自适应阈值算法以包容性数据池更新策略和周期性GPD重估机制动态确定异常判定边界，成功解决了经典SPOT的阈值衰减问题。
+
+实验结果表明，CSAD-AT在基于中国联通大数据生产环境构建的数据集上取得了0.9864的F1分数、精确率1.0，在无需人工阈值调整的条件下超越了精心调参的单一评分方法，且相比最优基线算法MAD-GAN的F1=0.6891提升了约30个百分点。阈值敏感性分析揭示了曲线相似度方法在实际部署中面临的"悬崖效应"挑战，进一步凸显了自适应阈值机制的必要性。
+
+未来工作将从三个方向展开：一是将方法扩展至多指标联合检测场景，融合不同指标间的关联信息构建更全面的异常画像；二是探索在线增量学习机制，使自编码器模型能够动态适应集群规模扩缩容和负载模式的长期演变；三是在更多类型的分布式集群和监控指标上验证方法的泛化能力与鲁棒性。
+
+\section*{利益冲突声明}
+所有作者声明不存在利益冲突关系。
+
+
+%=====================================================================
+%  参考文献
+%=====================================================================
+\begin{thebibliography}{99}
+
+\bibitem{hundman2018detecting}
+Hundman K, Constantinou V, Laber C, et al. Detecting spacecraft anomalies using LSTMs and nonparametric dynamic thresholding[C]//Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery \& Data Mining. 2018: 387--395.
+
+\bibitem{su2019omni}
+Su Y, Zhao Y, Niu C, et al. Robust anomaly detection for multivariate time series through stochastic recurrent neural network[C]//Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery \& Data Mining. 2019: 2828--2837.
+
+\bibitem{tuli2022tranad}
+Tuli S, Casale G, Jennings N R. TranAD: deep transformer networks for anomaly detection in multivariate time series data[J]. Proceedings of the VLDB Endowment, 2022, 15(6): 1201--1214.
+
+\bibitem{deng2021graph}
+Deng A, Hooi B. Graph neural network-based anomaly detection in multivariate time series[C]//Proceedings of the AAAI Conference on Artificial Intelligence. 2021, 35(5): 4027--4035.
+
+\bibitem{siffer2017spot}
+Siffer A, Fouque P A, Termier A, et al. Anomaly detection in streams with extreme value theory[C]//Proceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining. 2017: 1067--1075.
+
+\bibitem{pei2017mlops}
+裴丹, 张圣林. 基于机器学习的智能运维[J]. 中国计算机学会通讯, 2017, 13(12): 68--73.
+
+\bibitem{box1970arima}
+Box G E P, Jenkins G M. Time series analysis: Forecasting and control[M]. San Francisco: Holden-Day, 1970.
+
+\bibitem{liu2008isolation}
+Liu F T, Ting K M, Zhou Z H. Isolation forest[C]//Proceedings of the IEEE International Conference on Data Mining. 2008: 413--422.
+
+\bibitem{scholkopf2001ocsvm}
+Sch{\"o}lkopf B, Platt J C, Shawe-Taylor J, et al. Estimating the support of a high-dimensional distribution[J]. Neural Computation, 2001, 13(7): 1443--1471.
+
+\bibitem{choi2021deepreview}
+Choi K, Yi J, Park C, et al. Deep learning for anomaly detection in time-series data: Review, analysis, and guidelines[J]. IEEE Access, 2021, 9: 120043--120065.
+
+\bibitem{pang2021deepsurvey}
+Pang G, Shen C, Cao L, et al. Deep learning for anomaly detection: A review[J]. ACM Computing Surveys, 2021, 54(2): 1--38.
+
+\bibitem{audibert2020usad}
+Audibert J, Michiardi P, Guyard F, et al. USAD: unsupervised anomaly detection on multivariate time series[C]//Proceedings of the 26th ACM SIGKDD International Conference on Knowledge Discovery \& Data Mining. 2020: 3395--3404.
+
+\bibitem{xu2022anomaly}
+Xu J, Wu H, Wang J, et al. Anomaly transformer: Time series anomaly detection with association discrepancy[C]//International Conference on Learning Representations. 2022.
+
+\bibitem{zhao2020mtadgat}
+Zhao H, Wang Y, Duan J, et al. Multivariate time-series anomaly detection via graph attention network[C]//Proceedings of the IEEE International Conference on Data Mining. 2020: 841--850.
+
+\bibitem{chen2025carots}
+Chen W, Liu Y, Zhang M. CAROTS: Causal-aware contrastive learning for robust multivariate time series anomaly detection[C]//Proceedings of the 42nd International Conference on Machine Learning. 2025.
+
+\bibitem{li2019madgan}
+Li D, Chen D, Jin B, et al. MAD-GAN: multivariate anomaly detection for time series data with generative adversarial networks[C]//Proceedings of the International Conference on Artificial Neural Networks. 2019: 703--716.
+
+\bibitem{berndt1994dtw}
+Berndt D J, Clifford J. Using dynamic time warping to find patterns in time sequences[C]//Proceedings of the KDD Workshop on Knowledge Discovery in Databases. 1994: 359--370.
+
+\bibitem{breunig2000lof}
+Breunig M M, Kriegel H P, Ng R T, et al. LOF: identifying density-based local outliers[C]//Proceedings of the 2000 ACM SIGMOD International Conference on Management of Data. 2000: 93--104.
+
+\bibitem{ester1996dbscan}
+Ester M, Kriegel H P, Sander J, et al. A density-based algorithm for discovering clusters in large spatial databases with noise[C]//Proceedings of the 2nd International Conference on Knowledge Discovery and Data Mining. 1996: 226--231.
+
+\bibitem{hinton2006autoencoder}
+Hinton G E, Salakhutdinov R R. Reducing the dimensionality of data with neural networks[J]. Science, 2006, 313(5786): 504--507.
+
+\end{thebibliography}
+
+%=====================================================================
+%  作者信息
+%=====================================================================
+\vspace{1em}
+\noindent\rule{\columnwidth}{0.4pt}
+\vspace{0.5em}
+
+{\small
+
+\noindent\begin{minipage}{\columnwidth}
+\begin{minipage}[t]{0.18\columnwidth}
+    \vspace{0pt}
+    
+\end{minipage}\hfill
+\begin{minipage}[t]{0.78\columnwidth}
+    \vspace{0pt}
+    \textbf{杨婧雯}，中国科学院计算机网络信息中心硕士研究生，主要研究方向为分布式系统异常检测与智能运维。本文中负责算法设计、实验实施与论文撰写。
+
+    \textbf{YANG Jingwen}, master's student at the Computer Network Information Center, Chinese Academy of Sciences. Her research focuses on anomaly detection in distributed systems and intelligent operations. She was responsible for algorithm design, experimental implementation, and paper writing in this work.
+
+    E-mail: yangjingwen@cnic.cn% 替换为实际邮箱
+\end{minipage}
+\end{minipage}
+
+\vspace{1em}
+
+\noindent\begin{minipage}{\columnwidth}
+\begin{minipage}[t]{0.18\columnwidth}
+    \vspace{0pt}
+    
+\end{minipage}\hfill
+\begin{minipage}[t]{0.78\columnwidth}
+    \vspace{0pt}
+    \textbf{裴昶华}（通信作者），中国科学院计算机网络信息中心副研究员，主要研究方向为智能运维（AIOps）、IT智能化与计算机网络。本文中负责研究方向指导、技术方案审定与论文修改。
+
+    \textbf{PEI Changhua} (corresponding author), Associate Professor at the Computer Network Information Center, Chinese Academy of Sciences. His research interests include AIOps, AI for IT operations, and networking. He was responsible for research supervision, technical review, and paper revision in this work.
+
+    E-mail: changhuapei@gmail.com
+\end{minipage}
+\end{minipage}
+
+}
+
+\end{document}

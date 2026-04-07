@@ -6,7 +6,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap');
-        
+
         body {
             background-color: #ffffff;
             font-family: 'Noto Sans SC', sans-serif;
@@ -42,14 +42,16 @@
 
         .stage-tag {
             position: absolute;
-            top: -12px;
-            left: 20px;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
             background: #475569;
             color: white;
             padding: 2px 12px;
             border-radius: 4px;
-            font-size: 12px;
+            font-size: 16px;
             font-weight: bold;
+            white-space: nowrap;
         }
 
         /* 节点块样式 */
@@ -60,7 +62,7 @@
             border-radius: 4px;
             padding: 10px 8px;
             text-align: center;
-            font-size: 12px;
+            font-size: 16px;
             line-height: 1.5;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             transition: all 0.2s;
@@ -122,14 +124,14 @@
 
 <div class="canvas">
     <div class="flex items-center">
-        
+
         <!-- 数据输入 -->
         <div class="flex flex-col items-center">
             <div class="node bg-input">
                 <span class="font-bold">多维监控指标</span><br>
                 时序数据集 <span class="math">X<sub>t</sub></span>
             </div>
-            <div class="text-[10px] text-slate-400 mt-2">（多节点、多指标）</div>
+            <div class="text-[14px] text-slate-400 mt-2">（多节点、多指标）</div>
         </div>
 
         <!-- 分叉路径 -->
@@ -137,7 +139,7 @@
 
         <!-- 并行核心阶段 -->
         <div class="flex flex-col gap-12">
-            
+
             <!-- 第一阶段 -->
             <div class="stage-box" style="border-color: #3b82f6;">
                 <div class="stage-tag" style="background: #3b82f6;">阶段 I：数值特征异常检测</div>
@@ -177,7 +179,7 @@
             <div class="flex flex-col items-center gap-4">
                 <div class="node bg-fusion w-full">
                     双视角加权融合策略<br>
-                    <span class="math text-[11px] text-amber-700">S = α·S<sub>num</sub> + (1-α)·S<sub>sha</sub></span>
+                    <span class="math text-[15px] text-amber-700">S = α·S<sub>num</sub> + (1-α)·S<sub>sha</sub></span>
                 </div>
                 <div class="h-6 w-[1.5px] bg-amber-300"></div>
                 <div class="node bg-fusion w-full">
@@ -190,7 +192,7 @@
 
         <!-- 最终结果 -->
         <div class="flex flex-col items-center ml-3">
-            <div class="node bg-slate-800 text-white font-bold border-none" style="width: 130px; border-radius: 20px;">
+            <div class="node bg-slate-800 text-white font-bold border-none" style="width: auto; padding: 10px 20px; border-radius: 20px; white-space: nowrap;">
                 故障候选节点<br>Top-K 列表
             </div>
         </div>

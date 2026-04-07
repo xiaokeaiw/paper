@@ -1,6 +1,6 @@
 \chapter{CSAD-AT：阈值鲁棒的单指标多节点异常检测算法}\label{chap:single_metric}
 
-基于第二章揭示的多节点曲线相似性规律，本章开展面向单指标多节点场景的异常检测方法研究。本章以联通大数据生产环境为背景构建高质量的单指标多节点时序数据集，在此基础上系统评估基于曲线相似性的多种检测方法的性能，并通过参数敏感性实验揭示阈值依赖性这一核心问题。针对该问题，本章提出I-SPOT自适应阈值算法，通过包容性数据池更新与周期性GPD重估机制消除人工调参需求，进而将上述组件整合为统一的CSAD-AT（Curve Similarity-based Anomaly Detection with Adaptive Threshold）框架，融合多视角相似性评分、分数归一化聚合与自适应阈值检测，实现端到端的自适应异常检测。
+基于第二章揭示的多节点曲线相似性规律，本章开展面向单指标多节点场景的异常检测方法研究。本章以联通大数据生产环境为背景构建高质量的单指标多节点时序数据集，在此基础上系统评估基于曲线相似性的多种检测方法的性能，并通过参数敏感性实验揭示阈值依赖性这一核心问题。针对该问题，本章提出I-SPOT自适应阈值算法，通过包容性数据池更新与周期性GPD重估机制消除人工调参需求，进而将上述组件整合为统一的CSAD-AT（Curve Similarity-based Anomaly Detection with Adaptive Threshold）算法框架，融合多视角相似性评分、分数归一化聚合与自适应阈值检测，实现端到端的自适应异常检测。
 
 \section{多节点单指标数据构建}\label{sec:dataset}
 
@@ -25,16 +25,16 @@
 
 为构建适用于算法研究的高质量数据集，并对后续模型性能进行可靠评估，本研究对从生产环境采集的原始监控时序数据实施了系统化的预处理与半人工标注流程，整体流程如图\ref{fig:annotation_flow}所示。
 
-在数据预处理阶段，本研究对原始监控时序数据执行三项操作：（1）线性插值：针对因网络延迟、采集器瞬时故障或系统抖动产生的短暂缺失值，采用线性插值法进行填充，确保时序数据的连续性；（2）时间戳对齐：将所有节点的数据点对齐至统一的60秒间隔时间戳，确保跨节点相似性比较在时间维度上严格对齐；（3）长时缺失项剔除：对于因监控代理长期离线、节点重启或下线导致的长时间段数据完全缺失，直接剔除对应的整条节点记录，避免插值引入较大误差。
-
-在异常标注阶段，由于生产环境中的异常样本缺乏系统记录且缺乏自动化标注工具，本研究采用多算法初筛与专家判读相结合的半人工标注策略。
-
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{Img/draft/annotation_flow_new.pdf}
     \bicaption{\enspace 数据集预处理与半人工标注流程}{\enspace Dataset Preprocessing and Semi-manual Annotation Workflow}
     \label{fig:annotation_flow}
 \end{figure}
+
+在数据预处理阶段，本研究对原始监控时序数据执行三项操作：（1）线性插值：针对因网络延迟、采集器瞬时故障或系统抖动产生的短暂缺失值，采用线性插值法进行填充，确保时序数据的连续性；（2）时间戳对齐：将所有节点的数据点对齐至统一的60秒间隔时间戳，确保跨节点相似性比较在时间维度上严格对齐；（3）长时缺失项剔除：对于因监控代理长期离线、节点重启或下线导致的长时间段数据完全缺失，直接剔除对应的整条节点记录，避免插值引入较大误差。
+
+在异常标注阶段，由于生产环境中的异常样本缺乏系统记录且缺乏自动化标注工具，本研究采用多算法初筛与专家判读相结合的半人工标注策略。
 
 在多算法初筛阶段，利用多种基础的无监督离群点检测算法（如基于统计偏差、距离度量等）分别对全体时序数据进行扫描，将各算法的检测结果取并集，筛选出偏离自身历史基线或群体平均模式的``疑似异常''时间片段。这种多算法取并集的策略以宽松阈值最大化覆盖潜在异常，有效缩小了人工审查范围。
 
@@ -203,14 +203,14 @@ DBSCAN方法的主要优势在于无需人工设定异常分数阈值，算法�
 
 \begin{table}[htbp]
     \centering
-    \bicaption{\enspace 欧氏距离方法在不同阈值和时间窗口下的异常检测分数}{\enspace Anomaly Detection Scores of Euclidean Distance Method under Different Thresholds and Window Sizes}
+    \bicaption{\enspace 欧氏距离方法的参数敏感性实验结果}{\enspace Parameter Sensitivity Results of Euclidean Distance Method}
     \label{tab:euclidean_sensitivity}
     \resizebox{\textwidth}{!}{
     \begin{tabular}{lccccccccc}
         \toprule
-        & \multicolumn{3}{c}{window size=10} & \multicolumn{3}{c}{window size=20} & \multicolumn{3}{c}{window size=30} \\
+        & \multicolumn{3}{c}{窗口大小=10} & \multicolumn{3}{c}{窗口大小=20} & \multicolumn{3}{c}{窗口大小=30} \\
         \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
-        threshold & Precision & Recall & F1 & Precision & Recall & F1 & Precision & Recall & F1 \\
+        阈值 & Precision & Recall & F1 & Precision & Recall & F1 & Precision & Recall & F1 \\
         \midrule
         3.0 & 0.5485 & 1.0000 & 0.7084 & 0.7251 & 1.0000 & 0.8406 & 0.8214 & 1.0000 & 0.9020 \\
         3.2 & 0.6797 & 1.0000 & 0.8093 & 0.7892 & 1.0000 & 0.8822 & 0.8593 & 1.0000 & 0.9243 \\
@@ -226,14 +226,14 @@ DBSCAN方法的主要优势在于无需人工设定异常分数阈值，算法�
 
 \begin{table}[htbp]
     \centering
-    \bicaption{\enspace 自编码器嵌入方法在不同阈值和时间窗口下的异常检测分数}{\enspace Anomaly Detection Scores of Autoencoder Embedding Method under Different Thresholds and Window Sizes}
+    \bicaption{\enspace 自编码器嵌入方法的参数敏感性实验结果}{\enspace Parameter Sensitivity Results of Autoencoder Embedding Method}
     \label{tab:ae_sensitivity}
     \resizebox{\textwidth}{!}{
     \begin{tabular}{lccccccccc}
         \toprule
-        & \multicolumn{3}{c}{window size=10} & \multicolumn{3}{c}{window size=20} & \multicolumn{3}{c}{window size=30} \\
+        & \multicolumn{3}{c}{窗口大小=10} & \multicolumn{3}{c}{窗口大小=20} & \multicolumn{3}{c}{窗口大小=30} \\
         \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
-        threshold & Precision & Recall & F1 & Precision & Recall & F1 & Precision & Recall & F1 \\
+        阈值 & Precision & Recall & F1 & Precision & Recall & F1 & Precision & Recall & F1 \\
         \midrule
         3.0 & 0.4370 & 0.9833 & 0.6051 & 0.6028 & 1.0000 & 0.7522 & 0.7206 & 1.0000 & 0.8376 \\
         3.2 & 0.6070 & 1.0000 & 0.7554 & 0.7860 & 1.0000 & 0.8802 & 0.8391 & 1.0000 & 0.9125 \\
@@ -249,12 +249,12 @@ DBSCAN方法的主要优势在于无需人工设定异常分数阈值，算法�
 
 \begin{table}[htbp]
     \centering
-    \bicaption{\enspace 密度偏离方法在不同参数下的异常检测分数}{\enspace Anomaly Detection Scores of Density Deviation Method under Different Parameters}
+    \bicaption{\enspace 密度偏离方法的参数敏感性实验结果}{\enspace Parameter Sensitivity Results of Density Deviation Method}
     \label{tab:density_sensitivity}
     \resizebox{\textwidth}{!}{
     \begin{tabular}{lccccccccc}
         \toprule
-        & \multicolumn{3}{c}{window size=10} & \multicolumn{3}{c}{window size=20} & \multicolumn{3}{c}{window size=30} \\
+        & \multicolumn{3}{c}{窗口大小=10} & \multicolumn{3}{c}{窗口大小=20} & \multicolumn{3}{c}{窗口大小=30} \\
         \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
         eps & Precision & Recall & F1 & Precision & Recall & F1 & Precision & Recall & F1 \\
         \midrule
@@ -291,28 +291,28 @@ DBSCAN方法的主要优势在于无需人工设定异常分数阈值，算法�
 
 从工程实践的角度分析，生产环境中获取高质量标注数据的成本极高。异常事件本身具有稀疏性和多样性的特点，完整覆盖各类异常模式需要长期积累。同时，异常标注需要具备领域专业知识的运维人员进行判断，人力成本高昂。更为关键的是，系统运行环境会随时间演化，历史数据上调优的参数可能因概念漂移而逐渐失效，需要持续的人工干预和重新标定。
 
-综合以上分析，如何降低算法对预设阈值的依赖性，实现阈值的动态自适应调整，成为将基于曲线相似性的异常检测方法推向实际生产应用的关键技术挑战。针对这一问题，下一节将提出CSAD-AT框架，通过多视角分数融合与基于极值理论的自适应阈值机制，实现端到端的无人工调参异常检测。
+综合以上分析，如何降低算法对预设阈值的依赖性，实现阈值的动态自适应调整，成为将基于曲线相似性的异常检测方法推向实际生产应用的关键技术挑战。针对这一问题，下一节将提出CSAD-AT算法，通过多视角分数融合与基于极值理论的自适应阈值机制，实现端到端的无人工调参异常检测。
 
-\section{CSAD-AT：阈值自适应的异常检测框架}\label{sec:framework}
+\section{CSAD-AT：阈值自适应的异常检测算法}\label{sec:framework}
 
-上一节的实验表明，基于曲线相似性的异常检测方法在最优参数下能取得优异性能，但对阈值选择高度敏感，难以直接应用于生产环境。为解决这一问题，本节提出CSAD-AT（Curve Similarity-based Anomaly Detection with Adaptive Threshold）框架，将多视角相似性评分、分数归一化聚合与自适应阈值检测整合为统一的端到端检测流程，消除对人工阈值调优的依赖。
+上一节的实验表明，基于曲线相似性的异常检测方法在最优参数下能取得优异性能，但对阈值选择高度敏感，难以直接应用于生产环境。为解决这一问题，本节提出CSAD-AT（Curve Similarity-based Anomaly Detection with Adaptive Threshold）算法，将多视角相似性评分、分数归一化聚合与自适应阈值检测整合为统一的端到端检测流程，消除对人工阈值调优的依赖。
 
-\subsection{框架概述}\label{subsec:framework_overview}
+\subsection{算法框架概述}\label{subsec:framework_overview}
 
-CSAD-AT框架的整体架构如图\ref{fig:csad_framework}所示，包含三个核心模块：（1）多视角相似性评分模块，融合数值距离、嵌入空间距离和局部密度三种互补的评分方法，提升对不同类型异常的覆盖能力；（2）分数归一化与聚合模块，将不同量纲的评分统一归一化后加权融合，保证各方法贡献的可比性；（3）I-SPOT自适应阈值检测模块，将所有节点的聚合分数按时间窗口交织为全局序列，基于极值理论动态确定异常判定边界，无需人工设定阈值。
+CSAD-AT算法的整体架构如图\ref{fig:csad_framework}所示，包含三个核心模块：（1）多视角相似性评分模块，融合数值距离、嵌入空间距离和局部密度三种互补的评分方法，提升对不同类型异常的覆盖能力；（2）分数归一化与聚合模块，将不同量纲的评分统一归一化后加权融合，保证各方法贡献的可比性；（3）I-SPOT自适应阈值检测模块，将所有节点的聚合分数按时间窗口交织为全局序列，基于极值理论动态确定异常判定边界，无需人工设定阈值。
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{Img/image4-6.pdf}
-    \bicaption{\enspace CSAD-AT框架整体架构}{\enspace Overall Architecture of the CSAD-AT Framework}
+    \bicaption{\enspace CSAD-AT算法整体架构}{\enspace Overall Architecture of the CSAD-AT Framework}
     \label{fig:csad_framework}
 \end{figure}
 
 \subsection{多视角异常评分}
 
-CSAD-AT框架采用三种基于曲线相似性的异常评分方法，分别从数值距离、嵌入空间距离和局部密度三个互补视角对节点的偏离程度进行量化。其中，欧氏距离评分和自编码器嵌入评分的计算流程与\ref{subsec:similarity}节所述一致，分别在原始空间和潜在空间中度量节点间的平均距离并通过Z-score标准化得到异常分数。
+CSAD-AT算法采用三种基于曲线相似性的异常评分方法，分别从数值距离、嵌入空间距离和局部密度三个互补视角对节点的偏离程度进行量化。其中，欧氏距离评分和自编码器嵌入评分的计算流程与\ref{subsec:similarity}节所述一致，分别在原始空间和潜在空间中度量节点间的平均距离并通过Z-score标准化得到异常分数。
 
-密度偏离评分方面，与\ref{subsec:density_score}节介绍的DBSCAN聚类方法不同，CSAD-AT框架借鉴局部离群因子（Local Outlier Factor, LOF）\cite{breunig2000lof}的思想，设计了基于$k$近邻可达密度的连续异常评分方法。该方法不进行显式的簇划分，不依赖$\epsilon$邻域半径和$MinPts$等聚类参数，而是输出连续的异常分数，更适合与后续的归一化聚合及I-SPOT自适应阈值算法衔接。
+密度偏离评分方面，与\ref{subsec:density_score}节介绍的DBSCAN聚类方法不同，CSAD-AT算法借鉴局部离群因子（Local Outlier Factor, LOF）\cite{breunig2000lof}的思想，设计了基于$k$近邻可达密度的连续异常评分方法。该方法不进行显式的簇划分，不依赖$\epsilon$邻域半径和$MinPts$等聚类参数，而是输出连续的异常分数，更适合与后续的归一化聚合及I-SPOT自适应阈值算法衔接。
 
 对于每个时间窗口内的每个节点$i$，首先基于距离矩阵找到其$k_{\text{nn}}$个最近邻节点，记第$k_{\text{nn}}$近邻距离为$d_i^{k_{\text{nn}}}$。以$d_i^{k_{\text{nn}}}$作为自适应邻域半径，计算节点$i$的邻域集合$\mathcal{N}_i = \{j : d_{ij} \leq d_i^{k_{\text{nn}}}, j \neq i\}$。基于邻域信息，计算节点$i$的局部可达密度（Local Reachability Density, LRD）：
 \begin{equation}
@@ -328,7 +328,7 @@ CSAD-AT框架采用三种基于曲线相似性的异常评分方法，分别从�
 
 \subsection{分数归一化与聚合}
 
-三种评分方法输出的原始异常分数在量纲和数值范围上存在显著差异，直接聚合将导致某些方法的贡献被掩盖。为此，CSAD-AT框架对每种方法的分数序列分别执行两步归一化处理。
+三种评分方法输出的原始异常分数在量纲和数值范围上存在显著差异，直接聚合将导致某些方法的贡献被掩盖。为此，CSAD-AT算法对每种方法的分数序列分别执行两步归一化处理。
 
 第一步，负值截断：由于异常分数的正值表示偏离群体（潜在异常），负值表示与群体高度一致（正常），将所有负值截断为零：
 \begin{equation}
@@ -351,7 +351,7 @@ CSAD-AT框架采用三种基于曲线相似性的异常评分方法，分别从�
 
 \subsection{I-SPOT：包容性自适应阈值检测算法}\label{sec:threshold}
 
-\ref{subsec:param_sensitivity}节的实验揭示了基于曲线相似性的方法对阈值高度敏感的问题。为消除对人工阈值调优的依赖，CSAD-AT框架引入基于极值理论（Extreme Value Theory, EVT）\cite{siffer2017spot}的自适应阈值机制。然而，经典的SPOT算法在分布式集群监控场景中存在局限性：其数据池更新策略在概念漂移条件下易导致阈值逐渐失效。为此，本小节在介绍SPOT算法原理的基础上，提出改进的I-SPOT（Inclusive SPOT）算法，通过包容性数据池更新与周期性GPD重估机制增强阈值的长期自适应能力。
+\ref{subsec:param_sensitivity}节的实验揭示了基于曲线相似性的方法对阈值高度敏感的问题。为消除对人工阈值调优的依赖，CSAD-AT算法引入基于极值理论（Extreme Value Theory, EVT）\cite{siffer2017spot}的自适应阈值机制。然而，经典的SPOT算法在分布式集群监控场景中存在局限性：其数据池更新策略在概念漂移条件下易导致阈值逐渐失效。为此，本小节在介绍SPOT算法原理的基础上，提出改进的I-SPOT（Inclusive SPOT）算法，通过包容性数据池更新与周期性GPD重估机制增强阈值的长期自适应能力。
 
 \subsubsection{SPOT算法原理}
 
@@ -412,7 +412,7 @@ I-SPOT算法维护一个最大容量为$W_{\max}$的先进先出（FIFO）数据
 
 \subsubsection{全局时间线构建与异常判定}
 
-CSAD-AT框架的一个关键设计是将所有节点的聚合分数按窗口交织为全局时间序列，而非为每个节点独立运行阈值检测。具体而言，对于窗口$k$中$N$个节点的聚合分数$\{s_{\text{fused},0}^{(k)}, s_{\text{fused},1}^{(k)}, \ldots, s_{\text{fused},N-1}^{(k)}\}$，全局序列的排列方式为：
+CSAD-AT算法的一个关键设计是将所有节点的聚合分数按窗口交织为全局时间序列，而非为每个节点独立运行阈值检测。具体而言，对于窗口$k$中$N$个节点的聚合分数$\{s_{\text{fused},0}^{(k)}, s_{\text{fused},1}^{(k)}, \ldots, s_{\text{fused},N-1}^{(k)}\}$，全局序列的排列方式为：
 \begin{equation}
     \mathbf{S}_{\text{global}} = [s_{\text{fused},0}^{(0)}, s_{\text{fused},1}^{(0)}, \ldots, s_{\text{fused},N-1}^{(0)}, s_{\text{fused},0}^{(1)}, \ldots]
 \end{equation}
@@ -426,7 +426,7 @@ CSAD-AT框架的一个关键设计是将所有节点的聚合分数按窗口交�
 
 \subsection{实验设置}
 
-本节实验在本文构建的单指标多节点数据集上进行，旨在全面验证CSAD-AT框架及其各组件的有效性。实验评估采用异常检测领域通用的精确率（Precision）、召回率（Recall）和F1分数三个指标，异常判定采用窗口级别的评估协议：若检测到的异常窗口与真实异常标注窗口的重叠比例超过设定参数值，则视为正确检测（True Positive）。
+本节实验在本文构建的单指标多节点数据集上进行，旨在全面验证CSAD-AT算法及其各组件的有效性。实验评估采用异常检测领域通用的精确率（Precision）、召回率（Recall）和F1分数三个指标，异常判定采用窗口级别的评估协议：若检测到的异常窗口与真实异常标注窗口的重叠比例超过设定参数值，则视为正确检测（True Positive）。
 
 I-SPOT算法的超参数设置为：风险水平$q = 0.0065$，分位数水平$\text{level} = 0.98$，重估间隔$T_{\text{update}} = 50$，初始序列长度$n_0 = 1500$。
 
@@ -462,7 +462,7 @@ I-SPOT算法的超参数设置为：风险水平$q = 0.0065$，分位数水平$\
 
 从实验结果可以观察到以下规律。现有的多元时序异常检测算法在本数据集上的表现普遍欠佳，F1分数均未超过0.7，其原因在于此类方法主要针对多变量间的关联异常设计，而本数据集的异常主要表现为单节点的行为偏离，且负载均衡类指标的正常波动具有随机性和不可预测性，难以通过历史数据学习出稳定的正常模式。相比之下，三种基于曲线相似性的评分方法在最优人工调参条件下均取得了显著更优的检测效果，F1分数均超过0.96，充分验证了基于多节点曲线相似性进行异常检测的核心思路的有效性。
 
-本研究提出的CSAD-AT框架在无需人工阈值调整的条件下，F1分数达到了0.9864，优于各评分方法在最优阈值下的性能水平，证明分数聚合与I-SPOT自适应阈值的组合能够有效替代基于标注数据的人工调参过程，具有重要的实际应用价值。
+本研究提出的CSAD-AT算法在无需人工阈值调整的条件下，F1分数达到了0.9864，优于各评分方法在最优阈值下的性能水平，证明分数聚合与I-SPOT自适应阈值的组合能够有效替代基于标注数据的人工调参过程，具有重要的实际应用价值。
 
 \subsection{分数聚合策略对比实验}\label{subsec:agg_compare}
 
@@ -487,7 +487,7 @@ I-SPOT算法的超参数设置为：风险水平$q = 0.0065$，分位数水平$\
 
 \subsection{消融实验：各评分方法贡献分析}
 
-为分析三种评分方法在CSAD-AT框架中的各自贡献，本节设计了消融实验，将每种方法单独与I-SPOT结合进行检测，并与三种方法融合后的完整框架进行对比。实验结果如表\ref{tab:ablation}所示。
+为分析三种评分方法在CSAD-AT算法中的各自贡献，本节设计了消融实验，将每种方法单独与I-SPOT结合进行检测，并与三种方法融合后的完整算法进行对比。实验结果如表\ref{tab:ablation}所示。
 
 \begin{table}[htbp]
     \centering
@@ -513,8 +513,6 @@ I-SPOT算法的超参数设置为：风险水平$q = 0.0065$，分位数水平$\
 
 为验证I-SPOT算法相对于经典SPOT的改进效果，本节在相同的融合分数序列上分别运行经典SPOT与I-SPOT，对比两者的检测性能。两种算法采用完全相同的超参数设置，包括风险水平$q=0.0065$、分位数水平$\text{level}=0.98$和重估间隔$T_{\text{update}}=50$，以确保性能差异完全来自于更新策略的不同。
 
-表\ref{tab:spot_compare}给出了两种算法的量化检测性能对比。经典SPOT虽然实现了1.0的召回率，即成功检测到了所有真实异常窗口，但其精确率仅为0.3218，意味着在全部报警中超过三分之二为误报。这一严重的误报问题使得经典SPOT的F1分数仅有0.4870，在实际应用中会导致运维人员频繁收到无效告警，大幅降低告警系统的可信度。相比之下，I-SPOT在保持0.9732高召回率的同时实现了1.0的精确率，即所有报警均为真实异常，F1分数达到0.9864，较经典SPOT提升了约50个百分点。
-
 \begin{table}[htbp]
     \centering
     \bicaption{\enspace 经典SPOT与I-SPOT性能对比}{\enspace Performance Comparison of Classic SPOT and I-SPOT}
@@ -529,22 +527,24 @@ I-SPOT算法的超参数设置为：风险水平$q = 0.0065$，分位数水平$\
     \end{tabular}
 \end{table}
 
-图\ref{fig:spot_vs_ispot}从阈值动态变化的角度直观揭示了两种算法产生如此显著性能差异的根本原因。该图分为上下两个子图，分别对应经典SPOT和I-SPOT在同一融合分数序列上的检测过程。两个子图中，蓝色竖线表示各数据点的融合异常分数值，反映了每个时间窗口内各节点的综合异常程度；橙色曲线为算法动态计算的自适应阈值$z_q$，当某个数据点的融合分数超过该阈值时即被判定为异常；黄色圆圈标记算法输出的异常检测点；红色实心圆点标记真实的异常标注位置。图中左侧的灰色阴影区域对应算法的初始化阶段，该阶段用于积累初始数据以完成GPD模型的首次拟合，不进行异常判定。
+表\ref{tab:spot_compare}给出了两种算法的量化检测性能对比。经典SPOT虽然实现了1.0的召回率，即成功检测到了所有真实异常窗口，但其精确率仅为0.3218，意味着在全部报警中超过三分之二为误报。这一严重的误报问题使得经典SPOT的F1分数仅有0.4870，在实际应用中会导致运维人员频繁收到无效告警，大幅降低告警系统的可信度。相比之下，I-SPOT在保持0.9732高召回率的同时实现了1.0的精确率，即所有报警均为真实异常，F1分数达到0.9864，较经典SPOT提升了约50个百分点。
+
+图\ref{fig:spot_vs_ispot}从阈值动态变化的角度直观揭示了两种算法产生如此显著性能差异的根本原因。该图分为上下两个子图，分别对应经典SPOT和I-SPOT在同一融合分数序列上的检测过程。两个子图中，蓝色竖线表示各数据点的融合异常分数值，反映了每个时间窗口内各节点的综合异常程度；橙色曲线为算法动态计算的自适应阈值$z_q$，当某个数据点的融合分数超过该阈值时即被判定为异常；红色实心圆点标记为算法输出的异常检测点。图中左侧的灰色阴影区域对应算法的初始化阶段，该阶段用于积累初始数据以完成GPD模型的首次拟合，不进行异常判定。
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.95\textwidth]{spot_vs_ispot_fused.png}
+    \includegraphics[width=0.95\textwidth]{spot_vs_ispot_fused.pdf}
     \bicaption{\enspace 融合分数上经典SPOT与I-SPOT检测结果对比}{\enspace Comparison of Classic SPOT and I-SPOT Detection Results on Fused Scores}
     \label{fig:spot_vs_ispot}
 \end{figure}
 
-从上子图可以清晰地观察到经典SPOT的阈值衰减现象。在初始化阶段结束后的早期，橙色阈值曲线尚处于较高水平，能够有效区分正常数据点和异常数据点。然而随着流式处理的持续推进，阈值呈现出明显的单调下降趋势，到序列后半段已降至极低水平，导致几乎所有数据点都超过了阈值而被标记为异常，图中后半段密集出现的黄色圆圈即为大量误报。这一现象的根源在于经典SPOT采用排他性更新策略，超过阈值$z_q$的数据点被视为异常而排除在数据池之外，数据池中仅保留低分数的正常样本。随着被排除的数据点逐渐增多，数据池的分数分布不断向低值区域收缩，GPD模型拟合的尾部分布随之变窄，阈值进一步降低，形成了``阈值衰减''的恶性正反馈循环。
+从上子图可以清晰地观察到经典SPOT的阈值衰减现象。在初始化阶段结束后的早期，橙色阈值曲线尚处于较高水平，能够有效区分正常数据点和异常数据点。然而随着流式处理的持续推进，阈值呈现出明显的单调下降趋势，到序列后半段已降至极低水平，导致几乎所有数据点都超过了阈值而被标记为异常，图中后半段密集出现的了大量误报。这一现象的根源在于经典SPOT采用排他性更新策略，超过阈值$z_q$的数据点被视为异常而排除在数据池之外，数据池中仅保留低分数的正常样本。随着被排除的数据点逐渐增多，数据池的分数分布不断向低值区域收缩，GPD模型拟合的尾部分布随之变窄，阈值进一步降低，形成了``阈值衰减''的恶性正反馈循环。
 
-下子图展示了I-SPOT在相同数据上的表现。可以看到，橙色阈值曲线在整个处理过程中始终保持平稳，没有出现经典SPOT中的单调下降现象。I-SPOT的黄色检测标记仅出现在红色真实异常点附近，与真实标注高度吻合，几乎不存在误报。这得益于I-SPOT采用的包容性更新策略，将所有数据点纳入数据池$D_t$，不论其是否被标记为异常。由于高分数数据点始终参与GPD的尾部拟合，模型能够持续感知分数分布的真实形态，尾部参数估计更加稳健，阈值也因此能够维持在合理水平。
+下子图展示了I-SPOT在相同数据上的表现。可以看到，橙色阈值曲线在整个处理过程中始终保持平稳，没有出现经典SPOT中的单调下降现象。I-SPOT的红色异常点与真实标注高度吻合，几乎不存在误报。这得益于I-SPOT采用的包容性更新策略，将所有数据点纳入数据池$D_t$，不论其是否被标记为异常。由于高分数数据点始终参与GPD的尾部拟合，模型能够持续感知分数分布的真实形态，尾部参数估计更加稳健，阈值也因此能够维持在合理水平。
 
 \section{本章小结}\label{sec:ch3_summary}
 
-本章针对单指标多节点场景下的分布式集群异常检测问题，从数据构建、算法评估、方法设计到框架整合进行了系统研究，提出了CSAD-AT（Curve Similarity-based Anomaly Detection with Adaptive Threshold）框架。主要工作和贡献如下：
+本章针对单指标多节点场景下的分布式集群异常检测问题，从数据构建、算法评估、方法设计到算法整合进行了系统研究，提出了CSAD-AT（Curve Similarity-based Anomaly Detection with Adaptive Threshold）算法。主要工作和贡献如下：
 
 （1）基于联通大数据生产环境构建了高质量的单指标多节点时序数据集，采用多算法初筛与专家判读相结合的半人工标注策略，确保异常标签的准确性，为后续算法研究提供了可靠的数据支撑。
 
@@ -552,7 +552,7 @@ I-SPOT算法的超参数设置为：风险水平$q = 0.0065$，分位数水平$\
 
 （3）提出了基于欧氏距离、自编码器嵌入和DBSCAN聚类的三种曲线相似性异常评分方法，分别从数值幅度、形态模式和密度分布三个视角度量节点间的行为偏离程度，并通过参数敏感性实验揭示了阈值依赖性这一核心挑战。
 
-（4）设计了CSAD-AT框架，融合多视角相似性评分、分数归一化与加权聚合、全局时间线构建等模块，并提出I-SPOT自适应阈值算法，通过包容性数据池更新与周期性GPD重估机制解决了经典SPOT算法的阈值衰减问题。实验结果表明，CSAD-AT框架在无需人工阈值调整的条件下，F1分数达到0.9864，优于各评分方法在最优阈值下的表现，显著降低了对人工参数调优的依赖。
+（4）设计了CSAD-AT算法，融合多视角相似性评分、分数归一化与加权聚合、全局时间线构建等模块，并提出I-SPOT自适应阈值算法，通过包容性数据池更新与周期性GPD重估机制解决了经典SPOT算法的阈值衰减问题。实验结果表明，CSAD-AT算法在无需人工阈值调整的条件下，F1分数达到0.9864，优于各评分方法在最优阈值下的表现，显著降低了对人工参数调优的依赖。
 
 本章的工作验证了基于曲线相似性的异常检测方法在单指标多节点场景下的有效性。然而，实际生产环境中的分布式集群通常需要同时监控多种指标（如CPU使用率、内存占用、网络吞吐量等），如何将异常检测方法扩展到多指标场景，充分利用指标间的关联信息，将在下一章进行研究。
 \endinput
