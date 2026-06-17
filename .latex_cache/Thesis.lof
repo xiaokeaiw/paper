@@ -17,12 +17,13 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {4-1}{\ignorespaces \enspace GPU集群典型故障案例的多指标多节点时序可视化}}{43}{figure.caption.37}%
 \contentsline {figure}{\numberline {4-2}{\ignorespaces \enspace NSFusion算法框架流程}}{45}{figure.caption.38}%
-\contentsline {figure}{\numberline {4-3}{\ignorespaces \enspace 传统SAX与FR-SAX的符号化过程对比}}{50}{figure.caption.39}%
+\contentsline {figure}{\numberline {4-3}{\ignorespaces \enspace 传统SAX与FR-SAX的符号化过程对比}}{49}{figure.caption.39}%
 \contentsline {figure}{\numberline {4-4}{\ignorespaces \enspace 传统SAX与FR-SAX的符号距离矩阵对比}}{50}{figure.caption.40}%
 \contentsline {figure}{\numberline {4-5}{\ignorespaces \enspace FR-SAX方法优势案例}}{54}{figure.caption.42}%
 \contentsline {figure}{\numberline {4-6}{\ignorespaces \enspace 欧氏距离方法优势案例}}{55}{figure.caption.43}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5-1}{\ignorespaces \enspace 异常检测系统检测结果可视化界面}}{65}{figure.caption.48}%
+\contentsline {figure}{\numberline {5-1}{\ignorespaces \enspace 集群节点异常检测系统总体架构}}{60}{figure.caption.46}%
+\contentsline {figure}{\numberline {5-2}{\ignorespaces \enspace 异常检测系统检测结果可视化界面}}{66}{figure.caption.49}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

@@ -18,10 +18,10 @@
 \contentsline {table}{\numberline {4-4}{\ignorespaces \enspace 算法优化前后效率对比}}{56}{table.caption.44}%
 \contentsline {table}{\numberline {4-5}{\ignorespaces \enspace 优化后不同节点规模下的平均检测耗时统计}}{56}{table.caption.45}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {5-1}{\ignorespaces \enspace 系统算法模块组织结构}}{61}{table.caption.46}%
-\contentsline {table}{\numberline {5-2}{\ignorespaces \enspace 系统核心API接口设计}}{64}{table.caption.47}%
-\contentsline {table}{\numberline {5-3}{\ignorespaces \enspace 系统检测性能（单位：秒）}}{66}{table.caption.49}%
-\contentsline {table}{\numberline {5-4}{\ignorespaces \enspace 常态化巡检端到端耗时分布（30节点$\times $500步）}}{66}{table.caption.50}%
+\contentsline {table}{\numberline {5-1}{\ignorespaces \enspace 系统算法模块组织结构}}{62}{table.caption.47}%
+\contentsline {table}{\numberline {5-2}{\ignorespaces \enspace 系统核心API接口设计}}{65}{table.caption.48}%
+\contentsline {table}{\numberline {5-3}{\ignorespaces \enspace 系统检测性能（单位：秒）}}{67}{table.caption.50}%
+\contentsline {table}{\numberline {5-4}{\ignorespaces \enspace 常态化巡检端到端耗时分布}}{67}{table.caption.51}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

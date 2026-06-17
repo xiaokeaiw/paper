@@ -1,4 +1,4 @@
-This is BibTeX, Version 0.99d (TeX Live 2025)
+This is BibTeX, Version 0.99e (TeX Live 2026)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: Thesis.aux
 The style file: Biblio/gbt7714-numerical.bst
@@ -12,42 +12,42 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: Biblio/ref.bib
 You've used 84 entries,
             4948 wiz_defined-function locations,
-            1416 strings with 23927 characters,
-and the built_in function-call counts, 700382 in all, are:
-= -- 12569
-> -- 83073
-< -- 103752
-+ -- 28327
-- -- 5064
-* -- 3779
-:= -- 96626
+            1417 strings with 24116 characters,
+and the built_in function-call counts, 695961 in all, are:
+= -- 12486
+> -- 82538
+< -- 103123
++ -- 28153
+- -- 5007
+* -- 3744
+:= -- 96016
 add.period$ -- 252
 call.type$ -- 84
 change.case$ -- 166
-chr.to.int$ -- 25690
+chr.to.int$ -- 25521
 cite$ -- 84
-duplicate$ -- 1788
-empty$ -- 5202
-format.name$ -- 2669
-if$ -- 182335
-int.to.chr$ -- 5
+duplicate$ -- 1769
+empty$ -- 5166
+format.name$ -- 2652
+if$ -- 181204
+int.to.chr$ -- 4
 int.to.str$ -- 85
 missing$ -- 0
-newline$ -- 480
+newline$ -- 479
 num.names$ -- 252
-pop$ -- 37914
+pop$ -- 37748
 preamble$ -- 1
 purify$ -- 84
 quote$ -- 0
-skip$ -- 72929
+skip$ -- 72436
 stack$ -- 0
-substring$ -- 31768
-swap$ -- 102
-text.length$ -- 1403
+substring$ -- 31531
+swap$ -- 98
+text.length$ -- 1390
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 996
+type$ -- 998
 warning$ -- 0
-while$ -- 1767
+while$ -- 1754
 width$ -- 0
 write$ -- 1136

@@ -123,13 +123,12 @@ Proceedings of the 26th ACM SIGKDD International Conference on Knowledge Discove
 \bibitem[Hochreiter {\bibetal}(1997)Hochreiter and Schmidhuber]{hochreiter1997lstm}
 Hochreiter~S, Schmidhuber~J.
 \newblock Long short-term memory [J].
-\newblock Neural computation, 1997, 9\penalty0 (8): 1735-1780.
+\newblock Neural Computation, 1997, 9\penalty0 (8): 1735-1780.
 
 \bibitem[Tuli {\bibetal}(2022)Tuli, Casale, and Jennings]{tuli2022tranad}
 Tuli~S, Casale~G, Jennings~N~R.
-\newblock Tranad: Deep transformer networks for anomaly detection in multivariate time series data [C]//\allowbreak
-Proceedings of the VLDB Endowment: volume~15.
-\newblock 2022: 1201-1214.
+\newblock Tranad: Deep transformer networks for anomaly detection in multivariate time series data [J].
+\newblock Proceedings of the VLDB Endowment, 2022, 15\penalty0 (6): 1201-1214.
 
 \bibitem[Xu {\bibetal}(2022)Xu, Wu, Wang, and Long]{xu2022anomaly}
 Xu~J, Wu~H, Wang~J, et~al.
@@ -166,11 +165,11 @@ Munir~M, Siddiqui~S~A, Dengel~A, et~al.
 \newblock {DeepAnT}: A deep learning approach for unsupervised anomaly detection in time series [J].
 \newblock IEEE Access, 2018, 7: 1991-2005.
 
-\bibitem[Ren {\bibetal}(2019{\natexlab{a}})Ren, Xu, Wang, Yi, Huang, Kou, Xing, Yang, Tong, and Zhang]{ren2019sranomaly}
+\bibitem[Ren {\bibetal}(2019)Ren, Xu, Wang, Yi, Huang, Kou, Xing, Yang, Tong, and Zhang]{ren2019srnn}
 Ren~H, Xu~B, Wang~Y, et~al.
 \newblock Time-series anomaly detection service at {Microsoft} [C]//\allowbreak
-Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery \& Data Mining.
-\newblock 2019{\natexlab{a}}: 3009-3017.
+Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining.
+\newblock 2019: 3009-3017.
 
 \bibitem[Darban {\bibetal}(2025)Darban, Webb, Pan, Aggarwal, and Salehi]{darban2025carla}
 Darban~Z~Z, Webb~G~I, Pan~S, et~al.
@@ -257,8 +256,9 @@ Sch{\"o}lkopf~B, Platt~J~C, Shawe-Taylor~J, et~al.
 
 \bibitem[Ester {\bibetal}(1996)Ester, Kriegel, Sander, and Xu]{ester1996dbscan}
 Ester~M, Kriegel~H~P, Sander~J, et~al.
-\newblock A density-based algorithm for discovering clusters in large spatial databases with noise [J].
-\newblock KDD, 1996, 96\penalty0 (34): 226-231.
+\newblock A density-based algorithm for discovering clusters in large spatial databases with noise [C]//\allowbreak
+Proceedings of the 2nd International Conference on Knowledge Discovery and Data Mining.
+\newblock 1996: 226-231.
 
 \bibitem[Ishimtsev {\bibetal}(2017)Ishimtsev, Bernstein, Burnaev, et~al.]{ishimtsev2017conformal}
 Ishimtsev~V, Bernstein~A, Burnaev~E, et~al.
@@ -425,17 +425,10 @@ Li~D, Chen~D, Shi~L, et~al.
 International Conference on Artificial Neural Networks.
 \newblock 2019: 703-716.
 
-\bibitem[Ren {\bibetal}(2019{\natexlab{b}})Ren, Xu, Wang, Yi, Huang, Kou, Xing, Yang, Tong, and Zhang]{ren2019srnn}
-Ren~H, Xu~B, Wang~Y, et~al.
-\newblock Time-series anomaly detection service at {Microsoft} [C]//\allowbreak
-Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining.
-\newblock 2019{\natexlab{b}}: 3009-3017.
-
 \bibitem[Ca{\~n}izo {\bibetal}(2019)Ca{\~n}izo, Triguero, Conde, and Onieva]{canizo2019multihead}
 Ca{\~n}izo~M, Triguero~I, Conde~A, et~al.
-\newblock Multi-head {CNN-RNN} for multi-time series anomaly detection: An industrial case study [C]//\allowbreak
-Neurocomputing: volume 363.
-\newblock 2019: 246-260.
+\newblock Multi-head {CNN-RNN} for multi-time series anomaly detection: An industrial case study [J].
+\newblock Neurocomputing, 2019, 363: 246-260.
 
 \bibitem[Wang {\bibetal}(2024)Wang, Ma, et~al.]{wang2024fcvae}
 Wang~Z, Ma~M, et~al.
@@ -476,5 +469,11 @@ Proceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discove
 Lin~J, Keogh~E, Wei~L, et~al.
 \newblock Experiencing sax: a novel symbolic representation of time series [J].
 \newblock Data Mining and Knowledge Discovery, 2007, 15\penalty0 (2): 107-144.
+
+\bibitem[Sohn {\bibetal}(2015)Sohn, Lee, and Yan]{sohn2015cvae}
+Sohn~K, Lee~H, Yan~X.
+\newblock Learning structured output representation using deep conditional generative models [C]//\allowbreak
+Advances in Neural Information Processing Systems: volume~28.
+\newblock 2015.
 
 \end{thebibliography}
